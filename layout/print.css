@@ -1,0 +1,26 @@
+@media print {
+  
+  /* Make body transparent */
+  body {
+    background: transparent;
+  }
+  
+  /* Hide header and footer elements */
+  #header-band,
+  #header-links,
+  #footer {
+    display: none;
+  }
+  
+  /* Give remaining logo a transparent background and black foreground */
+  #header  {
+    background: transparent;
+  }
+  #header-logo a {
+    color: #000000;
+  }
+  #orbis-head-logo {
+    filter: invert(1);
+  }
+  
+}

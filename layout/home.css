@@ -1,0 +1,130 @@
+#homesearchtop {
+  display: flex;
+  padding: 50px 0;
+  background-position: bottom right;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+#spacer {
+  flex: 1 1 auto;
+}
+
+#search-form {
+  flex: 0 1 600px;
+}
+
+#home-about {
+  margin: 2rem 0;
+}
+
+#searchby {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+#searchby > div {
+  flex: 1 1 500px;
+  background: white;
+  padding: 0;
+  border: 1px solid #cccccc;
+  margin: .5rem;
+}
+
+#searchby > div h2 {
+  color: white;
+  font-size: 150%;
+  font-weight: normal;
+  padding: 1rem;
+  margin-top: 0;
+  background-color: #6c34a8;
+}
+
+#searchby > div button {
+  font-family: Verdana, Arial, Helvetica, Sans;
+  font-size: 1rem;
+}
+
+#searchbytopic,
+#searchbyinst {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.topic {
+  display: flex;
+  flex: 1 1 250px;
+  margin: .5rem;
+}
+
+.topicIcon {
+  flex: 0 0 64px;
+  text-align: center;
+}
+
+.topicSearch {
+  flex: 1 1 auto;
+  padding-top: 5px;
+  cursor: pointer;
+}
+
+.topicSearch button {
+  display: inline;
+  background: transparent;
+  border: none;
+  text-align: left;
+}
+
+.topicSearch button:hover,
+.topicSearch button:focus {
+  text-decoration: underline;
+}
+
+.searchterms {
+  display: none;
+  list-style: none;
+  padding: .5rem 0 0 1rem;
+  margin: 0;
+}
+
+.searchterms a {
+  display: block;
+  margin: .5rem 0;
+}
+
+#rss {
+  margin-top: 2rem;
+}
+
+.rss-subscribe img,
+.rss-subscribe a {
+  vertical-align: middle;
+}
+
+.rss-item {
+  margin-bottom: 1rem;
+  padding: .5rem 1rem;
+  background: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: .25rem;
+}
+
+.rss-item p {
+  margin: .5rem 0;
+}
+
+.rss-date {
+  font-size: 90%;
+  margin-bottom: 0;
+}
+
+.rss-title {
+  margin: 0;
+  font-size: 110%;
+}
+
+.rss-desc > i {
+  display: block;
+  margin-bottom: .5rem;
+  font-size: 90%;
+}

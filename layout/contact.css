@@ -1,0 +1,26 @@
+select {
+  padding: .5rem;
+}
+
+h2 {
+  margin-top: .5rem;
+}
+
+h3 {
+  margin-bottom: .5rem;
+}
+
+.repo {
+  border-top: 1px solid #cccccc;
+  padding-top: 1rem;
+  margin-top: 2rem;
+}
+
+.pre {
+  white-space: pre-wrap;
+}
+
+.search-link img,
+.search-link a {
+  vertical-align: middle;
+}

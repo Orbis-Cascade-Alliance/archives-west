@@ -1,0 +1,28 @@
+.appnotes,
+#source {
+  display: none;
+}
+
+.appnotes-link {
+  color: #006600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.context-link {
+  color: #990000;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.ui-button:focus {
+  outline: none !important;
+}
+
+.ui-dialog .ui-dialog-title {
+  white-space: normal;
+}
+
+#dialog-source textarea {
+  width: 98%;
+}

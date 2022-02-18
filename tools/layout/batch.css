@@ -1,0 +1,65 @@
+#form-files {
+  width: 600px;
+  margin: 0 auto;
+}
+
+#label-manual {
+  background: #e0e0e0;
+  border: 1px solid #cccccc;
+  border-radius: .25rem;
+  padding: .5rem;
+}
+
+#label-manual:hover,
+#label-manual:focus {
+  background: #eeeeee;
+}
+
+#label-manual input {
+  display: none;
+}
+
+#form-files p:last-child {
+  text-align: center;
+}
+
+.dropzone {
+  background: #C5DBDB;
+  padding: 1rem;
+  border: 2px dashed #333333;
+}
+
+#list,
+#upload {
+  display: none;
+}
+
+#upload {
+  font-size: 120%;
+}
+
+#list li {
+  margin: 0 0 1rem 0;
+}
+
+.highlight {
+  background: #D4EAEA;
+  border-color: #666666;
+}
+
+#report > h3 {
+  background: #49147e;
+  color: #fff;
+  padding: .5rem;
+}
+
+#report .compliance-report {
+  display: none;
+  padding: 0 1rem 1rem 1rem;
+  border: 2px dotted #ccc;
+  background: #f9f9f9;  
+}
+
+#report .compliance-report table {
+  background: #ffffff;
+}

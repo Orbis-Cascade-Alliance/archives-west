@@ -1,0 +1,16 @@
+#total {
+  font-weight: bold;
+}
+
+#loading {
+  display: block;
+  margin: 0 auto;
+}
+
+input.date {
+  margin-right: 1rem;
+}
+
+.btn-export {
+  float: right;
+}

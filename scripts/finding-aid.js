@@ -1,0 +1,212 @@
+var toc_top;
+
+$(document).ready(function() {
+  
+  // Style return to top links
+  $('a[title="Return to Top"]').addClass('backtotop');
+  
+  // Handle behavior of Table of Contents depending on window width
+  toc_structure();
+  toc_scroll();
+  table_structure();
+  var toc_offset = $('#toc').offset();
+  if (typeof(toc_offset) != 'undefined') {
+    toc_top = toc_offset.top;
+    $(window).resize(function() {
+      toc_structure();
+      toc_scroll();
+      table_structure();
+    });
+    $(window).scroll(function() {
+      toc_scroll();
+    });
+  }
+  
+  // Attach handler to toggle buttons
+  $('.toggle-button')
+    .each(function() {
+      var id = $(this).attr('id').substring(7);
+      var content = $('.' + id + '-content');
+      if ($(this).children('.glyphicon').hasClass('glyphicon-triangle-bottom')) {
+        content.show();
+      }
+      else {
+        content.hide();
+      }
+    })
+    .click(function(e) {
+      e.preventDefault();
+      var id = $(this).attr('id').substring(7);
+      var content = $('.' + id + '-content');
+      var glyphicon = $(this).children('.glyphicon').eq(0);
+      toggle_section(glyphicon, content);
+    });
+    
+  // Add links to controlaccess headings
+  $('#caID ul.ca_list').each(function() {
+    var facet;
+    if ($(this).prev('h4').length > 0) {
+      var heading_el = $(this).prev('h4');
+    }
+    else if ($(this).prev('h5').length > 0) {
+      var heading_el = $(this).prev('h5');
+    }
+    var heading = heading_el.text().trim();
+    if (heading == 'Subject Terms') {
+      facet = 'subject';
+    }
+    else if (heading == 'Geographical Names') {
+      facet = 'geogname';
+    }
+    else if (heading == 'Form or Genre Terms') {
+      facet = 'genreform';
+    }
+    else if (heading == 'Personal Names' || heading == 'Family Names' || heading == 'Corporate Names') {
+      facet = 'name';
+    }
+    else if (heading == 'Occupations') {
+      facet = 'occupation';
+    }
+    if (typeof(facet) != 'undefined') {
+      $(this).children('li').each(function() {
+        var facet_term = $(this).text().replace(/\s+/g,' ').trim();
+        if (facet == 'name') {
+          facet_term = facet_term.replace(/^(.+)\s\([a-z]+\)$/, "$1");
+        }
+        $(this).wrapInner('<a href="/search.php?facet=' + facet + ':' + encodeURIComponent(facet_term) + '"></a>');
+      });
+    }
+  });
+    
+  // Highlight keyword matches
+  // Uses the mark.js library at https://markjs.io/
+  var urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.get('q') != null) {
+    var keyword = urlParams.get('q').replace(/[^a-zA-Z0-9\s]/g, "");
+    if (keyword != null) {
+      $('#docBody').mark(keyword, {
+        "ignorePunctuation": ":;.,-–—‒_(){}[]!'\"+=".split("")
+      });
+    }
+  }
+  
+  // Dialog for QR codes
+  $('#dialog-qr').dialog({
+    autoOpen: false,
+    width: 300
+  });
+  $('#btn-qr').click(function(e) {
+    e.preventDefault();
+    $('#dialog-qr').dialog('open').html('<img src="' + $(this).attr('href') + '" alt="QR Code" />');
+    return false;
+  });
+  
+});
+
+// Toggle content with glyphicons
+function toggle_section(glyphicon, content) {
+  if (content.is(':visible')) {
+    content.hide();
+    $(glyphicon).removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-right');
+  }
+  else {
+    content.show();
+    $(glyphicon).removeClass('glyphicon-triangle-right').addClass('glyphicon-triangle-bottom');
+  }
+}
+
+// Set height and behavior of Table of Contents
+function toc_structure() { 
+  if ($(window).outerWidth() >= 1200) {
+    $('#toc').css('max-height', $(window).height());
+    $('#toc-toggle').remove();
+    $('#toc > ul').show();
+  }
+  else {
+    $('#toc').css('max-height', 'auto');
+    if ($('#toc-toggle').length == 0) {
+      $('#toc h2').append('<span id="toc-toggle" class="glyphicon glyphicon-triangle-right" onclick="toggle_section(this, $(\'#toc > ul\'));"></span>');
+      $('#toc > ul').hide();
+    }
+  }
+}
+
+// Fix position of Table of Contents on scroll
+function toc_scroll() {
+  if ($(window).outerWidth() >= 1200) {
+    if ($(window).scrollTop() >= toc_top) {
+      console.log('fixed');
+      $('#toc').css({
+        'position': 'fixed',
+        'top': '0'
+      });
+    }
+    else {
+      $('#toc').css({
+        position: 'absolute',
+        top: 'auto'
+      });
+    }
+  }
+  else {
+    $('#toc').css({
+      position: 'relative',
+      top: 'auto'
+    });
+  }
+}
+
+// Mobile tables
+function table_structure() {
+  if ($(window).outerWidth() > 760) {
+    $('thead, tr').show();
+    $('td').css({
+      'display': 'table-cell',
+      'border-top': '1px solid #ddd',
+      'padding': '.5rem'
+    });
+    $('.table-label').remove();
+  }
+  else {
+    $('table').each(function() {
+      $(this).find('thead').hide();
+      $(this).find('td').css({
+        'display': 'block',
+        'border-top': 'none',
+        'padding': '.5rem 0'
+      });
+      var container_labels = [];
+      $(this).find('tbody tr').each(function() {
+        if ($(this).find('td span.containerLabel').length > 0) {
+          container_labels = [];
+          $(this).children('td').each(function() {
+            if ($(this).children('span.containerLabel').length > 0) {
+              container_labels.push($(this).children('span.containerLabel').text());
+            }
+            else {
+              container_labels.push('');
+            }
+          });
+          $(this).hide();
+        }
+        else {
+          var i = 0;
+          $(this).children('td').each(function() {
+            if (typeof(container_labels[i]) != 'undefined' && container_labels[i] != '' && $(this).text() != '' && $(this).children('.c02').length == 0 && $(this).children('.table-label').length == 0 && $(this).text().substring(0, container_labels[i].length) != container_labels[i]) {
+              $(this).prepend('<span class="table-label">' + container_labels[i] + ':</span> ');
+            }
+            if ($(this).is(':last-child')) {
+              $(this).css('border-bottom', '1px solid #ddd');
+            }
+            i++;
+          });
+        }
+      });
+    });
+  }
+}
+
+// Print window
+function print_finding_aid() {
+  window.print();
+}

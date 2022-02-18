@@ -1,0 +1,59 @@
+@media print {
+  
+  body {
+    font-family: "Times New Roman", serif;
+    font-size: 12pt;
+  }
+  
+  /* Hide table of contents, downloads, glyphicons and return to top links */
+  #toc,
+  #downloads,
+  .backtotop,
+  .glyphicon {
+    display: none;
+  }
+  
+  /* Remove margin and padding on wrapper divs */
+  #main-content, 
+  #main, 
+  #header  {
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Style headings */
+  h2 {
+    font-size: 24pt;
+  }
+  
+  h3 {
+    font-size: 18pt;
+    border: none;
+    padding-top: 0;
+  }
+  
+  h4 {
+    font-size: 14pt;
+  }
+  
+  /* Prevent page breaks in the middle of elements */
+  #docBody div {
+    page-break-before: avoid;
+    page-break-after: avoid;
+  }
+  
+  #docBody table tr {
+    page-break-inside: avoid;
+  }
+  
+  /* Align footer left */
+  #main .footer {
+    text-align: left;
+  }
+  
+  /* Give highlighted text a transparent background */
+  mark {
+    background: transparent;
+  }
+  
+}

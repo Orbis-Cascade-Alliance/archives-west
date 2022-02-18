@@ -1,0 +1,124 @@
+#home-columns h3 {
+  margin: 0;
+  font-weight: normal;
+}
+
+#home-columns ul {
+  margin-top: 0;
+}
+
+/* Tabs */
+
+#tabs {
+  display: block;
+  padding-left: 0;
+  margin: 0;
+}
+
+#tabs li {
+  display: inline-block;
+  margin-right: .5rem;
+  border-top-left-radius: .25rem;
+  border-top-right-radius: .25rem;
+  border: 1px solid #aaaaaa;
+  background: #dddddd;
+}
+
+#tabs li.active {
+  background: #f9f9f9;
+  border-bottom: 1px solid #f9f9f9;
+}
+
+#tabs li a {
+  display: block;
+  padding: .5rem;
+  color: #333333;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#tabs li.active a {
+  pointer-events: none;
+  cursor: default;
+}
+
+#tab-contents {
+  background: #f9f9f9;
+  border: 1px solid #aaaaaa;
+  margin-top: -1px;
+  padding: 1rem;
+}
+
+/* Finding Aids Tab */
+
+#finding-aids {
+  width: 100%;
+  background: #ffffff;
+}
+
+#finding-aids .date {
+  white-space: nowrap;
+}
+
+#reset {
+  background: #555555;
+}
+
+#reset:hover {
+  background: #666666;
+}
+
+button.help {
+  display: inline-block;
+  background: #eeeeee;
+  color: #333333;
+  padding: 0;
+  width: 1rem;
+  border-radius: .5rem;
+  border: 1px solid #333333;
+  font-size: 75%;
+  vertical-align: top;
+  cursor: pointer;
+}
+
+button.help:hover,
+button.help:focus {
+  background: #f9f9f9;
+}
+
+button.btn-delete {
+  background: #555555;
+}
+button.btn-delete:hover,
+button.btn-delete:focus {
+  background: #666666; 
+}
+
+.pagination {
+  display: flex;
+  margin: .5rem 0;
+}
+
+.prev, .next {
+  flex: 0 0 100px;
+}
+
+.next {
+  text-align: right;
+}
+
+.num-results {
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+.prev button, .next button {
+  display: none;
+}
+
+/* Jobs Tab */
+
+#results table ul {
+  padding-left: 1rem;
+}
+

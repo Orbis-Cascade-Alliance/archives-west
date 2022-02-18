@@ -1,0 +1,166 @@
+html, body {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: #f9f9f9;
+  line-height: 1.5;
+  font-family: "Helvetica Neue", Arial, sans-serif;
+}
+
+h1, h2 {
+  font-weight: normal;
+}
+
+table {
+  border-collapse: collapse;
+  max-width: 100%;
+}
+
+table th,
+table td {
+  padding: .5rem;
+  border: 1px solid #999999;
+}
+
+table th {
+  background: #C5DBDB;
+}
+
+.even {
+  background: #EEF7F7;
+}
+
+.errors,
+.success {
+  background: #f9f9f9;
+  border: 2px dotted #cccccc;
+}
+
+.errors {
+  color: #990000;
+  padding: 1rem 2rem;
+}
+
+.success {
+  color: #009900;
+  padding: 1rem;
+}
+
+.no-break {
+  white-space: nowrap;
+}
+
+input[type="text"],
+input[type="password"],
+select,
+textarea {
+  background: white;
+  border-radius: .25rem;
+  border: 1px solid #ccc;
+  padding: .5rem;
+}
+
+input[type="button"],
+input[type="submit"],
+button {
+  padding: .5rem;
+  background: #496568;
+  color: #fff;
+  border-radius: .25rem;
+  border: none;
+}
+
+input[type="button"]:hover, input[type="button"]:focus,
+input[type="submit"]:hover, input[type="submit"]:focus,
+button:hover, button:focus {
+  background: #597a7d;
+}
+
+form.table-layout {
+  display: table;
+}
+
+form.table-layout p {
+  display: table-row;
+}
+
+form.table-layout label,
+form.table-layout input[type="text"],
+form.table-layout input[type="checkbox"],
+form.table-layout textarea {
+  display: table-cell;
+}
+
+form.table-layout label {
+  padding: .5rem 1rem .5rem 0;
+  vertical-align: top;
+}
+
+form.table-layout input[type="text"] {
+  width: 30rem;
+}
+
+form.table-layout textarea {
+  width: 30rem;
+  height: 5rem;
+}
+
+form.table-layout input[type="checkbox"] {
+  margin: .75rem 0 0 0;
+  vertical-align: bottom;
+}
+
+#main-content {
+  width: 1200px;
+  background: #ffffff;
+  margin: 0 auto;
+}
+
+#main-header {
+  background: #eeeeee;
+  padding: 1rem 2rem;
+  display: flex;
+}
+
+#main-header #title {
+  flex: 1 1 auto;
+}
+
+#main-header #title h1 {
+  margin: 0;
+  font-size: 175%;
+}
+
+#main-header #login {
+  flex: 1 1 auto;
+  text-align: right;
+}
+
+#main-header #login .username {
+  font-weight: bold;
+}
+
+#page-content {
+  padding: 1rem 2rem;
+}
+
+#home-columns {
+  display: flex;
+}
+
+#home-columns > div {
+  flex: 1 1 300px;
+}
+
+.red {
+  background: #ff9999;
+}
+
+.loading {
+  background-image: url('../../layout/images/loading.gif');
+  background-position: center;
+  background-repeat: no-repeat;
+  height: 120px;
+}

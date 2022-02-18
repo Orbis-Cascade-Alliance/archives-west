@@ -1,0 +1,44 @@
+<?php
+// Include definitions
+$page_title = 'Analytics Report';
+require_once('/var/www/defs.php');
+include(AW_INCLUDES . '/server-header.php');
+include(AW_TOOL_INCLUDES . '/tools-header.php');
+?>
+<link rel="stylesheet" href="<?php echo AW_DOMAIN; ?>/tools/layout/report.css" />
+<script src="<?php echo AW_DOMAIN; ?>/tools/scripts/report.js"></script>
+<?php
+include(AW_TOOL_INCLUDES . '/tools-header-end.php');
+
+if ($user->is_admin()) {
+  // Print repo select form
+  include('../repo-form.php'); 
+}
+if ($repo_id != 0) {
+  $start_date = date('Y-m-d', strtotime('first day of this month'));
+  $end_date = date('Y-m-d', time());
+  if (isset($_SESSION['report_start']) && !empty($_SESSION['report_start'])) {
+    $start_date = $_SESSION['report_start'];
+  }
+  if (isset($_SESSION['report_end']) && !empty($_SESSION['report_end'])) {
+    $end_date = $_SESSION['report_end'];
+  }
+?>
+<p>Select a date range below to generate a report of finding aid views from Google Analytics. Usage was recorded starting August 15, 2016.</p>
+<p>For large repositories with thousands of finding aids, requests can take a long time and might fail after 60 seconds. Requests are most likely to be successful with date ranges of <strong>90 days</strong> or less.</p>
+<form id="form-report" method="post" action="report.php">
+  <p>
+    <label for="start">Start</label> <input type="text" name="start" id="start" class="date" value="<?php echo $start_date; ?>" />
+    <label for="end">End</label> <input type="text" name="end" id="end" class="date" value="<?php echo $end_date; ?>"  />
+    <input type="submit" value="Get Report" />
+  </p>
+</form>
+<div id="report"></div>
+<div id="dialog-dates" title="Dates required">
+  <p>Start and end date are required.</p>
+</div>
+<?php
+}
+
+include(AW_TOOL_INCLUDES . '/tools-footer.php');
+?>
