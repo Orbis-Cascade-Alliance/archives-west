@@ -13,4 +13,6 @@ This repository does not included all of the files needed by the website.
 
 In Apache, an environment variable AW_HOME must be set to the root directory where the defs.php file lives, for inclusion in other scripts.
 
+Information about ARKs, repositories, users, and jobs are stored in a MySQL database. The structure is not included in this git repository.
+
 Other setup details can be found in the [BaseX Development Documentation](https://docs.google.com/document/d/1Hjj5mskZhz3TlZAsPmczKCQQ6DnsALVBOjNAhNDSWHk/edit?usp=sharing).
