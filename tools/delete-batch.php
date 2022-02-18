@@ -19,7 +19,7 @@ if (isset($_SESSION['fa_deleted']) && !empty($_SESSION['fa_deleted'])) {
 ?>
 
 <p>Enter ARKs below for deletion, separated by line breaks.</p>
-<form id="form-batch-delete" action="delete-process.php" method="post">
+<form id="form-batch-delete" action="<?php echo AW_DOMAIN; ?>/tools/delete-process.php" method="post">
   <input type="hidden" name="type" value="batch" />
   <p><textarea name="ark" rows="10" cols="50"></textarea></p>
   <p><input type="submit" value="Delete Finding Aids" /></p>
