@@ -16,7 +16,7 @@ class AW_Process{
     }
   }
   private function runCom(){
-    $command = 'nohup ' . $this->command . ' > /dev/null 2>&1 & echo $!';
+    $command = 'export AW_HOME="' . getenv('AW_HOME') . '" && nohup ' . $this->command . ' > /dev/null 2>&1 & echo $!';
     exec($command, $op);
     $pid = (int) $op[0];
     $this->setPid($pid);

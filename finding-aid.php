@@ -7,6 +7,8 @@ include(AW_INCLUDES . '/server-header.php');
 include(AW_INCLUDES . '/header.php');
 
 // Get finding aid from ARK
+$title = 'Not Found';
+$finding_aid = null;
 if (isset($_GET['ark']) && !empty($_GET['ark'])) {
   $ark = filter_var($_GET['ark'], FILTER_SANITIZE_STRING);
   try {
@@ -37,7 +39,7 @@ else {
 <?php include(AW_INCLUDES . '/header-end.php'); ?>
 
 <?php
-if ($finding_aid->is_active()) {
+if ($finding_aid != null && $finding_aid->is_active()) {
   if ($cache = $finding_aid->get_cache()) {
     ?>
     <div id="downloads">

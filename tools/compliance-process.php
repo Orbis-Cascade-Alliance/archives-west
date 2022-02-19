@@ -51,7 +51,7 @@ if (isset($_FILES['ead']) && !empty($_FILES['ead'])) {
   $_SESSION['compliance_report'] = $transformed_xml;
   $_SESSION['compliance_errors'] = $errors;
 }
-if ($type != 'batch') {
+if (!isset($type) || $type != 'batch') {
   header('Location: /tools/compliance.php');
 }
 ?>

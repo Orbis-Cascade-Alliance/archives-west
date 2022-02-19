@@ -81,7 +81,7 @@ if (isset($_FILES['ead']) && !empty($_FILES['ead'])) {
   $_SESSION['validation_errors'] = $errors;
   
 }
-if ($type != 'batch') {
+if (!isset($type) || $type != 'batch') {
   header('Location: /tools/validation.php');
 }
 ?>

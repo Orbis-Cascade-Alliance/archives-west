@@ -166,7 +166,7 @@ else {
 $_SESSION['upload_file'] = $file_name;
 $_SESSION['upload_errors'] = $errors;
    
-if ($type != 'batch') {
+if (!isset($type) || $type != 'batch') {
   header('Location: /tools/upload.php?ark=' . $ark);
 }
 ?>
