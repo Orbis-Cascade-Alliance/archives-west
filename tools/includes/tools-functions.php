@@ -133,11 +133,6 @@ function build_ark_select($repo_id, $active = 1, $null_file = 0) {
   return $ark_select;
 }
 
-// Cache finding aid in the background
-function cache_finding_aid($ark) {
-  exec('php ' . AW_HTML . '/tools/cache.php ' . $ark);
-}
-
 // Check for running cache process
 function check_cache_process() {
   exec('ps -u www-data -f', $output);
