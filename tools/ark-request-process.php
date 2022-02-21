@@ -45,5 +45,5 @@ if ($repo_id != 0 && isset($_POST['num']) && !empty($_POST['num'])) {
   }
   $_SESSION['new_arks'] = $arks;
 }
-header('Location: /tools/ark-request.php');
+header('Location: ' . AW_DOMAIN . '/tools/ark-request.php');
 ?>

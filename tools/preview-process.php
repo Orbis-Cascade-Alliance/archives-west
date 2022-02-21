@@ -74,7 +74,7 @@ if (!$stripped_transformed) {
 }
 if (!empty($errors)) {
   $_SESSION['preview_errors'] = $errors;
-  header('Location: /tools/preview.php');
+  header('Location: ' . AW_DOMAIN . '/tools/preview.php');
 }
 else {
   include(AW_INCLUDES . '/header.php');

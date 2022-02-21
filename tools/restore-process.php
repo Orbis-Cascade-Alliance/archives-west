@@ -58,5 +58,5 @@ if (isset($_POST['ark']) && !empty($_POST['ark'])) {
     $_SESSION['fa_arks'] = array();
   }
 }
-header('Location: /tools/restore.php');
+header('Location: ' . AW_DOMAIN . '/tools/restore.php');
 ?>

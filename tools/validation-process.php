@@ -82,6 +82,6 @@ if (isset($_FILES['ead']) && !empty($_FILES['ead'])) {
   
 }
 if (!isset($type) || $type != 'batch') {
-  header('Location: /tools/validation.php');
+  header('Location: ' . AW_DOMAIN . '/tools/validation.php');
 }
 ?>

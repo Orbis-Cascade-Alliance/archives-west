@@ -167,6 +167,6 @@ $_SESSION['upload_file'] = $file_name;
 $_SESSION['upload_errors'] = $errors;
    
 if (!isset($type) || $type != 'batch') {
-  header('Location: /tools/upload.php?ark=' . $ark);
+  header('Location: ' . AW_DOMAIN . '/tools/upload.php?ark=' . $ark);
 }
 ?>

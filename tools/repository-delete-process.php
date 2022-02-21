@@ -92,5 +92,5 @@ if ($repo) {
 $_SESSION['repo_deletion_id'] = $repo_id;
 $_SESSION['repo_deletion_errors'] = $errors;
 $_SESSION['repo_id'] = 0;
-header('Location: /tools/repository-delete.php');
+header('Location: ' . AW_DOMAIN . '/tools/repository-delete.php');
 ?>

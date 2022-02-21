@@ -96,5 +96,5 @@ else {
 $_SESSION['repo_edit_attempted'] = true;
 $_SESSION['repo_edit_errors'] = $errors;
 
-header('Location: /tools/repository-edit.php');
+header('Location: ' . AW_DOMAIN . '/tools/repository-edit.php');
 ?>

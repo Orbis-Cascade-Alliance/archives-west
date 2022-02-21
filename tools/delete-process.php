@@ -69,6 +69,6 @@ if (isset($_POST['ark']) && !empty($_POST['ark'])) {
   }
 }
 if ($type == 'batch') {
-  header('Location: /tools/delete-batch.php');
+  header('Location: ' . AW_DOMAIN . '/tools/delete-batch.php');
 }
 ?>

@@ -80,6 +80,6 @@ if ($user_id != null) {
   
   $_SESSION['user_edit_errors'] = $errors;
   $_SESSION['user_edit_type'] = $user_id == 0 ? 'created' : 'edited';
-  header('Location: user-edit.php?u=' . $username);
+  header('Location: ' . AW_DOMAIN . '/tools/user-edit.php?u=' . $username);
 }
 ?>

@@ -77,5 +77,5 @@ else {
 
 $_SESSION['repo_creation_id'] = $repo_id;
 $_SESSION['repo_creation_errors'] = $errors;
-header('Location: /tools/repository-create.php');
+header('Location: ' . AW_DOMAIN . '/tools/repository-create.php');
 ?>

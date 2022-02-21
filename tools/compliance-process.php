@@ -52,6 +52,6 @@ if (isset($_FILES['ead']) && !empty($_FILES['ead'])) {
   $_SESSION['compliance_errors'] = $errors;
 }
 if (!isset($type) || $type != 'batch') {
-  header('Location: /tools/compliance.php');
+  header('Location: ' . AW_DOMAIN . '/tools/compliance.php');
 }
 ?>
