@@ -26,7 +26,7 @@ if ($repo_id != 0) {
     $_SESSION['preview_errors'] = array();
   }
 ?>
-  <form id="form-preview" action="/tools/preview-process.php" method="post" enctype="multipart/form-data" target="_blank">
+  <form id="form-preview" action="<?php echo AW_DOMAIN; ?>/tools/preview-process.php" method="post" enctype="multipart/form-data" target="_blank">
     <p><input type="file" name="ead" id="ead"></p>
     <p><input type="submit" value="Preview Finding Aid" name="submit"></p>
   </form>

@@ -73,8 +73,7 @@ if (!$stripped_transformed) {
   $errors[] = 'Result of transformation is empty. Try the <a href="/tools/validation.php">Document Validation</a> tool to see errors in the XML.';
 }
 if (!empty($errors)) {
-  $_SESSION['preview_errors'] = $errors;
-  header('Location: ' . AW_DOMAIN . '/tools/preview.php');
+  echo print_errors($errors);
 }
 else {
   include(AW_INCLUDES . '/header.php');
