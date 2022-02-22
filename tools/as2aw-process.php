@@ -432,31 +432,7 @@ else {
 }
 $_SESSION['conversion_errors'] = $errors;
 $_SESSION['converted_ead'] = $converted_ead;
-if ($process_type != 'batch') {
-  header('Location: as2aw.php');
-}
-
-function rename_c($c, $ead) {
-  $c_level = 1;
-  $parent_node = $c->parentNode;
-  if (substr($parent_node->tagName, 0, 2) == 'c0') {
-    $parent_level = (int) substr($parent_node->tagName, 2);
-    $c_level = $parent_level + 1;
-  }
-  $new_c = $ead->createElement('c0' . $c_level);
-  if ($level = $c->getAttribute('level')) {
-    $new_c->setAttribute('level', $level);
-  }
-  if ($c->hasChildNodes()) {
-    for ($i = 0; $i < count($c->childNodes); $i++) {
-      $child = $c->childNodes->item($i);
-      $new_child = $child->cloneNode(true);
-      $new_c->appendChild($new_child);
-      if ($new_child->tagName == 'c') {
-        rename_c($new_child, $ead);
-      }
-    }
-  }
-  $c->parentNode->replaceChild($new_c, $c);
+if (!isset($process_type) || $process_type != 'batch') {
+  header('Location: '. AW_DOMAIN . '/tools/as2aw.php');
 }
 ?>

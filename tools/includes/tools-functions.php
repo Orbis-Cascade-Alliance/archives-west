@@ -209,4 +209,29 @@ function get_as_oaipmh($url) {
   return $response;
 }
 
+// Rename c nodes in as2aw conversion
+function rename_c($c, $ead) {
+  $c_level = 1;
+  $parent_node = $c->parentNode;
+  if (substr($parent_node->tagName, 0, 2) == 'c0') {
+    $parent_level = (int) substr($parent_node->tagName, 2);
+    $c_level = $parent_level + 1;
+  }
+  $new_c = $ead->createElement('c0' . $c_level);
+  if ($level = $c->getAttribute('level')) {
+    $new_c->setAttribute('level', $level);
+  }
+  if ($c->hasChildNodes()) {
+    for ($i = 0; $i < count($c->childNodes); $i++) {
+      $child = $c->childNodes->item($i);
+      $new_child = $child->cloneNode(true);
+      $new_c->appendChild($new_child);
+      if ($new_child->tagName == 'c') {
+        rename_c($new_child, $ead);
+      }
+    }
+  }
+  $c->parentNode->replaceChild($new_c, $c);
+}
+
 ?>
