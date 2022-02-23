@@ -21,7 +21,7 @@ return <results>{
       let $aw_date := aw:get_aw_date($ead)
       where not($ark="") and (empty($arks) or $ark=$arks)
         group by $ark, $title, $aw_date
-          let $contains_all := ft:contains(string-join($result, ' '), $terms, map{'mode':'all','fuzzy':'true'})
+          let $contains_all := ft:contains(string-join($result, ' '), $terms, map{'mode':'all','fuzzy':$f})
           where ($contains_all = xs:boolean(1))
             let $count := count($result)
             let $percent_exact := count(
