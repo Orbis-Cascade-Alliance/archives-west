@@ -11,7 +11,7 @@ if (!isset($_SESSION['per_page'])) {
 }
 
 if (!empty($_POST)) {
-  
+  $time_start = time();
   // Get submitted search parameters (query, mainagencycode, and facets)
   $query = urldecode(filter_var($_POST['query'], FILTER_SANITIZE_STRING));
   $mainagencycode = filter_var($_POST['mainagencycode'], FILTER_SANITIZE_STRING);
@@ -26,7 +26,10 @@ if (!empty($_POST)) {
   }
   $page = filter_var($_POST['page'], FILTER_SANITIZE_NUMBER_INT);
   $sort = filter_var($_POST['sort'], FILTER_SANITIZE_STRING);
-  $type = filter_var($_POST['type'], FILTER_SANITIZE_STRING);
+  $type = 'fuzzy';
+  if (isset($_POST['type']) && !empty($_POST['type'])) {
+    $type = filter_var($_POST['type'], FILTER_SANITIZE_STRING);
+  }
   
   // If at least one parameter...
   if ($query || $facets || $mainagencycode) {
@@ -50,13 +53,14 @@ if (!empty($_POST)) {
     }
     
     // Construct the AW_Search object
+    $time_search = time();
     try {
       $search = new AW_Search($query, $facets, $repos, $sort, $type);
     }
     catch (Exception $e) {
       die($e->getMessage());
     }
-    
+    $time_finished = time();
     // Print the #results div contents (facets, brief records, all-arks for JS)
     //echo '<p>Filtered query: ' . $search->get_filtered_query();
     if ($search->get_result_count() > 0) {
@@ -97,6 +101,13 @@ if (!empty($_POST)) {
       
       // End flex row
       echo '</div><!-- end flex -->';
+      $time_printed = time();
+      // Print times
+      echo '<div style="display:none;">
+        <p>Start to search: ' . ($time_search - $time_start) . ' s</p>
+        <p>Search complete: ' . ($time_finished - $time_start) . ' s</p>
+        <p>Printing complete: ' . ($time_printed - $time_finished) . ' s</p>
+      </div>';
     }
     
     // Print no results message

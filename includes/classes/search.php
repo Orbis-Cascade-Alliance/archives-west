@@ -12,6 +12,7 @@ class AW_Search {
   private $repo; // Object AW_Repo for a single repository search
   private $results; // Array of ARKs
   private $excluded_words; // Array of words excluded from search;
+  public $time;
   
   function __construct($query, $facets, $repos, $sort, $type) {
     $this->query = $query;
@@ -174,6 +175,7 @@ class AW_Search {
       }
       
       // POST query results from BaseX
+      $time_start = time();
       $results = array();
       if ($filtered_query) {
         $body = '<run>
@@ -196,6 +198,8 @@ class AW_Search {
       $opts = get_opts($body);
       $context = stream_context_create($opts);
       if ($result_string = file_get_contents(BASEX_REST, FALSE, $context)) {
+        $time_stop = time();
+        $this->time = $time_stop - $time_start;
         $result_xml = simplexml_load_string($result_string);
         foreach ($result_xml->children() as $ark) {
           $results[] = (string) $ark;

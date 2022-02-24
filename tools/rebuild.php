@@ -7,8 +7,8 @@ require_once(getenv('AW_HOME') . '/defs.php');
 include(AW_INCLUDES . '/server-header.php');
 include(AW_TOOL_INCLUDES . '/tools-header.php');
 ?>
-<link rel="stylesheet" href="/tools/layout/rebuild.css" />
-<script src="/tools/scripts/rebuild.js"></script>
+<link rel="stylesheet" href="<?php echo AW_DOMAIN; ?>/tools/layout/rebuild.css" />
+<script src="<?php echo AW_DOMAIN; ?>/tools/scripts/rebuild.js"></script>
 <?php
 include(AW_TOOL_INCLUDES . '/tools-header-end.php');
 
