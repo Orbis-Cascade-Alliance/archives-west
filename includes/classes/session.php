@@ -181,6 +181,7 @@ class AW_Session {
     $this->session->execute('OPEN eads' . $repo_id);
     $this->session->execute('SET STOPWORDS ' . BASEX_INSTALL . '/etc/stopwords.txt');
     $this->session->execute('CREATE INDEX fulltext');
+    $this->session->execute('CLOSE');
   }
 
   // Drop all facets
