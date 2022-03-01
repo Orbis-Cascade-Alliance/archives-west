@@ -25,7 +25,6 @@ if ($type == 'all') {
       $session->build_db($repo_id);
       echo $session->print_info();
       $session->optimize_db($repo_id);
-      echo $session->print_info();
       break;
     case 3:
       // Build text databases
@@ -33,7 +32,6 @@ if ($type == 'all') {
       echo 'Building text index for ' . $repo_id . '...' . "\n";
       $session->build_text($repo_id);
       $session->index_text($repo_id);
-      echo $session->print_info();
       break;
     case 4:
       // Build brief database
