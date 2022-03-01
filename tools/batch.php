@@ -7,10 +7,10 @@ require_once(getenv('AW_HOME') . '/defs.php');
 include(AW_INCLUDES . '/server-header.php');
 include(AW_TOOL_INCLUDES . '/tools-header.php');
 ?>
-<link rel="stylesheet" href="/tools/layout/batch.css" />
-<link rel="stylesheet" href="/tools/layout/compliance.css" />
-<script src="/tools/scripts/batch.js"></script>
-<script src="/tools/scripts/compliance.js"></script>
+<link rel="stylesheet" href="<?php echo AW_DOMAIN; ?>/tools/layout/batch.css" />
+<link rel="stylesheet" href="<?php echo AW_DOMAIN; ?>/tools/layout/compliance.css" />
+<script src="<?php echo AW_DOMAIN; ?>/tools/scripts/batch.js"></script>
+<script src="<?php echo AW_DOMAIN; ?>/tools/scripts/compliance.js"></script>
 <?php
 include(AW_TOOL_INCLUDES . '/tools-header-end.php');
 

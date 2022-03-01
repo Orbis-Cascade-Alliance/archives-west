@@ -79,10 +79,10 @@ else {
   include(AW_INCLUDES . '/header.php');
 ?>
   <title>Preview - <?php echo SITE_TITLE; ?></title>
-  <link rel="stylesheet" href="/layout/finding-aid.css" />
-  <link rel="stylesheet" href="/layout/finding-aid-print.css" />
-  <script src="/scripts/jquery.mark.min.js"></script>
-  <script src="/scripts/finding-aid.js"></script>
+  <link rel="stylesheet" href="<?php echo AW_DOMAIN; ?>/layout/finding-aid.css" />
+  <link rel="stylesheet" href="<?php echo AW_DOMAIN; ?>/layout/finding-aid-print.css" />
+  <script src="<?php echo AW_DOMAIN; ?>/scripts/jquery.mark.min.js"></script>
+  <script src="<?php echo AW_DOMAIN; ?>/scripts/finding-aid.js"></script>
 <?php
   include(AW_INCLUDES . '/header-end.php');
 ?>

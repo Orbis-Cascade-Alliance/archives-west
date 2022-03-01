@@ -18,7 +18,7 @@ if ($user->is_admin()) {
 }
 if ($repo_id != 0) {
 ?>
-  <form id="form-request-arks" method="post" action="/tools/ark-request-process.php">
+  <form id="form-request-arks" method="post" action="<?php echo AW_DOMAIN; ?>/tools/ark-request-process.php">
     <input type="hidden" name="repo_id" value="<?php echo $repo_id; ?>" />
     <p>
       <label for="num">How many ARKs?</label>

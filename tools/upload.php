@@ -7,8 +7,8 @@ require_once(getenv('AW_HOME') . '/defs.php');
 include(AW_INCLUDES . '/server-header.php');
 include(AW_TOOL_INCLUDES . '/tools-header.php');
 ?>
-<link rel="stylesheet" href="/tools/layout/upload.css" />
-<script src="/tools/scripts/upload.js"></script>
+<link rel="stylesheet" href="<?php echo AW_DOMAIN; ?>/tools/layout/upload.css" />
+<script src="<?php echo AW_DOMAIN; ?>/tools/scripts/upload.js"></script>
 <?php
 include(AW_TOOL_INCLUDES . '/tools-header-end.php');
 
@@ -33,7 +33,7 @@ if ($repo_id != 0) {
     $ark_select = build_ark_select($repo_id, 1, 1);
     if ($ark_select) {
       echo '<p>Select an unused ARK from the dropdown below.</p>';
-      echo '<form id="form-ark" action="/tools/upload.php" method="get">
+      echo '<form id="form-ark" action="' . AW_DOMAIN . '/tools/upload.php" method="get">
         <p>' . $ark_select . ' <input type="submit" value="Use ARK" /></p>
       </form>';
     }
