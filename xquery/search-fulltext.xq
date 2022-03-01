@@ -37,7 +37,7 @@ let $arks := tokenize($a, '\|')
 return <results>{
   for $db_id in tokenize($d, '\|')
     for $result in ft:search('text' || $db_id, $terms, map{'mode':'all','fuzzy':$f})
-      let $ead := $result/ancestor::ead
+      let $ead := $result/parent::ead
       let $ark := string($ead/@ark)
       let $title := string($ead/@title)
       let $aw_date := string($ead/@date)

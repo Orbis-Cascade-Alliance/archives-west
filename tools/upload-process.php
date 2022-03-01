@@ -123,7 +123,7 @@ if ($ark) {
             $session = new AW_Session();
             if ($replace) {
               $session->replace_document($repo_id, $current_file_name, $file_name);
-              $session->delete_from_text($repo_id, $ark)
+              $session->delete_from_text($repo_id, $ark);
               $session->delete_from_brief($repo_id, $ark);
               $session->delete_from_facets($repo_id, $ark);
             }

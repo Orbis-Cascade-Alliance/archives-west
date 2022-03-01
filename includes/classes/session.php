@@ -128,6 +128,7 @@ class AW_Session {
     $this->session->execute('SET STOPWORDS ' . BASEX_INSTALL . '/etc/stopwords.txt');
     $this->session->execute('CREATE DB text' . $repo_id);
     $this->session->execute('ADD TO text' . $repo_id . ' <eads></eads>');
+    $this->session->execute('OPTIMIZE');
     $this->session->execute('CLOSE');
   }
   
@@ -150,18 +151,14 @@ class AW_Session {
   }
   
   // Add a finding aid to the text index
+  // Results are inserted within the XQuery
   function add_to_text($repo_id, $file) {
     try {
       $input = file_get_contents(AW_HTML . '/xquery/index-text-file.xq');
       $query = $this->session->query($input);
       $query->bind("d", $repo_id);
       $query->bind("f", $file);
-      if ($results = $query->execute()) {
-        // Results are inserted within the XQuery
-        $this->session->execute('OPEN text' . $repo_id);
-        $this->session->execute('OPTIMIZE');
-        $this->session->execute('CLOSE');
-      }
+      $results = $query->execute();
       $query->close();
     }
     catch (BaseXException $e) {
@@ -281,6 +278,7 @@ class AW_Session {
   }
   
   // Add/update facet terms for a finding aid
+  // Results are inserted within the XQuery
   function add_to_facets($repo_id, $file, $ark) {
     $types = get_facet_types();
     foreach ($types as $facet_name => $local_names) {
@@ -290,7 +288,6 @@ class AW_Session {
       $query->bind("d", $repo_id);
       $query->bind("f", $file);
       if ($results = $query->execute()) {
-        // Results are inserted within the XQuery
         $result_xml = simplexml_load_string($results);
         $update_input = file_get_contents(AW_HTML . '/xquery/update-facet.xq');
         if ($update_input) {
