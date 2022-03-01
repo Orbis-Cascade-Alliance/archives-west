@@ -5,30 +5,29 @@ declare variable $d as xs:string external;
 declare variable $s as xs:string external;
 declare variable $f as xs:string external;
 
-declare function local:calculate_score($db_id as xs:string, $terms as xs:string+, $results as node()*, $title as xs:string) as xs:float {
-  let $count := xs:integer(count($results))
+declare function local:calculate_score($db_id as xs:string, $terms as xs:string+, $result as node()*, $title as xs:string, $basex_score as xs:double) as xs:double {
   let $boost := fold-left(
     $terms,
-    local:calculate_boost(string(head($terms)), $results, $title, $count),
+    local:calculate_boost(string(head($terms)), $result, $title),
     function($running_boost, $term) { 
-      let $term_boost := local:calculate_boost($term, $results, $title, $count)
+      let $term_boost := local:calculate_boost($term, $result, $title)
       return $running_boost + $term_boost
     }
   )
-  let $phrase_boost := local:in_title($title, string-join($terms, ' '))
-  let $score := ($count * 0.0001) + $boost + $phrase_boost
+  let $phrase_boost := local:in_string($result, string-join($terms, ' '))
+  let $score := $basex_score + $boost + $phrase_boost
   return $score
 };
 
-declare function local:calculate_boost($term as xs:string, $results as node()*, $title as xs:string, $count as xs:integer) as xs:float {
-  let $in_title := local:in_title($title, $term)
-  let $percent_exact := count($results[contains(lower-case(.), lower-case($term))]) div $count
-  let $boost := $in_title + $percent_exact
+declare function local:calculate_boost($term as xs:string, $result as node()*, $title as xs:string) as xs:double {
+  let $in_title := local:in_string($title, $term)
+  let $exact := local:in_string($result, $term)
+  let $boost := $in_title + $exact
   return $boost
 };
 
-declare function local:in_title($title as xs:string, $term as xs:string) as xs:integer {
-  let $contains := xs:integer(xs:boolean(contains(lower-case($title), lower-case($term))))
+declare function local:in_string($string as xs:string, $term as xs:string) as xs:integer {
+  let $contains := xs:integer(xs:boolean(contains(lower-case($string), lower-case($term))))
   return $contains
 };
 
@@ -36,14 +35,14 @@ let $terms := tokenize($q, '\|')
 let $arks := tokenize($a, '\|')
 return <results>{
   for $db_id in tokenize($d, '\|')
-    for $result in ft:search('text' || $db_id, $terms, map{'mode':'all','fuzzy':$f})
+    for $result score $basex_score in ft:search('text' || $db_id, $terms, map{'mode':'all','fuzzy':$f})
       let $ead := $result/parent::ead
       let $ark := string($ead/@ark)
-      let $title := string($ead/@title)
-      let $aw_date := string($ead/@date)
       where not($ark="") and (empty($arks) or $ark=$arks)
+        let $title := string($ead/@title)
+        let $aw_date := string($ead/@date)
         order by
-          if ($s eq "score") then local:calculate_score($db_id, $terms, $result, $title) else() descending,
+          if ($s eq "score") then local:calculate_score($db_id, $terms, $result, $title, $basex_score) else() descending,
           if ($s eq "title") then $title else() ascending,
           if ($s eq "date") then $aw_date else() descending
         return <ark>{$ark}</ark>

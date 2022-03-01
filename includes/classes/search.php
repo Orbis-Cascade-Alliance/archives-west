@@ -206,7 +206,7 @@ class AW_Search {
         }
       }
       else {
-        throw new Exception('REST response failed.');
+        throw new Exception('An error occurred in full-text searching.');
       }
       $this->results = $results;
     }
@@ -238,6 +238,9 @@ class AW_Search {
           foreach ($facet_xml->ark as $ark) {
             $results[] = (string) $ark;
           }
+        }
+        else {
+          throw new Exception('An error occurred getting facet results.');
         }
       }
       $this->facet_results = $results;
@@ -296,39 +299,43 @@ class AW_Search {
     </run>';
     $opts = get_opts($body);
     $context = stream_context_create($opts);
-    $facet_result_string = file_get_contents(BASEX_REST, FALSE, $context);
-    $facet_xml = simplexml_load_string($facet_result_string);
-    
-    // Start output buffer
-    ob_start();
-    
-    // Repository facet
-    if (count($this->get_repos()) > 1) {
-      $repos = array();
+    if ($facet_result_string = file_get_contents(BASEX_REST, FALSE, $context)) {
+      $facet_xml = simplexml_load_string($facet_result_string);
       
-      // Get repository information for the ARKs
-      if ($mysqli = connect()) {
-        $ark_result = $mysqli->query('SELECT repo_id, count(ark) as count
-          FROM arks
-          WHERE ark IN("' . implode('","', $results) . '")
-          GROUP BY repo_id
-          ORDER BY count DESC'
-        );
+      // Start output buffer
+      ob_start();
+      
+      // Repository facet
+      if (count($this->get_repos()) > 1) {
         $repos = array();
-        while ($ark_row = $ark_result->fetch_assoc()) {
-          $repos[$ark_row['repo_id']] = $ark_row['count'];
-        }
         
-        // Print repository facet
-        echo '<h3>Repository</h3>';
-        echo '<ul>';
-        foreach ($repos as $repo_id => $repo_count) {
-          $repo = new AW_Repo($repo_id);
-          echo '<li><a href="' . $this->get_link('r=' . $repo->get_mainagencycode()) . '">' . $repo->get_name() . '</a> (' . $repo_count . ')</li>';
+        // Get repository information for the ARKs
+        if ($mysqli = connect()) {
+          $ark_result = $mysqli->query('SELECT repo_id, count(ark) as count
+            FROM arks
+            WHERE ark IN("' . implode('","', $results) . '")
+            GROUP BY repo_id
+            ORDER BY count DESC'
+          );
+          $repos = array();
+          while ($ark_row = $ark_result->fetch_assoc()) {
+            $repos[$ark_row['repo_id']] = $ark_row['count'];
+          }
+          
+          // Print repository facet
+          echo '<h3>Repository</h3>';
+          echo '<ul>';
+          foreach ($repos as $repo_id => $repo_count) {
+            $repo = new AW_Repo($repo_id);
+            echo '<li><a href="' . $this->get_link('r=' . $repo->get_mainagencycode()) . '">' . $repo->get_name() . '</a> (' . $repo_count . ')</li>';
+          }
+          echo '</ul>';
+          $mysqli->close();
         }
-        echo '</ul>';
-        $mysqli->close();
       }
+    }
+    else {
+      throw new Exception('An error occurred printing facets.');
     }
     
     // Place, Name, Subject, Occupation, and Material Type
