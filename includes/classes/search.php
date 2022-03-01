@@ -292,9 +292,11 @@ class AW_Search {
     
     // POST ARKs to facet_terms.xq
     $types = get_facet_types();
+    $max_shown = 20;
     $body = '<run>
       <variable name="n" value="' . implode('|', array_keys($types)) . '" />
       <variable name="a" value="' . implode('|', $results) . '" />
+      <variable name="m" value="' . $max_shown . '" />
       <text>get-facets.xq</text>
     </run>';
     $opts = get_opts($body);
@@ -339,7 +341,6 @@ class AW_Search {
     }
     
     // Place, Name, Subject, Occupation, and Material Type
-    $max_shown = 20;
     $facet_headings = get_facet_headings();
     $submitted_facets = $this->get_facets();
     foreach ($facet_xml->facet as $facet) {
@@ -349,15 +350,8 @@ class AW_Search {
           $facet_heading = $facet_headings[$facet_type];
           echo '<h3>' . $facet_heading . '</h3>';
           echo '<ul>';
-          $i = 0;
           foreach ($facet->term as $term) {
-            if ($i < $max_shown) {
-              echo '<li><a href="' . $this->get_link('facet=' . $facet_type . ':' . urlencode($term['text'])) . '">' . $term['text'] . '</a> (' . $term['count'] . ')</li>';
-              $i++;
-            }
-            else {
-              break;
-            }
+            echo '<li><a href="' . $this->get_link('facet=' . $facet_type . ':' . urlencode($term['text'])) . '">' . $term['text'] . '</a> (' . $term['count'] . ')</li>';
           }
           echo '</ul>';
         }
