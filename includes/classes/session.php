@@ -143,7 +143,7 @@ class AW_Session {
     $files = scandir(AW_REPOS . '/' . $repo->get_folder() . '/eads');
     foreach ($files as $file) {
       if ($file != '.' && $file != '..') {
-        $this->add_to_text($repo_id, $file, false);
+        $this->add_to_text($repo_id, $file, 'false');
       }
     }
     $this->optimize_text($repo_id);
@@ -151,7 +151,7 @@ class AW_Session {
   
   // Add a finding aid to the text index
   // Results are inserted within the XQuery
-  function add_to_text($repo_id, $file, $optimize = true) {
+  function add_to_text($repo_id, $file, $optimize = 'true') {
     try {
       $input = file_get_contents(AW_HTML . '/xquery/index-text-file.xq');
       $query = $this->session->query($input);
