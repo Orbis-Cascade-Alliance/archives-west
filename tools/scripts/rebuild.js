@@ -41,25 +41,36 @@ function rebuild_dbs() {
       {type:'all',step:1},
       function() {
         $('#results').append("Rebuilding databases...\n");
-        iterate_dbs();
+        iterate_dbs(2);
         var interval = setInterval(
           function() {
             if (iteration_complete) {
               clearInterval(interval);
-              $('#results').append("Building brief record index...\n");
-              rebuild_process(
-                {type:'all',step:3},
+              iteration_complete = false;
+              populate_repo_ids();
+              $('#results').append("Building text indexes...\n");
+              iterate_dbs(3);
+              var interval2 = setInterval(
                 function() {
-                  $('#results').append("Building facet indexes...\n");
-                  rebuild_process(
-                    {type:'all',step:4},
-                    function() {
-                      $('#results').prepend("Rebuild complete!\n");
-                      $('#form-rebuild').show();
-                      populate_repo_ids();
-                      iteration_complete = false;
-                    }
-                  );
+                  if (iteration_complete) {
+                    clearInterval(interval2);
+                    $('#results').append("Building brief record index...\n");
+                    rebuild_process(
+                      {type:'all',step:4},
+                      function() {
+                        $('#results').append("Building facet indexes...\n");
+                        rebuild_process(
+                          {type:'all',step:5},
+                          function() {
+                            $('#results').prepend("Rebuild complete!\n");
+                            $('#form-rebuild').show();
+                            iteration_complete = false;
+                            populate_repo_ids();
+                          }
+                        );
+                      }
+                    );
+                  }
                 }
               );
               return true;
@@ -78,13 +89,13 @@ function rebuild_dbs() {
   }
 }
 
-function iterate_dbs() {
+function iterate_dbs(step) {
   var current_id = repo_ids.shift();
   rebuild_process(
-    {type:'all',step:2,repo_id:current_id},
+    {type:'all',step:step,repo_id:current_id},
     function() {
       if (repo_ids.length > 0) {
-        return iterate_dbs();
+        return iterate_dbs(step);
       }
       else {
         iteration_complete = true;

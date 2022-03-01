@@ -61,7 +61,7 @@ if ($mainagencycode && $oclc && $name && $folder) {
     if ($repo_id != 0) {
       $session = new AW_Session();
       $session->build_db($repo_id);
-      $session->index_ft($repo_id);
+      $session->build_text($repo_id);
       $session->index_brief($repo_id);
       $session->index_facets($repo_id);
       $session->close();

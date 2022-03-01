@@ -36,17 +36,15 @@ let $terms := tokenize($q, '\|')
 let $arks := tokenize($a, '\|')
 return <results>{
   for $db_id in tokenize($d, '\|')
-    for $result in ft:search('eads' || $db_id, $terms, map{'mode':'any word','fuzzy':$f})
+    for $result in ft:search('text' || $db_id, $terms, map{'mode':'all','fuzzy':$f})
       let $ead := $result/ancestor::ead
-      let $ark := aw:get_ark($ead)
-      let $title := aw:get_title($ead)
-      let $aw_date := aw:get_aw_date($ead)
+      let $ark := string($ead/@ark)
+      let $title := string($ead/@title)
+      let $aw_date := string($ead/@date)
       where not($ark="") and (empty($arks) or $ark=$arks)
-        group by $ark, $title, $aw_date, $db_id
-          where ft:contains(string-join($result, ' '), $terms, map{'mode':'all words','fuzzy':$f})
-            order by
-              if ($s eq "score") then local:calculate_score($db_id, $terms, $result, $title) else() descending,
-              if ($s eq "title") then $title else() ascending,
-              if ($s eq "date") then $aw_date else() descending
-            return <ark>{$ark}</ark>
+        order by
+          if ($s eq "score") then local:calculate_score($db_id, $terms, $result, $title) else() descending,
+          if ($s eq "title") then $title else() ascending,
+          if ($s eq "date") then $aw_date else() descending
+        return <ark>{$ark}</ark>
 }</results>

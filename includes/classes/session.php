@@ -103,6 +103,80 @@ class AW_Session {
     $this->session->execute('CLOSE');
   }
   
+  // Drop all text indexes
+  function drop_all_text() {
+    foreach ($this->get_repos() as $repo_id => $repo_info) {
+      $this->session->execute('DROP DB text' . $repo_id);
+    }
+  }
+  
+  // Delete a single repository's text index
+  function drop_text($repo_id) {
+    $this->session->execute('DROP DB text' . $repo_id);
+  }
+  
+  // Build all text indexes
+  function build_all_text() {
+    foreach($this->get_repos() as $repo_id => $repo_info) {
+      $this->build_text($repo_id);
+    }
+  }
+  
+  // Build text index for one database
+  function build_text($repo_id) {
+    $this->session->execute('SET FTINDEX true');
+    $this->session->execute('SET STOPWORDS ' . BASEX_INSTALL . '/etc/stopwords.txt');
+    $this->session->execute('CREATE DB text' . $repo_id);
+    $this->session->execute('ADD TO text' . $repo_id . ' <eads></eads>');
+    $this->session->execute('CLOSE');
+  }
+  
+  // Populate text index for all databases
+  function index_all_text() {
+    foreach ($this->get_repos() as $repo_id => $repo_info) {
+      $this->index_text($repo_id);
+    }
+  }
+  
+  // Populate text index for one database
+  function index_text($repo_id) {
+    $repo = new AW_Repo($repo_id);
+    $files = scandir(AW_REPOS . '/' . $repo->get_folder() . '/eads');
+    foreach ($files as $file) {
+      if ($file != '.' && $file != '..') {
+        $this->add_to_text($repo_id, $file);
+      }
+    }
+  }
+  
+  // Add a finding aid to the text index
+  function add_to_text($repo_id, $file) {
+    try {
+      $input = file_get_contents(AW_HTML . '/xquery/index-text-file.xq');
+      $query = $this->session->query($input);
+      $query->bind("d", $repo_id);
+      $query->bind("f", $file);
+      if ($results = $query->execute()) {
+        // Results are inserted within the XQuery
+        $this->session->execute('OPEN text' . $repo_id);
+        $this->session->execute('OPTIMIZE');
+        $this->session->execute('CLOSE');
+      }
+      $query->close();
+    }
+    catch (BaseXException $e) {
+      print $e->getMessage();
+    }
+  }
+  
+  // Delete a finding aid from the text index
+  function delete_from_text($repo_id, $ark) {
+    $this->session->execute('OPEN text' . $repo_id);
+    $this->session->execute('XQUERY delete node //eads/ead[@ark="'. $ark . '"]');
+    $this->session->execute('OPTIMIZE');
+    $this->session->execute('CLOSE');
+  }
+  
   // Drop brief record index
   function drop_brief() {
     $this->session->execute('DROP DB index-brief');
@@ -168,21 +242,6 @@ class AW_Session {
     $this->session->execute('OPTIMIZE');
     $this->session->execute('CLOSE');
   }
-  
-  // Create fulltext index for all databases
-  function index_all_ft() {
-    foreach ($this->get_repos() as $repo_id => $repo_info) {
-      $this->index_ft($repo_id);
-    }
-  }
-  
-  // Create fulltext index for one database
-  function index_ft($repo_id) {
-    $this->session->execute('OPEN eads' . $repo_id);
-    $this->session->execute('SET STOPWORDS ' . BASEX_INSTALL . '/etc/stopwords.txt');
-    $this->session->execute('CREATE INDEX fulltext');
-    $this->session->execute('CLOSE');
-  }
 
   // Drop all facets
   function drop_facets() {
@@ -231,6 +290,7 @@ class AW_Session {
       $query->bind("d", $repo_id);
       $query->bind("f", $file);
       if ($results = $query->execute()) {
+        // Results are inserted within the XQuery
         $result_xml = simplexml_load_string($results);
         $update_input = file_get_contents(AW_HTML . '/xquery/update-facet.xq');
         if ($update_input) {

@@ -123,12 +123,14 @@ if ($ark) {
             $session = new AW_Session();
             if ($replace) {
               $session->replace_document($repo_id, $current_file_name, $file_name);
+              $session->delete_from_text($repo_id, $ark)
               $session->delete_from_brief($repo_id, $ark);
               $session->delete_from_facets($repo_id, $ark);
             }
             else {
               $session->add_document($repo_id, $file_name);
             }
+            $session->add_to_text($repo_id, $file_name);
             $session->add_to_brief($repo_id, $file_name);
             $session->add_to_facets($repo_id, $file_name, $ark);
             $session->close();

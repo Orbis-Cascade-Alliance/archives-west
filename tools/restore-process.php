@@ -30,6 +30,7 @@ if (isset($_POST['ark']) && !empty($_POST['ark'])) {
           // Add to BaseX
           $session = new AW_Session();
           $session->add_document($repo_id, $file_name);
+          $session->add_to_text($repo_id, $file_name);
           $session->add_to_brief($repo_id, $file_name);
           $session->add_to_facets($repo_id, $file_name, $ark);
           $session->close();

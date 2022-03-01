@@ -41,6 +41,7 @@ if (isset($_POST['ark']) && !empty($_POST['ark'])) {
         }
         $session = new AW_Session();
         $session->delete_document($repo_id, $file_name);
+        $session->delete_from_text($repo_id, $ark);
         $session->delete_from_brief($repo_id, $ark);
         $session->delete_from_facets($repo_id, $ark);
         $session->close();
