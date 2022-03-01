@@ -160,6 +160,12 @@ class AW_Search {
     return $this->type;
   }
   
+  // Get ARK strings from search results
+  function regex_arks($result_string) {
+    $result_xml = preg_match_all("/<ark>(80444\/xv[0-9]+)<\/ark>/", $result_string, $ark_matches);
+    return $ark_matches[1];
+  }
+  
   // Get ranked search results as an array
   function get_results() {
     if (!isset($this->results)) {
@@ -200,10 +206,7 @@ class AW_Search {
       if ($result_string = file_get_contents(BASEX_REST, FALSE, $context)) {
         $time_stop = time();
         $this->time = $time_stop - $time_start;
-        $result_xml = simplexml_load_string($result_string);
-        foreach ($result_xml->children() as $ark) {
-          $results[] = (string) $ark;
-        }
+        $results = $this->regex_arks($result_string);
       }
       else {
         throw new Exception('An error occurred in full-text searching.');
@@ -234,10 +237,7 @@ class AW_Search {
         $opts = get_opts($body);
         $context = stream_context_create($opts);
         if ($facet_string = file_get_contents(BASEX_REST, FALSE, $context)) {
-          $facet_xml = simplexml_load_string($facet_string);
-          foreach ($facet_xml->ark as $ark) {
-            $results[] = (string) $ark;
-          }
+          $results = $this->regex_arks($facet_string);
         }
         else {
           throw new Exception('An error occurred getting facet results.');
