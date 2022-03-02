@@ -35,11 +35,11 @@ let $terms := tokenize($q, '\|')
 let $arks := tokenize($a, '\|')
 return <results>{
   for $db_id in tokenize($d, '\|')
-    for $result score $basex_score in ft:search('text' || $db_id, $terms, map{'mode':'all','fuzzy':$f})/parent::ead
+    for $result score $basex_score in ft:search('text' || $db_id, $terms, map{'mode':'all','fuzzy':$f})/ancestor::ead
       let $ark := string($result/@ark)
       where not($ark="") and (empty($arks) or $ark=$arks)
-        let $title := string($result/@title)
-        let $aw_date := string($result/@date)
+        let $title := string($result/title)
+        let $aw_date := string($result/date)
         order by
           if ($s eq "score") then local:calculate_score($db_id, $terms, $result, $title, $basex_score) else() descending,
           if ($s eq "title") then $title else() ascending,

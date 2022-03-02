@@ -125,6 +125,7 @@ class AW_Session {
   // Build text index for one database
   function build_text($repo_id) {
     $this->session->execute('SET FTINDEX true');
+    $this->session->execute('SET FTINCLUDE tokens');
     $this->session->execute('SET STOPWORDS ' . BASEX_INSTALL . '/etc/stopwords.txt');
     $this->session->execute('CREATE DB text' . $repo_id);
     $this->session->execute('ADD TO text' . $repo_id . ' <eads></eads>');

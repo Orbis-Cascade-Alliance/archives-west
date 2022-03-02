@@ -61,6 +61,7 @@ else if ($type == 'repo') {
     case 4:
       $session->drop_text($repo_id);
       $session->build_text($repo_id);
+      $session->index_text($repo_id);
       break;
     case 5:
       $session->delete_repo_from_brief($repo_id);
