@@ -1,5 +1,6 @@
 import module namespace aw = "https://archiveswest.orbiscascade.org";
 declare variable $d as xs:string external;
+declare variable $s as xs:string external;
 let $add_to_text := %updating function($d) {
   for $ead in db:open('eads' || $d)/ead 
     let $ark := aw:get_ark($ead)
@@ -13,4 +14,4 @@ let $add_to_text := %updating function($d) {
     </ead>
     return insert node $result into db:open('text' || $d)/eads
 }
-return updating $add_to_text($d), db:optimize('text' || $d)
+return updating $add_to_text($d), db:optimize('text' || $d, true(), map{'stopwords': $s})

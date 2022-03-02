@@ -126,7 +126,6 @@ class AW_Session {
   function build_text($repo_id) {
     $this->session->execute('SET FTINDEX true');
     $this->session->execute('SET FTINCLUDE tokens');
-    $this->session->execute('SET STOPWORDS ' . BASEX_INSTALL . '/etc/stopwords.txt');
     $this->session->execute('CREATE DB text' . $repo_id);
     $this->session->execute('ADD TO text' . $repo_id . ' <eads></eads>');
     $this->session->execute('OPTIMIZE');
@@ -147,6 +146,7 @@ class AW_Session {
       $input = file_get_contents(AW_HTML . '/xquery/index-text-db.xq');
       $query = $this->session->query($input);
       $query->bind("d", $repo_id);
+      $query->bind("s", BASEX_INSTALL . '/etc/stopwords.txt');
       $results = $query->execute();
       $query->close();
     }
@@ -163,6 +163,7 @@ class AW_Session {
       $query = $this->session->query($input);
       $query->bind("d", $repo_id);
       $query->bind("f", $file);
+      $query->bind("s", BASEX_INSTALL . '/etc/stopwords.txt');
       $results = $query->execute();
       $query->close();
     }

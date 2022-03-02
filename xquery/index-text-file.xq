@@ -1,6 +1,7 @@
 import module namespace aw = "https://archiveswest.orbiscascade.org";
 declare variable $d as xs:string external;
 declare variable $f as xs:string external;
+declare variable $s as xs:string external;
 let $ead := doc('eads' || $d || '/' || $f)/ead 
 let $ark := aw:get_ark($ead)
 let $title := aw:get_title($ead)
@@ -11,4 +12,4 @@ let $result := <ead ark="{$ark}">
   <date>{$aw_date}"</date>
   <tokens>{$tokens}</tokens>
 </ead>
-return insert node $result into db:open('text' || $d)/eads, db:optimize('text' || $d)
+return insert node $result into db:open('text' || $d)/eads, db:optimize('text' || $d, true(), map{'stopwords': $s})
