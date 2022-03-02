@@ -124,6 +124,8 @@ class AW_Session {
   
   // Build text index for one database
   function build_text($repo_id) {
+    $this->session->execute('SET FTINDEX true');
+    $this->session->execute('SET STOPWORDS ' . BASEX_INSTALL . '/etc/stopwords.txt');
     $this->session->execute('CREATE DB text' . $repo_id);
     $this->session->execute('ADD TO text' . $repo_id . ' <eads></eads>');
     $this->session->execute('OPTIMIZE');
@@ -137,27 +139,13 @@ class AW_Session {
     }
   }
   
-  // Populate and optimize text index for one database
-  function index_text($repo_id) {
-    $repo = new AW_Repo($repo_id);
-    $files = scandir(AW_REPOS . '/' . $repo->get_folder() . '/eads');
-    foreach ($files as $file) {
-      if ($file != '.' && $file != '..') {
-        $this->add_to_text($repo_id, $file, 'false');
-      }
-    }
-    $this->optimize_text($repo_id);
-  }
-  
-  // Add a finding aid to the text index
+  // Populate text index for one database
   // Results are inserted within the XQuery
-  function add_to_text($repo_id, $file, $optimize = 'true') {
+  function index_text($repo_id) {
     try {
-      $input = file_get_contents(AW_HTML . '/xquery/index-text-file.xq');
+      $input = file_get_contents(AW_HTML . '/xquery/index-text-db.xq');
       $query = $this->session->query($input);
       $query->bind("d", $repo_id);
-      $query->bind("f", $file);
-      $query->bind("o", $optimize);
       $results = $query->execute();
       $query->close();
     }
@@ -166,13 +154,20 @@ class AW_Session {
     }
   }
   
-  // Optimize a text index
-  function optimize_text($repo_id) {
-    $this->session->execute('OPEN text' . $repo_id);
-    $this->session->execute('SET FTINDEX true');
-    $this->session->execute('SET STOPWORDS ' . BASEX_INSTALL . '/etc/stopwords.txt');
-    $this->session->execute('OPTIMIZE');
-    $this->session->execute('CLOSE');
+  // Add a finding aid to the text index
+  // Results are inserted within the XQuery
+  function add_to_text($repo_id, $file) {
+    try {
+      $input = file_get_contents(AW_HTML . '/xquery/index-text-file.xq');
+      $query = $this->session->query($input);
+      $query->bind("d", $repo_id);
+      $query->bind("f", $file);
+      $results = $query->execute();
+      $query->close();
+    }
+    catch (BaseXException $e) {
+      print $e->getMessage();
+    }
   }
   
   // Delete a finding aid from the text index
