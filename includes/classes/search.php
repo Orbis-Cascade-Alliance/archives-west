@@ -168,7 +168,7 @@ class AW_Search {
   
   // Get ranked search results as an array
   function get_results() {
-    if (!isset($this->results)) {
+    if (!isset($this->results) && $this->get_facet_results() !== false) {
       
       $repos = $this->get_repos();
       $repo_string = implode('|', $repos);
@@ -237,7 +237,12 @@ class AW_Search {
         $opts = get_opts($body);
         $context = stream_context_create($opts);
         if ($facet_string = file_get_contents(BASEX_REST, FALSE, $context)) {
-          $results = $this->regex_arks($facet_string);
+          if (stristr($facet_string, '<ark>')) {
+            $results = $this->regex_arks($facet_string);
+          }
+          else {
+            $results = false;
+          }
         }
         else {
           throw new Exception('An error occurred getting facet results.');
