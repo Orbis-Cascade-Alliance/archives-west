@@ -383,6 +383,9 @@ class AW_Search {
         $params[] = 'facet=' . $facet_type . ':' . urlencode($facet_term);
       }
     }
+    if ($this->get_type() == 'exact') {
+      $params[] = 'type=exact';
+    }
     $params[] = $new_param;
     return AW_DOMAIN . '/search.php?' . implode('&', $params);
   }
