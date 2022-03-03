@@ -44,7 +44,7 @@ if ($finding_aid != null && $finding_aid->is_active()) {
     ?>
     <div id="downloads">
       <a class="btn" href="javascript:void(0)" onclick="print_finding_aid()">Print</a>
-      &#160;<a class="btn" href="/ark:/<?php echo $ark; ?>/xml" target="_blank" role="button">View XML</a>
+      &#160;<a class="btn" href="<?php echo AW_DOMAIN; ?>/ark:/<?php echo $ark; ?>/xml" target="_blank" role="button">View XML</a>
       <?php
       if ($qr_code = $finding_aid->get_qr_code()) {
         echo '&#160;<a id="btn-qr" class="btn" href="' . $qr_code . '" target="_blank" role="button">QR Code</a>';

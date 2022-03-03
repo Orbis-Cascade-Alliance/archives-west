@@ -36,3 +36,12 @@ declare function aw:get_abstract($ead as node()*) as xs:string {
   let $abstract := aw:concat_children($ead/archdesc/did/abstract, ' ')
   return $abstract
 };
+
+declare function aw:remove_stopwords($tokens as xs:string*, $stopwords as xs:string+)  {  
+  let $new_tokens :=
+    for $token in $tokens
+      return
+        if (not(exists(index-of($stopwords, $token)))) then $token
+        else()
+  return string-join($new_tokens, ' ')
+};  

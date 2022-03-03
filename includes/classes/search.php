@@ -104,16 +104,25 @@ class AW_Search {
       
       // For each term, remove if stopword
       foreach ($exploded_query as $key => $term) {
-        if (!stristr($term, '"')) {
-          $lowercase_word = strtolower($term);
-          if ($lowercase_word && isset($stopwords[$lowercase_word])) {
+        // If whole term is a stopword, exclude
+        if (!stristr($term, ' ')) {
+          $lowercase_term = strtolower($term);
+          if ($lowercase_term && isset($stopwords[$lowercase_term])) {
             unset($exploded_query[$key]);
             $excluded_words[] = $term;
           }
         }
+        // If term is a phrase and contains a stopword, remove it
         else {
-          // For retained term, strip punctuation
-          $exploded_query[$key] = $this->strip_chars($term);
+          $exploded_term = $this->strip_chars(explode(' ', $term));
+          $replaced_term = $term;
+          foreach ($exploded_term as $word_key => $word) {
+            $lowercase_word = strtolower($word);
+            if ($lowercase_word && isset($stopwords[$lowercase_word])) {
+              $replaced_term = str_replace($word, '', $replaced_term);
+            }
+          }
+          $exploded_query[$key] = $this->strip_chars($replaced_term);
         }
       }
       

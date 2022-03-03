@@ -139,6 +139,12 @@ class AW_Session {
     }
   }
   
+  function get_stopwords() {
+    $file = BASEX_INSTALL . '/etc/stopwords.txt';
+    $contents = file_get_contents($file, true);
+    return preg_replace('/\s/', '|', $contents);
+  }
+  
   // Populate text index for one database
   // Results are inserted within the XQuery
   function index_text($repo_id) {
@@ -146,7 +152,7 @@ class AW_Session {
       $input = file_get_contents(AW_HTML . '/xquery/index-text-db.xq');
       $query = $this->session->query($input);
       $query->bind("d", $repo_id);
-      $query->bind("s", BASEX_INSTALL . '/etc/stopwords.txt');
+      $query->bind("s", $this->get_stopwords());
       $results = $query->execute();
       $query->close();
     }
@@ -163,7 +169,7 @@ class AW_Session {
       $query = $this->session->query($input);
       $query->bind("d", $repo_id);
       $query->bind("f", $file);
-      $query->bind("s", BASEX_INSTALL . '/etc/stopwords.txt');
+      $query->bind("s", $this->get_stopwords());
       $results = $query->execute();
       $query->close();
     }
