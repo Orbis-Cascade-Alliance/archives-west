@@ -219,4 +219,14 @@ function print_rss() {
   ob_end_clean();
   return $rss_html;
 }
+
+// Check maintenance mode
+function check_maintenance_mode() {
+  return file_exists(AW_HTML . '/maintenance.html');
+}
+
+// Get maintenance file
+function get_maintenance_file() {
+  return file_get_contents(AW_HTML . '/maintenance.html');
+}
 ?>

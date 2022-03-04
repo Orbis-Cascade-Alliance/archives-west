@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 $user = get_session_user(true);
 if ($user->is_admin()) { 
-  if (file_exists(AW_HTML . '/maintenance.html')) {
+  if (check_maintenance_mode()) {
     toggle_maintenance_mode(false);
   }
   else {

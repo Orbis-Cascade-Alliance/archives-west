@@ -8,7 +8,7 @@ include(AW_INCLUDES . '/server-header.php');
 include(AW_TOOL_INCLUDES . '/tools-header.php');
 
 // Get maintenance mode status
-$maintenance_mode = file_exists(AW_HTML . '/maintenance.html');
+$maintenance_mode = check_maintenance_mode();
 
 // Get tab
 $tab = 'f';

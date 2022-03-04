@@ -10,7 +10,7 @@ require_once(AW_CLASSES . '/mail.php');
 require_once(AW_CLASSES . '/process.php');
 require_once(AW_CLASSES . '/user.php');
 require_once(AW_INCLUDES . '/functions.php');
-if (!in_array($_SERVER['REMOTE_ADDR'], ADMIN_IPS) && file_exists(AW_HTML . '/maintenance.html')) {
-  die(file_get_contents(AW_HTML . '/maintenance.html'));
+if ((isset($_SERVER['REMOTE_ADDR']) && !in_array($_SERVER['REMOTE_ADDR'], ADMIN_IPS)) && check_maintenance_mode()) {
+  die(get_maintenance_file());
 }
 ?>
