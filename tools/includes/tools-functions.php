@@ -234,4 +234,17 @@ function rename_c($c, $ead) {
   $c->parentNode->replaceChild($new_c, $c);
 }
 
+function toggle_maintenance_mode($on) {
+  $file = 'maintenance.html';
+  if ($on) {
+    $html = file_get_contents(AW_TOOL_INCLUDES . '/' . $file, true);
+    $fh = fopen(AW_HTML . '/' . $file, 'w');
+    fwrite($fh, $html);
+    fclose($fh);
+  }
+  else {
+    unlink(AW_HTML . '/' . $file);
+  }
+}
+
 ?>

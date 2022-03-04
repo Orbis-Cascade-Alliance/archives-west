@@ -7,6 +7,9 @@ require_once(getenv('AW_HOME') . '/defs.php');
 include(AW_INCLUDES . '/server-header.php');
 include(AW_TOOL_INCLUDES . '/tools-header.php');
 
+// Get maintenance mode status
+$maintenance_mode = file_exists(AW_HTML . '/maintenance.html');
+
 // Get tab
 $tab = 'f';
 if (isset($_GET['tab']) && $_GET['tab']=='j') {
@@ -27,6 +30,10 @@ else if (isset($_SESSION['order'])) {
   <script src="<?php echo AW_DOMAIN; ?>/tools/scripts/index.js"></script>
 <?php
 include(AW_TOOL_INCLUDES . '/tools-header-end.php');
+
+if ($maintenance_mode) {
+  echo '<div class="alert">Maintenance mode is on.</div>';
+}
 ?>
 
 <div id="home-columns">
@@ -80,6 +87,11 @@ include(AW_TOOL_INCLUDES . '/tools-header-end.php');
     </ul>
     <h3>BaseX</h3>
     <ul>
+      <li>
+        <a href="maintenance.php">Turn Maintenance Mode
+          <?php if ($maintenance_mode) {echo 'Off';} else {echo 'On';} ?>
+        </a>
+      </li>
       <li><a href="rebuild.php">Rebuild Databases</a></li>
     </ul>
   </div>
