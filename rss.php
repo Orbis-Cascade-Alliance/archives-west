@@ -18,7 +18,7 @@ if ($mysqli = connect()) {
 if (!empty($arks)) {
   
   // Get brief results
-  $brief_records = get_brief_records(array_keys($arks), 'full');
+  $brief_records = get_brief_records(array_keys($arks));
   
   // Print RSS
   $rss = simplexml_load_string('<?xml version="1.0" encoding="utf-8"?>

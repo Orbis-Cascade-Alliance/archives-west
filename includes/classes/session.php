@@ -138,14 +138,13 @@ class AW_Session {
   }
   
   // Populate text index for one database
-  // Results are inserted within the XQuery
   function index_text($repo_id) {
     try {
       $input = file_get_contents(AW_HTML . '/xquery/index-text-db.xq');
       $query = $this->session->query($input);
       $query->bind("d", $repo_id);
       $query->bind("s", $this->get_stopwords());
-      $results = $query->execute();
+      $query->execute();
       $query->close();
     }
     catch (BaseXException $e) {
@@ -153,16 +152,15 @@ class AW_Session {
     }
   }
   
-  // Add a finding aid to the text index
-  // Results are inserted within the XQuery
-  function add_to_text($repo_id, $file) {
+  // Add specific finding aids to the text index
+  // Takes string {database ID}:{file}|{database ID 2}:{file 2} etc.
+  function add_to_text($files) {
     try {
-      $input = file_get_contents(AW_HTML . '/xquery/index-text-file.xq');
+      $input = file_get_contents(AW_HTML . '/xquery/index-text-files.xq');
       $query = $this->session->query($input);
-      $query->bind("d", $repo_id);
-      $query->bind("f", $file);
+      $query->bind("f", $files);
       $query->bind("s", $this->get_stopwords());
-      $results = $query->execute();
+      $query->execute();
       $query->close();
     }
     catch (BaseXException $e) {
@@ -191,44 +189,40 @@ class AW_Session {
     $this->session->execute('DROP DB index-brief');
   }
   
-  // Create brief record index for all databases
+  // Build brief index
+  function build_brief() {
+    $this->session->execute('CREATE DB index-brief');
+    $this->session->execute('CLOSE');
+  }
+  
+  // Populate brief record index for all databases
   function index_all_brief() {
     foreach ($this->get_repos() as $repo_id => $repo_info) {
       $this->index_brief($repo_id);
     }
   }
   
-  // Create brief record index for one database
+  // Populate brief record index for one database
   function index_brief($repo_id) {
     try {
       $input = file_get_contents(AW_HTML . '/xquery/index-brief-db.xq');
       $query = $this->session->query($input);
       $query->bind("d", $repo_id);
-      if ($results = $query->execute()) {
-        $this->session->execute('CHECK index-brief');
-        $this->session->execute('ADD TO index-brief/eads' . $repo_id . ' ' . $results);
-        $this->session->execute('OPTIMIZE');
-        $this->session->execute('CLOSE');
-      }
+      $query->execute();
       $query->close();
     } catch (BaseXException $e) {
       print $e->getMessage();
     }
   }
   
-  // Add a finding aid to the brief record index
-  function add_to_brief($repo_id, $file) {
+  // Add specific finding aids to the brief record index
+  // Takes string {database ID}:{file}|{database ID 2}:{file 2} etc.
+  function add_to_brief($files) {
     try {
-      $input = file_get_contents(AW_HTML . '/xquery/index-brief-file.xq');
+      $input = file_get_contents(AW_HTML . '/xquery/index-brief-files.xq');
       $query = $this->session->query($input);
-      $query->bind("d", $repo_id);
-      $query->bind("f", $file);
-      if ($results = $query->execute()) {
-        $this->session->execute('OPEN index-brief');
-        $this->session->execute('XQUERY insert node ' . $results . ' as last into //eads[@db="' . $repo_id . '"]');
-        $this->session->execute('OPTIMIZE');
-        $this->session->execute('CLOSE');
-      }
+      $query->bind("f", $files);
+      $query->execute();
       $query->close();
     }
     catch (BaseXException $e) {
@@ -259,65 +253,46 @@ class AW_Session {
       $this->session->execute('DROP DB facet-' . $facet_name);
     }
   }
-
+  
   // Build all facet indexes for all databases
+  function build_facets() {
+    $types = get_facet_types();
+    foreach ($types as $facet_name => $local_names) {
+      $this->session->execute('CREATE DB facet-' . $facet_name);
+      $this->session->execute('CLOSE');
+    }
+  }
+
+  // Populate all facet indexes for all databases
   function index_all_facets() {
     foreach ($this->get_repos() as $repo_id => $repo_info) {
       $this->index_facets($repo_id);
     }
   }
   
-  // Build all facet indexes for one database
+  // Populate all facet indexes for one database
   function index_facets($repo_id) {
     $input = file_get_contents(AW_HTML . '/xquery/index-facet-db.xq');
-    $types = get_facet_types();
     try {
       $query = $this->session->query($input);
-      foreach ($types as $facet_name => $local_names) {
-        $query->bind("t", $local_names);
-        $query->bind("d", $repo_id);
-        if ($results = $query->execute()) {
-          $this->session->execute('CHECK facet-' . $facet_name);
-          $this->session->execute('ADD TO facet-' . $facet_name . '/eads' . $repo_id . ' ' . $results);
-          $this->session->execute('OPTIMIZE');
-          $this->session->execute('CLOSE');
-        }
-      }
+      $query->bind("t", get_facet_string());
+      $query->bind("d", $repo_id);
+      $query->execute();
       $query->close();
     } catch (BaseXException $e) {
       print $e->getMessage();
     }
   }
   
-  // Add/update facet terms for a finding aid
-  // Results are inserted within the XQuery
-  function add_to_facets($repo_id, $file, $ark) {
-    $types = get_facet_types();
-    foreach ($types as $facet_name => $local_names) {
-      $input = file_get_contents(AW_HTML . '/xquery/index-facet-file.xq');
-      $query = $this->session->query($input);
-      $query->bind("t", $local_names);
-      $query->bind("d", $repo_id);
-      $query->bind("f", $file);
-      if ($results = $query->execute()) {
-        $result_xml = simplexml_load_string($results);
-        $update_input = file_get_contents(AW_HTML . '/xquery/update-facet.xq');
-        if ($update_input) {
-          foreach ($result_xml->term as $term) {
-            $update_query = $this->session->query($update_input);
-            $update_query->bind("n", $facet_name);
-            $update_query->bind("d", $repo_id);
-            $update_query->bind("a", $ark);
-            $update_query->bind("s", (string) $term);
-            $update_query->execute();
-          }
-          $this->session->execute('OPEN facet-' . $facet_name);
-          $this->session->execute('OPTIMIZE');
-          $this->session->execute('CLOSE');
-        }
-      }
-      $query->close();
-    }
+  // Add/update facet terms for specific finding aids
+  // Takes string {database ID}:{file}|{database ID 2}:{file 2} etc.
+  function add_to_facets($files) {
+    $input = file_get_contents(AW_HTML . '/xquery/index-facet-files.xq');
+    $query = $this->session->query($input);
+    $query->bind("t", get_facet_string());
+    $query->bind("f", $files); 
+    $query->execute();
+    $query->close();
   }
   
   // Delete an ARK entry from all facets

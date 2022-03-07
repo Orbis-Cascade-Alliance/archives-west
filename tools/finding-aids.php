@@ -63,7 +63,7 @@ if ($repo_id != 0) {
   }
   if ($arks) {
     // Get titles and modification dates from brief records
-    $brief_records = get_brief_records(array_keys($arks), 'min');
+    $brief_records = get_brief_records(array_keys($arks));
     foreach ($brief_records as $ark => $brief) {
       $arks[$ark]['title'] = $brief['title'];
       $arks[$ark]['date'] = date('Y-m-d', strtotime($brief['date']));

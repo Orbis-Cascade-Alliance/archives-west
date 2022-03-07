@@ -14,9 +14,11 @@ if ($type == 'all') {
       // Drop all databases
       $session->drop_dbs();
       $session->drop_text();
-      $session->build_text();
       $session->drop_brief();
       $session->drop_facets();
+      $session->build_text();
+      $session->build_brief();
+      $session->build_facets();
       break;
     case 2:
       // Build databases

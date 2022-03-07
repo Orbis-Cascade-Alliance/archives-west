@@ -73,6 +73,7 @@ if ($ark) {
     if ($upload) {
       // Check ARK in file against the ARK submitted
       $xml = simplexml_load_file($_FILES['ead']['tmp_name']);
+      $current_file_name = '';
       if ($ark_in_file = (string) $xml->eadheader->eadid['identifier']) {
         if ($ark_in_file != $ark) {
           $errors[] = 'The ARK in the submitted file, <strong>' . $ark_in_file . '</strong>, doesn\'t match the ARK selected.';
@@ -130,10 +131,13 @@ if ($ark) {
             else {
               $session->add_document($repo_id, $file_name);
             }
-            $session->add_to_text($repo_id, $file_name);
-            $session->add_to_brief($repo_id, $file_name);
-            $session->add_to_facets($repo_id, $file_name, $ark);
+            $session->add_to_text($repo_id . ':' . $file_name);
+            $session->add_to_brief($repo_id . ':' . $file_name);
+            $session->add_to_facets($repo_id . ':' . $file_name);
             $session->close();
+            
+            //$index_command = 'php ' . AW_HTML . '/tools/index-update.php ' . $ark . ' ' . $replace . ' ' . $current_file_name;
+            //$index_process = new AW_Process($index_command);
             
             // Start caching process
             $finding_aid = new AW_Finding_Aid($ark);
