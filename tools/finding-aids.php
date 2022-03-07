@@ -179,7 +179,7 @@ if ($repo_id != 0) {
         echo '</td>
         <td class="file"><a href="' . AW_DOMAIN . '/ark:/' . $ark . '/xml" target="_blank" title="' . $ark_info['file'] . '">' . mb_strimwidth($ark_info['file'], 0, 30, "...") . '</a></td>
         <td class="date">' . substr($ark_info['date'], 0, 10) . '</td>
-        <td class="upload"><a href="/tools/upload.php?ark=' . $ark . '">' . ($ark_info['file']=='' ? 'Upload' : 'Replace') . '</a></td>
+        <td class="upload"><a href="' . AW_DOMAIN . '/tools/upload.php?ark=' . $ark . '">' . ($ark_info['file']=='' ? 'Upload' : 'Replace') . '</a></td>
         <td class="delete"><button class="btn-delete" type="button" onclick="confirm_deletion(\'' . $ark . '\', \'' . $ark_info['title'] . '\')">Delete</button></td>
       </tr>';
     }
