@@ -5,7 +5,7 @@ declare variable $d as xs:string external;
 declare variable $s as xs:string external;
 declare variable $f as xs:string external;
 
-declare function local:calculate_score($db_id as xs:string, $terms as xs:string+, $result as node()*, $title as xs:string, $basex_score as xs:double) as xs:double {
+declare function local:calculate_score($terms as xs:string+, $result as node()*, $title as xs:string, $basex_score as xs:double) as xs:double {
   let $boost := fold-left(
     $terms,
     local:calculate_boost(string(head($terms)), $result, $title),
@@ -33,16 +33,17 @@ declare function local:in_string($string as xs:string, $term as xs:string) as xs
 
 let $terms := tokenize($q, '\|')
 let $arks := tokenize($a, '\|')
+let $dbs := tokenize($d, '\|')
 return <results>{
-  for $db_id in tokenize($d, '\|')
-    for $result score $basex_score in ft:search('text' || $db_id, $terms, map{'mode':'all','fuzzy':$f})/ancestor::ead
+  for $result score $basex_score in ft:search('index-text', $terms, map{'mode':'all','fuzzy':$f})/ancestor::ead
+    where $result/@db=$dbs
       let $ark := string($result/@ark)
-      where not($ark="") and (empty($arks) or $ark=$arks)
-        let $title := string($result/title)
-        let $aw_date := string($result/date)
-        order by
-          if ($s eq "score") then local:calculate_score($db_id, $terms, $result, $title, $basex_score) else() descending,
-          if ($s eq "title") then $title else() ascending,
-          if ($s eq "date") then $aw_date else() descending
-        return <ark>{$ark}</ark>
+        where not($ark="") and (empty($arks) or $ark=$arks)
+          let $title := string($result/title)
+          let $aw_date := string($result/date)
+          order by
+            if ($s eq "score") then local:calculate_score($terms, $result, $title, $basex_score) else() descending,
+            if ($s eq "title") then $title else() ascending,
+            if ($s eq "date") then $aw_date else() descending
+          return <ark>{$ark}</ark>
 }</results>

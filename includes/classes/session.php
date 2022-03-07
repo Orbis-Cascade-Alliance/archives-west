@@ -103,32 +103,30 @@ class AW_Session {
     $this->session->execute('CLOSE');
   }
   
-  // Drop all text indexes
-  function drop_all_text() {
+  // Get stopwords as a string separated by bars
+  function get_stopwords() {
+    $file = BASEX_INSTALL . '/etc/stopwords.txt';
+    $contents = file_get_contents($file, true);
+    return preg_replace('/\s/', '|', $contents);
+  }
+  
+  // Delete old text indexes
+  function drop_old_text() {
     foreach ($this->get_repos() as $repo_id => $repo_info) {
       $this->session->execute('DROP DB text' . $repo_id);
     }
   }
   
   // Delete a single repository's text index
-  function drop_text($repo_id) {
-    $this->session->execute('DROP DB text' . $repo_id);
+  function drop_text() {
+    $this->session->execute('DROP DB index-text');
   }
   
-  // Build all text indexes
-  function build_all_text() {
-    foreach($this->get_repos() as $repo_id => $repo_info) {
-      $this->build_text($repo_id);
-    }
-  }
-  
-  // Build text index for one database
-  function build_text($repo_id) {
+  // Build text index
+  function build_text() {
     $this->session->execute('SET FTINDEX true');
     $this->session->execute('SET FTINCLUDE tokens');
-    $this->session->execute('CREATE DB text' . $repo_id);
-    $this->session->execute('ADD TO text' . $repo_id . ' <eads></eads>');
-    $this->session->execute('OPTIMIZE');
+    $this->session->execute('CREATE DB index-text');
     $this->session->execute('CLOSE');
   }
   
@@ -137,12 +135,6 @@ class AW_Session {
     foreach ($this->get_repos() as $repo_id => $repo_info) {
       $this->index_text($repo_id);
     }
-  }
-  
-  function get_stopwords() {
-    $file = BASEX_INSTALL . '/etc/stopwords.txt';
-    $contents = file_get_contents($file, true);
-    return preg_replace('/\s/', '|', $contents);
   }
   
   // Populate text index for one database
@@ -180,8 +172,16 @@ class AW_Session {
   
   // Delete a finding aid from the text index
   function delete_from_text($repo_id, $ark) {
-    $this->session->execute('OPEN text' . $repo_id);
+    $this->session->execute('OPEN index-text');
     $this->session->execute('XQUERY delete node //eads/ead[@ark="'. $ark . '"]');
+    $this->session->execute('OPTIMIZE');
+    $this->session->execute('CLOSE');
+  }
+  
+  // Delete a whole repository from the text index
+  function delete_repo_from_text($repo_id) {
+    $this->session->execute('OPEN index-text');
+    $this->session->execute('DELETE index-text/eads' . $repo_id);
     $this->session->execute('OPTIMIZE');
     $this->session->execute('CLOSE');
   }

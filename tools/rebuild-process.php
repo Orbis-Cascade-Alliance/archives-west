@@ -9,12 +9,12 @@ $step = $_POST['step'];
 $session = new AW_Session();
 
 if ($type == 'all') {
-
   switch ($step) {
     case 1:
       // Drop all databases
       $session->drop_dbs();
-      $session->drop_all_text();
+      $session->drop_text();
+      $session->build_text();
       $session->drop_brief();
       $session->drop_facets();
       break;
@@ -30,7 +30,6 @@ if ($type == 'all') {
       // Build text databases
       $repo_id = filter_var($_POST['repo_id'], FILTER_SANITIZE_NUMBER_INT);
       echo 'Building text index for ' . $repo_id . '...' . "\n";
-      $session->build_text($repo_id);
       $session->index_text($repo_id);
       break;
     case 4:
