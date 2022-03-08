@@ -179,7 +179,7 @@ class AW_Session {
   // Delete a whole repository from the text index
   function delete_repo_from_text($repo_id) {
     $this->session->execute('OPEN index-text');
-    $this->session->execute('DELETE index-text/eads' . $repo_id);
+    $this->session->execute('DELETE eads' . $repo_id);
     $this->session->execute('OPTIMIZE');
     $this->session->execute('CLOSE');
   }
@@ -233,7 +233,7 @@ class AW_Session {
   // Delete a finding aid from the brief index
   function delete_from_brief($repo_id, $ark) {
     $this->session->execute('OPEN index-brief');
-    $this->session->execute('XQUERY delete node //eads/ead[ark/text()="'. $ark . '"]');
+    $this->session->execute('XQUERY delete node //eads/ead[@ark="'. $ark . '"]');
     $this->session->execute('OPTIMIZE');
     $this->session->execute('CLOSE');
   }
@@ -241,7 +241,7 @@ class AW_Session {
   // Delete a whole repository from the brief index
   function delete_repo_from_brief($repo_id) {
     $this->session->execute('OPEN index-brief');
-    $this->session->execute('DELETE index-brief/eads' . $repo_id);
+    $this->session->execute('DELETE eads' . $repo_id);
     $this->session->execute('OPTIMIZE');
     $this->session->execute('CLOSE');
   }
@@ -314,10 +314,31 @@ class AW_Session {
     $types = get_facet_types();
     foreach ($types as $facet_name => $local_names) {
       $this->session->execute('OPEN facet-' . $facet_name);
-      $this->session->execute('DELETE facet-' . $facet_name . '/eads' . $repo_id);
+      $this->session->execute('DELETE eads' . $repo_id);
       $this->session->execute('XQUERY delete node //terms[@db="' . $repo_id . '"]');
       $this->session->execute('OPTIMIZE');
       $this->session->execute('CLOSE');
+    }
+  }
+  
+  // Update all indexes
+  function update_indexes() {
+    try {
+      $all_repos = $this->get_repos();
+      $input = file_get_contents(AW_HTML . '/xquery/get-unindexed.xq');
+      $query = $this->session->query($input);
+      $query->bind("d", implode('|', array_keys($all_repos)));
+      if ($result = $query->execute()) {
+        $result_xml = preg_match_all("/<file>(.+)<\/file>/", $result, $file_matches);
+        $files = implode('|', $file_matches[1]);
+        $this->add_to_text($files);
+        $this->add_to_brief($files);
+        $this->add_to_facets($files);
+      }
+      $query->close();
+    }
+    catch (BaseXException $e) {
+      print $e->getMessage();
     }
   }
 }

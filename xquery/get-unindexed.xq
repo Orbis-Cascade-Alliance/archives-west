@@ -1,10 +1,8 @@
+import module namespace aw = "https://archiveswest.orbiscascade.org";
 declare variable $d as xs:string external;
-<results>{
-for $db_id in tokenize($d, '\|')
-  let $brief_arks := db:open('index-brief')/eads/ead/@ark
-  for $ark in db:open('eads' || $db_id)/ead/eadheader/eadid/@identifier[not(. = $brief_arks)]
-    return <result>
-      <db>{$db_id}</db>
-      <ark>{string($ark)}</ark>
-    </result>
-}</results>
+<files>{
+  for $db_id in tokenize($d, '\|')
+    let $brief_arks := db:open('index-brief')/eads/ead/@ark
+    for $ead in db:open('eads' || $db_id)/ead[not(eadheader/eadid/@identifier = $brief_arks)]
+      return <file>{$db_id}:{db:path($ead)}</file>
+}</files>
