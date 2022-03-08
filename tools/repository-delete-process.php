@@ -25,6 +25,7 @@ if ($repo) {
   $session->delete_repo_from_text($repo_id);
   $session->delete_repo_from_brief($repo_id);
   $session->delete_repo_from_facets($repo_id);
+  $session->copy_indexes_to_prod();
   $session->drop_db($repo_id);
   $session->close();
 
@@ -52,33 +53,37 @@ if ($repo) {
     $ark_delete_stmt = $mysqli->prepare('DELETE FROM arks WHERE repo_id=?');
     $ark_delete_stmt->bind_param('i', $repo_id);
     $ark_delete_stmt->execute();
+    $ark_delete_error = $mysqli->error;
     $ark_delete_stmt->close();
-    if ($mysqli->error) {
-      $errors[] = $mysqli->error;
+    if ($ark_delete_error) {
+      $errors[] = $ark_delete_error;
     }
     else {
       $jobs_delete_stmt = $mysqli->prepare('DELETE FROM jobs WHERE repo_id=?');
       $jobs_delete_stmt->bind_param('i', $repo_id);
       $jobs_delete_stmt->execute();
+      $jobs_delete_error = $mysqli->error;
       $jobs_delete_stmt->close();
-      if ($mysqli->error) {
-        $errors[] = $mysqli->error;
+      if ($jobs_delete_error) {
+        $errors[] = $jobs_delete_error;
       }
       else {
         $users_delete_stmt = $mysqli->prepare('DELETE FROM users WHERE repo_id=?');
         $users_delete_stmt->bind_param('i', $repo_id);
         $users_delete_stmt->execute();
+        $users_delete_error = $mysqli->error;
         $users_delete_stmt->close();
-        if ($mysqli->error) {
-          $errors[] = $mysqli->error;
+        if ($users_delete_error) {
+          $errors[] = $users_delete_error;
         }
         else {
           $repo_delete_stmt = $mysqli->prepare('DELETE FROM repos WHERE id=?');
           $repo_delete_stmt->bind_param('i', $repo_id);
           $repo_delete_stmt->execute();
+          $repo_delete_error = $mysqli->error;
           $repo_delete_stmt->close();
-          if ($mysqli->error) {
-            $errors[] = $mysqli->error;
+          if ($repo_delete_error) {
+            $errors[] = $repo_delete_error;
           }
         }
       }
