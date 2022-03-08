@@ -62,11 +62,24 @@ if ($repo_id != 0) {
     $mysqli->close();
   }
   if ($arks) {
-    // Get titles and modification dates from brief records
-    $brief_records = get_brief_records(array_keys($arks));
-    foreach ($brief_records as $ark => $brief) {
-      $arks[$ark]['title'] = $brief['title'];
-      $arks[$ark]['date'] = date('Y-m-d', strtotime($brief['date']));
+    // Get titles and modification dates from BaseX
+    $body = '<run>
+      <variable name="d" value="' . $repo_id . '" />
+      <text>get-table.xq</text>
+    </run>';
+    $opts = get_opts($body);
+    $context = stream_context_create($opts);
+    if ($result_string = file_get_contents(BASEX_REST, FALSE, $context)) {
+      $result_xml = simplexml_load_string($result_string);
+      foreach ($result_xml->ead as $ead) {
+        $ark = (string) $ead->ark;
+        if (isset($arks[$ark])) {
+          $title = (string) $ead->title;
+          $date = (string) $ead->date;
+          $arks[$ark]['title'] = $title;
+          $arks[$ark]['date'] = date('Y-m-d', strtotime($date));
+        }
+      }
     }
     if ($sort_field == 'title' || $sort_field == 'date') {
       if ($sort_dir == 'ASC') {

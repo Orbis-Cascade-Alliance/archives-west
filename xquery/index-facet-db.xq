@@ -18,7 +18,7 @@ let $add_terms := %updating function($types) {
                 }
               </term>
     }</terms>
-    return db:add($facet_db, $result, 'terms')
+    return db:add($facet_db, $result, 'eads' || $d)
 }
 return updating $add_terms($types),
 

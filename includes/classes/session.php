@@ -168,12 +168,19 @@ class AW_Session {
     }
   }
   
-  // Delete a finding aid from the text index
-  function delete_from_text($repo_id, $ark) {
-    $this->session->execute('OPEN index-text');
-    $this->session->execute('XQUERY delete node //eads/ead[@ark="'. $ark . '"]');
-    $this->session->execute('OPTIMIZE');
-    $this->session->execute('CLOSE');
+  // Delete specific finding aids from the text index
+  // Takes string of arks separated by bars
+  function delete_from_text($arks) {
+    try {
+      $input = file_get_contents(AW_HTML . '/xquery/delete-text-files.xq');
+      $query = $this->session->query($input);
+      $query->bind("a", $arks);
+      $query->execute();
+      $query->close();
+    }
+    catch (BaseXException $e) {
+      print $e->getMessage();
+    }
   }
   
   // Delete a whole repository from the text index
@@ -230,12 +237,19 @@ class AW_Session {
     }
   }
   
-  // Delete a finding aid from the brief index
-  function delete_from_brief($repo_id, $ark) {
-    $this->session->execute('OPEN index-brief');
-    $this->session->execute('XQUERY delete node //eads/ead[@ark="'. $ark . '"]');
-    $this->session->execute('OPTIMIZE');
-    $this->session->execute('CLOSE');
+  // Delete finding aids from the brief index
+  // Takes a string of arks separated by bars
+  function delete_from_brief($arks) {
+    try {
+      $input = file_get_contents(AW_HTML . '/xquery/delete-brief-files.xq');
+      $query = $this->session->query($input);
+      $query->bind("a", $arks);
+      $query->execute();
+      $query->close();
+    }
+    catch (BaseXException $e) {
+      print $e->getMessage();
+    }
   }
   
   // Delete a whole repository from the brief index
@@ -295,17 +309,20 @@ class AW_Session {
     $query->close();
   }
   
-  // Delete an ARK entry from all facets
-  function delete_from_facets($repo_id, $ark) {
+  // Delete finding aids from all facets
+  // Takes a string of arks separated by bars
+  function delete_from_facets($arks) {
     $types = get_facet_types();
-    foreach ($types as $facet_name => $local_names) {
-      $this->session->execute('OPEN facet-' . $facet_name);
-      // Delete ARK nodes
-      $this->session->execute('XQUERY delete node //terms[@db="' . $repo_id . '"]/term/ark[text()="' . $ark . '"]');
-      // Delete empty term nodes
-      $this->session->execute('XQUERY delete node //terms[@db="' . $repo_id . '"]/term[not(descendant::ark)]');
-      $this->session->execute('OPTIMIZE');
-      $this->session->execute('CLOSE');
+    try {
+      $input = file_get_contents(AW_HTML . '/xquery/delete-facet-files.xq');
+      $query = $this->session->query($input);
+      $query->bind("t", get_facet_string());
+      $query->bind("a", $arks);
+      $query->execute();
+      $query->close();
+    }
+    catch (BaseXException $e) {
+      print $e->getMessage();
     }
   }
   
@@ -315,7 +332,6 @@ class AW_Session {
     foreach ($types as $facet_name => $local_names) {
       $this->session->execute('OPEN facet-' . $facet_name);
       $this->session->execute('DELETE eads' . $repo_id);
-      $this->session->execute('XQUERY delete node //terms[@db="' . $repo_id . '"]');
       $this->session->execute('OPTIMIZE');
       $this->session->execute('CLOSE');
     }
@@ -329,32 +345,11 @@ class AW_Session {
       $index_names[] = 'facet-' . $facet_name;
     }
     foreach ($index_names as $index) {
-      $this->session->execute('COPY ' . $index . ' ' . $index . '-prod');
+      // Command will work in BaseX 9.7, but need to use db:copy until then
+      //$this->session->execute('COPY ' . $index . ' ' . $index . '-prod');
+      $this->session->execute('XQUERY db:copy(\'' . $index . '\', \'' . $index . '-prod\')');
     }
   }
-  
-  // Update all indexes
-  function update_indexes() {
-    try {
-      $all_repos = $this->get_repos();
-      $input = file_get_contents(AW_HTML . '/xquery/get-unindexed.xq');
-      $query = $this->session->query($input);
-      $query->bind("d", implode('|', array_keys($all_repos)));
-      if ($result = $query->execute()) {
-        $result_xml = preg_match_all("/<file>(.+)<\/file>/", $result, $file_matches);
-        $files = implode('|', $file_matches[1]);
-        if (!empty($files)) {
-          $this->add_to_text($files);
-          $this->add_to_brief($files);
-          $this->add_to_facets($files);
-          $this->copy_indexes_to_prod();
-        }
-      }
-      $query->close();
-    }
-    catch (BaseXException $e) {
-      print $e->getMessage();
-    }
-  }
+
 }
 ?>

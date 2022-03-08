@@ -63,8 +63,7 @@ else if ($type == 'repo') {
       $session->optimize_db($repo_id);
       break;
     case 4:
-      $session->drop_text($repo_id);
-      $session->build_text($repo_id);
+      $session->delete_repo_from_text($repo_id);
       $session->index_text($repo_id);
       break;
     case 5:

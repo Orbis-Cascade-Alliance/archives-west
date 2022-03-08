@@ -106,8 +106,8 @@ if ($ark) {
               fclose($fh);
             }
             
-            // Update arks table
             if ($mysqli = connect()) {
+              // Update arks table
               if (!$replace) {
                 $update_stmt = $mysqli->prepare('UPDATE arks SET file=?, date=NOW() WHERE ark=?');
               }
@@ -117,27 +117,27 @@ if ($ark) {
               $update_stmt->bind_param('ss', $file_name, $ark);
               $update_stmt->execute();
               $update_stmt->close();
+              
+              // Insert into updates table
+              $insert_stmt = $mysqli->prepare('INSERT INTO updates (user, action, ark) VALUES (?, ?, ?)');
+              $user_id = $user->get_id();
+              $action = $replace ? 'replace' : 'add';
+              $insert_stmt->bind_param('iss', $user_id, $action, $ark);
+              $insert_stmt->execute();
+              $insert_stmt->close();
               $mysqli->close();
             }
             
-            // Update BaseX database and indeces
+            // Update BaseX document database
+            // Indexes will be updated in the next cron job
             $session = new AW_Session();
             if ($replace) {
               $session->replace_document($repo_id, $current_file_name, $file_name);
-              $session->delete_from_text($repo_id, $ark);
-              $session->delete_from_brief($repo_id, $ark);
-              $session->delete_from_facets($repo_id, $ark);
             }
             else {
               $session->add_document($repo_id, $file_name);
             }
-            $session->add_to_text($repo_id . ':' . $file_name);
-            $session->add_to_brief($repo_id . ':' . $file_name);
-            $session->add_to_facets($repo_id . ':' . $file_name);
             $session->close();
-            
-            //$index_command = 'php ' . AW_HTML . '/tools/index-update.php ' . $ark . ' ' . $replace . ' ' . $current_file_name;
-            //$index_process = new AW_Process($index_command);
             
             // Start caching process
             $finding_aid = new AW_Finding_Aid($ark);
