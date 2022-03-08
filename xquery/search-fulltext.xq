@@ -35,7 +35,7 @@ let $terms := tokenize($q, '\|')
 let $arks := tokenize($a, '\|')
 let $dbs := tokenize($d, '\|')
 return <results>{
-  for $result score $basex_score in ft:search('index-text', $terms, map{'mode':'all','fuzzy':$f})/ancestor::ead
+  for $result score $basex_score in ft:search('index-text-prod', $terms, map{'mode':'all','fuzzy':$f})/ancestor::ead
     where $result/@db=$dbs
       let $ark := string($result/@ark)
         where not($ark="") and (empty($arks) or $ark=$arks)

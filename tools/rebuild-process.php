@@ -42,6 +42,9 @@ if ($type == 'all') {
       // Build facets
       $session->index_all_facets();
       break;
+    case 6:
+      // Copy indexes to production
+      $session->copy_indexes_to_prod();
     default:
       // Do nothing
   }
@@ -70,7 +73,10 @@ else if ($type == 'repo') {
       break;
     case 6:
       $session->delete_repo_from_facets($repo_id);
-      $session->index_facets($repo_id);
+      $session->index_facets($repo_id);      
+      break;
+    case 7:
+      $session->copy_indexes_to_prod();
       break;
     default:
       // Do nothing

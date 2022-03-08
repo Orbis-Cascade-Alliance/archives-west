@@ -4,7 +4,7 @@ var iteration_complete = false;
 
 // Globals for one repository
 var step = 1;
-const total_steps = 6;
+const total_steps = 7;
 
 $(document).ready(function() {
   $('#form-rebuild').submit(function(e) {
@@ -62,10 +62,15 @@ function rebuild_dbs() {
                         rebuild_process(
                           {type:'all',step:5},
                           function() {
-                            $('#results').prepend("Rebuild complete!\n");
-                            $('#form-rebuild').show();
-                            iteration_complete = false;
-                            populate_repo_ids();
+                            $('#results').append("Copying indexes to production...\n");
+                            rebuild_process(
+                            {type:'all',step:6},
+                            function() {
+                              $('#results').prepend("Rebuild complete!\n");
+                              $('#form-rebuild').show();
+                              iteration_complete = false;
+                              populate_repo_ids();
+                            })
                           }
                         );
                       }

@@ -321,6 +321,18 @@ class AW_Session {
     }
   }
   
+  // Copy working indexes to production
+  function copy_indexes_to_prod() {
+    $index_names = array('index-text', 'index-brief');
+    $types = get_facet_types();
+    foreach ($types as $facet_name => $local_names) {
+      $index_names[] = 'facet-' . $facet_name;
+    }
+    foreach ($index_names as $index) {
+      $this->session->execute('COPY ' . $index . ' ' . $index . '-prod');
+    }
+  }
+  
   // Update all indexes
   function update_indexes() {
     try {
@@ -331,9 +343,12 @@ class AW_Session {
       if ($result = $query->execute()) {
         $result_xml = preg_match_all("/<file>(.+)<\/file>/", $result, $file_matches);
         $files = implode('|', $file_matches[1]);
-        $this->add_to_text($files);
-        $this->add_to_brief($files);
-        $this->add_to_facets($files);
+        if (!empty($files)) {
+          $this->add_to_text($files);
+          $this->add_to_brief($files);
+          $this->add_to_facets($files);
+          $this->copy_indexes_to_prod();
+        }
       }
       $query->close();
     }
