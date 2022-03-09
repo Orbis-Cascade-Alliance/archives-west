@@ -111,6 +111,9 @@ class AW_Search {
             unset($exploded_query[$key]);
             $excluded_words[] = $term;
           }
+          else {
+            $exploded_query[$key] = $this->strip_chars($term);
+          }
         }
         // If term is a phrase and contains a stopword, remove it
         else {
