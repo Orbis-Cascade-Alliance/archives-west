@@ -6,7 +6,7 @@ declare variable $m as xs:integer external;
 let $arks := tokenize($a, '\|')
 let $names := tokenize($n, '\|')
 for $name in $names
-  let $facet_db := 'facet-' || $name
+  let $facet_db := 'facet-' || $name || '-prod'
   let $sorted_terms := <terms>{
     for $term in db:open($facet_db)/terms/term[ark/text()=$arks]
       group by $text := $term/@text

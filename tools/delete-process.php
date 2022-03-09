@@ -41,21 +41,26 @@ if (isset($_POST['ark']) && !empty($_POST['ark'])) {
         }
         $session = new AW_Session();
         $session->delete_document($repo_id, $file_name);
-        $session->delete_from_text($repo_id, $ark);
-        $session->delete_from_brief($repo_id, $ark);
-        $session->delete_from_facets($repo_id, $ark);
         $session->close();
       }
       
       // Delete cache
       $finding_aid->delete_cache();
-     
-      // Update table row
+
       if ($mysqli = connect()) {
+        // Update arks table
         $delete_stmt = $mysqli->prepare('UPDATE arks SET active=0 WHERE ark=?');
         $delete_stmt->bind_param('s', $ark);
         $delete_stmt->execute();
         $delete_stmt->close();
+        
+        // Insert into updates table
+        $insert_stmt = $mysqli->prepare('INSERT INTO updates (user, action, ark) VALUES (?, ?, ?)');
+        $user_id = $user->get_id();
+        $action = 'delete';
+        $insert_stmt->bind_param('iss', $user_id, $action, $ark);
+        $insert_stmt->execute();
+        $insert_stmt->close();
         $mysqli->close();
       }
       

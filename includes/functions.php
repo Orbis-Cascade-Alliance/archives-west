@@ -20,12 +20,21 @@ function add_links($string) {
 // Get all facet keys and local names in EAD files
 function get_facet_types() {
   return array(
-    'geogname'=>'geogname',
-    'name'=>'persname|famname|corpname',
-    'subject'=>'subject',
-    'occupation'=>'occupation',
-    'genreform'=>'genreform'
+    'geogname' => array('geogname'),
+    'name' => array('persname', 'famname', 'corpname'),
+    'subject' => array('subject'),
+    'occupation' => array('occupation'),
+    'genreform' => array('genreform')
   );
+}
+
+// Get facet keys and local names as a string for XQuery
+function get_facet_string() {
+  $facet_strings = array();
+  foreach (get_facet_types() as $facet_name => $local_names) {
+    $facet_strings[] = $facet_name . ':' . implode(',', $local_names);
+  }
+  return implode('|', $facet_strings);
 }
 
 // Get facet headings
@@ -135,18 +144,10 @@ function print_sort($query, $sort) {
 }
 
 // POST ARKs from ranked results to get-brief.xq
-function get_brief_records($arks, $type='full') {
-  switch ($type) {
-    case 'full':
-      $xquery = 'get-brief.xq';
-    break;
-    case 'min':
-      $xquery = 'get-brief-min.xq';
-    break;
-  }
+function get_brief_records($arks) {
   $body = '<run>
     <variable name="a" value="' . implode('|', $arks) . '" />
-    <text>' . $xquery . '</text>
+    <text>get-brief.xq</text>
   </run>';
   $opts = get_opts($body);
   $context = stream_context_create($opts);
@@ -155,20 +156,18 @@ function get_brief_records($arks, $type='full') {
     $brief_records = array();
     $all_repos = get_all_repos();
     foreach ($brief_xml->children() as $result) {
-      $db = (string) $result->db;
-      $ark = (string) $result->ark;
+      $db = (string) $result['db'];
+      $ark = (string) $result['ark'];
       $title = (string) $result->title;
       $date = (string) $result->date;
       $repo_info = $all_repos[$db];
+      $abstract = (string) $result->abstract;
       $brief_records[$ark] = array(
         'title' => $title,
         'date' => $date,
-        'repo_info' => $repo_info
+        'repo_info' => $repo_info,
+        'abstract' => $abstract
       );
-      if ($type == 'full') {
-        $abstract = (string) $result->abstract;
-        $brief_records[$ark]['abstract'] = $abstract;
-      }
     }
     return $brief_records;
   }
@@ -179,7 +178,7 @@ function get_brief_records($arks, $type='full') {
 
 // Print brief records from array of ARKs
 function print_brief_records($arks, $query) {
-  $brief_records = get_brief_records($arks, 'full');
+  $brief_records = get_brief_records($arks);
   ob_start();
   foreach ($arks as $ark) {
     if (isset($brief_records[$ark])) {
