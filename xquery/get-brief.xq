@@ -1,3 +1,4 @@
+(: Get brief records by ARK from the production index :)
 declare variable $a as xs:string external;
 <eads>
 {

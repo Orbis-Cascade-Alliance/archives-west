@@ -1,5 +1,5 @@
+(: Report EADs with missing upload dates :)
 import module namespace aw = "https://archiveswest.orbiscascade.org";
-
 for $d in (1 to 47)
   let $db := 'eads' || $d
   return <eads>{

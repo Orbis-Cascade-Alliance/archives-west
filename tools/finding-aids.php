@@ -65,7 +65,8 @@ if ($repo_id != 0) {
     // Get titles and modification dates from BaseX
     $body = '<run>
       <variable name="d" value="' . $repo_id . '" />
-      <text>get-table.xq</text>
+      <variable name="a" value="" />
+      <text>get-export.xq</text>
     </run>';
     $opts = get_opts($body);
     $context = stream_context_create($opts);

@@ -1,3 +1,4 @@
+(: Delete EADs by ARK from the working brief index :)
 declare variable $a as xs:string external;
 let $arks := tokenize($a, '\|')
 let $delete_from_brief := %updating function($arks) {

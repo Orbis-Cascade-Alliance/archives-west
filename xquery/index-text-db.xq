@@ -1,3 +1,4 @@
+(: Add the EADs of a repository to the working text index :)
 import module namespace aw = "https://archiveswest.orbiscascade.org";
 declare variable $d as xs:string external;
 declare variable $s as xs:string external;

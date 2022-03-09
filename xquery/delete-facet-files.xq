@@ -1,3 +1,4 @@
+(: Delete EADs by ARK from the working facet indexes :)
 import module namespace aw = "https://archiveswest.orbiscascade.org";
 declare variable $t as xs:string external;
 declare variable $a as xs:string external;

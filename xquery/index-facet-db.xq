@@ -1,3 +1,4 @@
+(: Add the EADs of a repository to the working facet indexes :)
 declare variable $t as xs:string external;
 declare variable $d as xs:string external;
 declare variable $types as xs:string+ := tokenize($t, '\|');

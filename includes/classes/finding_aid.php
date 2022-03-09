@@ -211,21 +211,19 @@ class AW_Finding_Aid {
     }
   }
   
-  // Get title from XML
-  function get_title($include_date = true) {
+  // Get title from BaseX
+  function get_title() {
     if (!isset($this->title)) {
-      if ($xml = $this->get_xml()) {
-        $title = $this->get_value($xml->archdesc->did->unittitle);
-        if ($include_date) {
-          $date = $this->get_value($xml->archdesc->did->unitdate);
-          if ($date) {
-            $title .= ' ' . $date;
-          }
-        }
-        $this->title = trim(preg_replace('|\s+|', ' ', $title));
-      }
-      else {
-        $this->title = 'Untitled';
+      $body = '<run>
+        <variable name="d" value="' . $this->get_repo()->get_id() . '" />
+        <variable name="a" value="' . $this->get_ark() . '" />
+        <text>get-export.xq</text>
+      </run>';
+      $opts = get_opts($body);
+      $context = stream_context_create($opts);
+      if ($result_string = file_get_contents(BASEX_REST, FALSE, $context)) {
+        $result_xml = simplexml_load_string($result_string);
+        $this->title = (string) $result_xml->ead->title;
       }
     }
     return $this->title;

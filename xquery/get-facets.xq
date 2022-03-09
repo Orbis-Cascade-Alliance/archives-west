@@ -1,3 +1,4 @@
+(: Get facet terms for ARKs from the production indexes :)
 declare variable $a as xs:string external;
 declare variable $n as xs:string external;
 declare variable $m as xs:integer external;

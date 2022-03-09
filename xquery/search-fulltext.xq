@@ -1,3 +1,4 @@
+(: Perform a full-text search of the production text index :)
 import module namespace aw = "https://archiveswest.orbiscascade.org";
 declare variable $q as xs:string external;
 declare variable $a as xs:string external;

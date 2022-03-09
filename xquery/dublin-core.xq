@@ -1,3 +1,4 @@
+(: Output DC records for OAI-PMH harvesting :)
 import module namespace aw = "https://archiveswest.orbiscascade.org";
 declare variable $d as xs:string external;
 declare variable $a as xs:string external;

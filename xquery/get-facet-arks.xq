@@ -1,3 +1,4 @@
+(: Get ARKs of finding aids that contain given facet terms in the production indexes :)
 declare variable $d as xs:string external;
 declare variable $f as xs:string external;
 declare function local:get_arks($facet as xs:string, $db_ids as item()+) as item()* {

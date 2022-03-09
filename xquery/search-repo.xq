@@ -1,3 +1,4 @@
+(: Return all repository EADs from the production brief index :)
 import module namespace aw = "https://archiveswest.orbiscascade.org";
 declare variable $a as xs:string external;
 declare variable $d as xs:string external;

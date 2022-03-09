@@ -1,3 +1,4 @@
+(: Add specific EAD files to the working brief index :)
 import module namespace aw = "https://archiveswest.orbiscascade.org";
 declare variable $f as xs:string external;
 let $files := tokenize($f, '\|')

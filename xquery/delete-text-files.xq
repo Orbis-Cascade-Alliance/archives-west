@@ -1,3 +1,4 @@
+(: Delete EADs by ARK from the working text index :)
 declare variable $a as xs:string external;
 let $arks := tokenize($a, '\|')
 let $delete_from_text := %updating function($arks) {

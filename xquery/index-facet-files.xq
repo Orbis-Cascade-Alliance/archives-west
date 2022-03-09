@@ -1,3 +1,4 @@
+(: Add specific EAD files to the working facet indexes :)
 import module namespace aw = "https://archiveswest.orbiscascade.org";
 declare variable $t as xs:string external;
 declare variable $f as xs:string external;

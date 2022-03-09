@@ -1,3 +1,4 @@
+(: Add specific EAD files to the working text index :)
 import module namespace aw = "https://archiveswest.orbiscascade.org";
 declare variable $f as xs:string external;
 declare variable $s as xs:string external;
