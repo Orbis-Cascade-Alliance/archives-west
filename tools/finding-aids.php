@@ -76,7 +76,7 @@ if ($repo_id != 0) {
         $ark = (string) $ead->ark;
         if (isset($arks[$ark])) {
           $title = (string) $ead->title;
-          $date = (string) $ead->date;
+          $date = (string) $ead->modified;
           $arks[$ark]['title'] = $title;
           $arks[$ark]['date'] = date('Y-m-d', strtotime($date));
         }

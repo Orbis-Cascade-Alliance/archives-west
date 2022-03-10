@@ -45,7 +45,7 @@ class AW_Updates {
     $ids = array();
     if ($updates = $this->get_updates()) {
       foreach ($updates as $action => $info) {
-        $ids = $ids + array_keys($info);
+        $ids = array_merge($ids, array_keys($info));
       }
     }
     return implode(',', $ids);
@@ -65,13 +65,13 @@ class AW_Updates {
   }
   
   // Get DBs and arks for an action
-  // Returns string separated by bars
+  // Returns string {database ID}:{ark}|{database ID 2}:{ark 2} etc.
   function get_arks($action) {
     $arks = array();
     if ($updates = $this->get_updates()) {
       $action_updates = $updates[$action];
       foreach ($action_updates as $update) {
-        $arks[] = $update['ark'];
+        $arks[] = $update['repo_id'] . ':' . $update['ark'];
       }
     }
     return implode('|', $arks);

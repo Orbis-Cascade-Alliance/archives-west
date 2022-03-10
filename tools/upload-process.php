@@ -119,17 +119,19 @@ if ($ark) {
               $update_stmt->close();
               
               // Insert into updates table
-              $insert_stmt = $mysqli->prepare('INSERT INTO updates (user, action, ark) VALUES (?, ?, ?)');
               $user_id = $user->get_id();
               $action = $replace ? 'replace' : 'add';
-              $insert_stmt->bind_param('iss', $user_id, $action, $ark);
-              $insert_stmt->execute();
-              $insert_stmt->close();
+              $existing_result = $mysqli->query('SELECT id FROM updates WHERE ark="' . $ark . '" AND action="' . $action . '" AND complete=0');
+              if ($existing_result->num_rows == 0) {
+                $insert_stmt = $mysqli->prepare('INSERT INTO updates (user, action, ark) VALUES (?, ?, ?)');
+                $insert_stmt->bind_param('iss', $user_id, $action, $ark);
+                $insert_stmt->execute();
+                $insert_stmt->close();
+              }
               $mysqli->close();
             }
             
             // Update BaseX document database
-            // Indexes will be updated in the next cron job
             $session = new AW_Session();
             if ($replace) {
               $session->replace_document($repo_id, $current_file_name, $file_name);
@@ -138,6 +140,11 @@ if ($ark) {
               $session->add_document($repo_id, $file_name);
             }
             $session->close();
+            
+            // Start index process
+            if (!isset($type) || $type != 'batch') {
+              start_index_process();
+            }
             
             // Start caching process
             $finding_aid = new AW_Finding_Aid($ark);

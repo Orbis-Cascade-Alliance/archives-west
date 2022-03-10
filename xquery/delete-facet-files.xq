@@ -4,12 +4,14 @@ declare variable $t as xs:string external;
 declare variable $a as xs:string external;
 declare variable $types as xs:string+ := tokenize($t, '\|');
 
-let $arks := tokenize($a, '\|')
-let $delete_from_facets := %updating function($types, $arks) {
+let $db_arks := tokenize($a, '\|')
+let $delete_from_facets := %updating function($types, $db_arks) {
   for $type in $types
     let $facet_db := 'facet-' || substring-before($type, ':')
-    for $ark in $arks
-      return delete node db:open($facet_db)/terms/term/ark[text()=$ark]
+    for $db_ark in $db_arks
+      let $db_id := substring-before($db_ark, ':')
+      let $ark := substring-after($db_ark, ':')
+      return delete node db:open($facet_db)/terms[@db=$db_id]/term/ark[text()=$ark]
 }
 return updating $delete_from_facets($types, $arks),
 

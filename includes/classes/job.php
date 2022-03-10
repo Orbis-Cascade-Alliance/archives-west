@@ -148,6 +148,9 @@ class AW_Job {
       $_SESSION['upload_file'] = null;
       $_SESSION['upload_errors'] = array();
     }
+    
+    // Start index process
+    index_next();
      
     // Save report file
     $fh = fopen($this->get_report_path(), 'w');

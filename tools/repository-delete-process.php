@@ -22,7 +22,7 @@ catch (Exception $e) {
 if ($repo) {
   // Remove finding aids from BaseX indexes and drop database
   $session = new AW_Session();
-  $session->delete_repo_from_text($repo_id);
+  $session->drop_text($repo_id);
   $session->delete_repo_from_brief($repo_id);
   $session->delete_repo_from_facets($repo_id);
   $session->copy_indexes_to_prod();

@@ -133,11 +133,11 @@ function build_ark_select($repo_id, $active = 1, $null_file = 0) {
   return $ark_select;
 }
 
-// Check for running cache process
-function check_cache_process() {
+// Check for running process
+function check_process($script) {
   exec('ps -u www-data -f', $output);
   foreach ($output as $line) {
-    if (stristr($line, 'cache.php')) {
+    if (stristr($line, $script)) {
       return true;
     }
   }
@@ -147,12 +147,10 @@ function check_cache_process() {
 // If no caching process is currently running, create the cached file in the background
 // If a process is running, the cache-track.php script will call cache_next() when it's done
 function start_cache_process($ark) {
-  $current_process = check_cache_process();
+  $current_process = check_process('cache.php');
   if (!$current_process) {
-    $cache_command = 'php ' . AW_HTML . '/tools/cache.php ' . $ark;
-    $cache_process = new AW_Process($cache_command);
-    $track_command = 'php ' . AW_HTML . '/tools/cache-track.php ' . $cache_process->getPid() . ' ' . $ark;
-    $track_process = new AW_Process($track_command);
+    $cache_process = new AW_Process('php ' . AW_HTML . '/tools/cache.php ' . $ark);
+    new AW_Process('php ' . AW_HTML . '/tools/track-process.php cache ' . $cache_process->getPid() . ' ' . $ark);
   }
 }
 
@@ -164,6 +162,26 @@ function cache_next() {
       while ($ark_row = $ark_result->fetch_row()) {
         start_cache_process($ark_row[0]);
       }
+    }
+    $mysqli->close();
+  }
+}
+
+// Run an index update as a process
+function start_index_process() {
+  $current_process = check_process('update-indexes.php');
+  if (!$current_process) {
+    $index_process = new AW_Process('php ' . AW_HTML . '/tools/update-indexes.php');
+    new AW_Process('php ' . AW_HTML . '/tools/track-process.php index ' . $index_process->getPid());
+  }
+}
+
+// Update indexes if any update rows have a complete value of 0
+function index_next() {
+  if ($mysqli = connect()) {
+    $update_result = $mysqli->query('SELECT id FROM updates WHERE complete=0');
+    if ($update_result->num_rows > 0) {
+      start_index_process();
     }
     $mysqli->close();
   }

@@ -51,12 +51,12 @@ if ($repo_id != 0) {
         echo print_errors('upload_errors');
       }
       else {
-        $now = time();
-        $next_quarter = ceil($now/900)*900;
-        $job_time = date('g:i a', $next_quarter);
+        //$now = time();
+        //$next_quarter = ceil($now/900)*900;
+        //$job_time = date('g:i a', $next_quarter);
         echo '<p class="success">Uploaded ' . $_SESSION['upload_file'] . '.
-        <a href="' . AW_DOMAIN . '/ark:/' . $ark . '" target="_blank">View in Archives West</a>.
-        <br />This finding aid will be indexed for searching during the next job at ' . $job_time . '.</p>';
+        <a href="' . AW_DOMAIN . '/ark:/' . $ark . '" target="_blank">View in Archives West</a>.';
+        //<br />This finding aid will be indexed for searching during the next job at ' . $job_time . '.</p>';
         
       }
       $_SESSION['upload_file'] = null;

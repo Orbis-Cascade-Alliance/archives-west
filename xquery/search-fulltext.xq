@@ -34,10 +34,10 @@ declare function local:in_string($string as xs:string, $term as xs:string) as xs
 
 let $terms := tokenize($q, '\|')
 let $arks := tokenize($a, '\|')
-let $dbs := tokenize($d, '\|')
+let $db_ids := tokenize($d, '\|')
 return <results>{
-  for $result score $basex_score in ft:search('index-text-prod', $terms, map{'mode':'all','fuzzy':$f})/ancestor::ead
-    where $result/@db=$dbs
+  for $db_id in $db_ids
+    for $result score $basex_score in ft:search('text' || $db_id || '-prod', $terms, map{'mode':'all','fuzzy':$f})/ancestor::ead
       let $ark := string($result/@ark)
         where not($ark="") and (empty($arks) or $ark=$arks)
           let $title := string($result/title)

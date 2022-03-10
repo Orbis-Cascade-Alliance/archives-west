@@ -24,17 +24,24 @@ function check_completion($process, $start) {
   }
 }
 
-// Get process ID and ark
+// Get type, process ID, and arguments
+$types = array('cache', 'index');
+$type = '';
 $pid = 0;
-$ark = '';
-if (isset($argv[1]) && !empty($argv[1])) {
-  $pid = filter_var($argv[1], FILTER_SANITIZE_NUMBER_INT);
+if (isset($argv[1]) && !empty($argv[1]) && in_array($argv[1], $types)) {
+  $type = $argv[1];
 }
 if (isset($argv[2]) && !empty($argv[2])) {
-  $ark = filter_var($argv[2], FILTER_SANITIZE_STRING);
+  $pid = filter_var($argv[1], FILTER_SANITIZE_NUMBER_INT);
+}
+if ($type == 'cache') {
+  $ark = '';
+  if (isset($argv[3]) && !empty($argv[3])) {
+    $ark = filter_var($argv[2], FILTER_SANITIZE_STRING);
+  }
 }
 
-if ($pid != 0 && $ark != '') {
+if ($type != '' && $pid != 0) {
   // Create process object to check status
   $process = new AW_Process();
   $process->setPID($pid);
@@ -45,12 +52,17 @@ if ($pid != 0 && $ark != '') {
   
   // If tracking function returned false, notify webmaster
   if (!$complete) {
-    $mail = new AW_Mail('webmaster@orbiscascade.org', 'Cache Failed!', 'Process ' . $pid . ' for ARK ' . $ark . ' failed to complete within 5 minutes.');
+    $mail = new AW_Mail('webmaster@orbiscascade.org', ucwords($type) . ' Failed!', 'Process ' . $pid . ' failed to complete within 5 minutes.');
     $mail->send();
   }
-  // If process is complete, start the cache process for another waiting finding aid
   else {
-    cache_next();
+    // Start the next process
+    if ($type == 'cache') {
+      cache_next();
+    }
+    else if ($type == 'index') {
+      index_next();
+    }
   }
 }
 ?>

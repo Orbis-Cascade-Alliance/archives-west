@@ -18,12 +18,13 @@ let $add_to_facets := %updating function($types, $files) {
         let $text := normalize-space(translate($terms, '&#160;', ' '))
         group by $text, $ark, $db_id, $facet_db
           where not($text="")
-            let $existing_term := db:open($facet_db)/terms[@db=$db_id]/term[@text=$text]
-            return
-              if (exists($existing_term)) then
-                insert node <ark>{$ark}</ark> as last into $existing_term
-              else
-                insert node <term text="{$text}"><ark>{$ark}</ark></term> as last into db:open($facet_db)/terms[@db=$db_id]
+            let $existing_term := db:open($facet_db)/terms[@db=$db_id]/term[@text=$text][1]
+            where not($existing_term/ark[text()=$ark])
+              return
+                if (exists($existing_term)) then
+                  insert node <ark>{$ark}</ark> as last into $existing_term
+                else
+                  insert node <term text="{$text}"><ark>{$ark}</ark></term> as last into db:open($facet_db)/terms[@db=$db_id]
 }
 return updating $add_to_facets($types, $files), 
 

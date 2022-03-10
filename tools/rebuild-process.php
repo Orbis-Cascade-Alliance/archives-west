@@ -13,10 +13,9 @@ if ($type == 'all') {
     case 1:
       // Drop all databases
       $session->drop_dbs();
-      $session->drop_text();
+      $session->drop_all_text();
       $session->drop_brief();
       $session->drop_facets();
-      $session->build_text();
       $session->build_brief();
       $session->build_facets();
       break;
@@ -32,6 +31,7 @@ if ($type == 'all') {
       // Build text databases
       $repo_id = filter_var($_POST['repo_id'], FILTER_SANITIZE_NUMBER_INT);
       echo 'Building text index for ' . $repo_id . '...' . "\n";
+      $session->build_text($repo_id);
       $session->index_text($repo_id);
       break;
     case 4:
@@ -63,7 +63,8 @@ else if ($type == 'repo') {
       $session->optimize_db($repo_id);
       break;
     case 4:
-      $session->delete_repo_from_text($repo_id);
+      $session->drop_text($repo_id);
+      $session->build_text($repo_id);
       $session->index_text($repo_id);
       break;
     case 5:
@@ -75,7 +76,9 @@ else if ($type == 'repo') {
       $session->index_facets($repo_id);      
       break;
     case 7:
-      $session->copy_indexes_to_prod();
+      $session->copy_text_to_prod($repo_id);
+      $session->copy_brief_to_prod();
+      $session->copy_facets_to_prod();
       break;
     default:
       // Do nothing

@@ -110,27 +110,27 @@ class AW_Session {
     return preg_replace('/\s/', '|', $contents);
   }
   
-  // Delete old text indexes
-  function drop_old_text() {
+  // Delete all text indexes
+  function drop_all_text() {
     foreach ($this->get_repos() as $repo_id => $repo_info) {
       $this->session->execute('DROP DB text' . $repo_id);
     }
   }
   
   // Delete a single repository's text index
-  function drop_text() {
-    $this->session->execute('DROP DB index-text');
+  function drop_text($repo_id) {
+    $this->session->execute('DROP DB text' . $repo_id);
   }
   
-  // Build text index
-  function build_text() {
+  // Build text index for a sigle repository
+  function build_text($repo_id) {
     $this->session->execute('SET FTINDEX true');
     $this->session->execute('SET FTINCLUDE tokens');
-    $this->session->execute('CREATE DB index-text');
+    $this->session->execute('CREATE DB text' . $repo_id);
     $this->session->execute('CLOSE');
   }
   
-  // Populate text index for all databases
+  // Populate text indexes for all databases
   function index_all_text() {
     foreach ($this->get_repos() as $repo_id => $repo_info) {
       $this->index_text($repo_id);
@@ -168,8 +168,8 @@ class AW_Session {
     }
   }
   
-  // Delete specific finding aids from the text index
-  // Takes string of arks separated by bars
+  // Delete specific finding aids from text indexes
+  // Takes string {database ID}:{ark}|{database ID 2}:{ark 2} etc.
   function delete_from_text($arks) {
     try {
       $input = file_get_contents(AW_HTML . '/xquery/delete-text-files.xq');
@@ -183,12 +183,16 @@ class AW_Session {
     }
   }
   
-  // Delete a whole repository from the text index
-  function delete_repo_from_text($repo_id) {
-    $this->session->execute('OPEN index-text');
-    $this->session->execute('DELETE eads' . $repo_id);
-    $this->session->execute('OPTIMIZE');
-    $this->session->execute('CLOSE');
+  // Copy a repository's text index to production
+  function copy_text_to_prod($repo_id) {
+    $this->session->execute('XQUERY db:copy(\'text' . $repo_id . '\', \'text' . $repo_id . '-prod\')');
+  }
+  
+  // Copy all text indexes to production
+  function copy_all_text_to_prod() {
+    foreach ($this->get_repos() as $repo_id => $repo_info) {
+      $this->copy_text_to_prod($repo_id);
+    }
   }
   
   // Drop brief record index
@@ -258,6 +262,11 @@ class AW_Session {
     $this->session->execute('DELETE eads' . $repo_id);
     $this->session->execute('OPTIMIZE');
     $this->session->execute('CLOSE');
+  }
+  
+  // Copy a brief index to production
+  function copy_brief_to_prod() {
+    $this->session->execute('XQUERY db:copy(\'index-brief\', \'index-brief-prod\')');
   }
 
   // Drop all facets
@@ -337,9 +346,8 @@ class AW_Session {
     }
   }
   
-  // Copy working indexes to production
-  function copy_indexes_to_prod() {
-    $index_names = array('index-text', 'index-brief');
+  // Copy facets to production
+  function copy_facets_to_prod() {
     $types = get_facet_types();
     foreach ($types as $facet_name => $local_names) {
       $index_names[] = 'facet-' . $facet_name;
@@ -349,6 +357,13 @@ class AW_Session {
       //$this->session->execute('COPY ' . $index . ' ' . $index . '-prod');
       $this->session->execute('XQUERY db:copy(\'' . $index . '\', \'' . $index . '-prod\')');
     }
+  }
+  
+  // Copy all working indexes to production
+  function copy_indexes_to_prod() {
+    $this->copy_all_text_to_prod();
+    $this->copy_brief_to_prod();
+    $this->copy_facets_to_prod();
   }
 
 }

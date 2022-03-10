@@ -10,10 +10,10 @@ let $result := <eads db="{$d}">{
     let $title := aw:remove_stopwords(ft:tokenize(aw:get_title($ead)), $stopwords)
     let $aw_date := aw:get_aw_date($ead)
     let $tokens := aw:remove_stopwords(ft:tokenize(string-join($ead//text(), ' ')), $stopwords)
-    return <ead db="{$d}" ark="{$ark}">
+    return <ead ark="{$ark}">
       <title>{$title}</title>
       <date>{$aw_date}"</date>
       <tokens>{$tokens}</tokens>
     </ead>
 }</eads>
-return db:add('index-text', $result, $db), db:optimize('index-text')
+return db:add('text' || $d, $result, 'tokens'), db:optimize('text' || $d)
