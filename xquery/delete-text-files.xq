@@ -1,6 +1,6 @@
 (: Delete EADs by ARK from the working text index :)
 declare variable $a as xs:string external;
-declare variable $db_arks as xs:string+ := tokenize($a, '\|')
+declare variable $db_arks as xs:string+ := tokenize($a, '\|');
 
 let $delete_from_text := %updating function($db_arks) {
   for $db_ark in $db_arks

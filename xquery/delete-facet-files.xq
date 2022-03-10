@@ -13,7 +13,7 @@ let $delete_from_facets := %updating function($types, $db_arks) {
       let $ark := substring-after($db_ark, ':')
       return delete node db:open($facet_db)/terms[@db=$db_id]/term/ark[text()=$ark]
 }
-return updating $delete_from_facets($types, $arks),
+return updating $delete_from_facets($types, $db_arks),
 
 let $delete_empty_terms := %updating function($types) {
   for $type in $types
