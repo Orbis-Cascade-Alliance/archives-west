@@ -125,8 +125,6 @@ button.btn-delete:focus {
 /* Alert */
 .alert {
   background: #ffffcc;
-  color: #990000;
-  font-size: 120%;
   padding: .5rem;
   border: 1px solid #cccccc;
 }
