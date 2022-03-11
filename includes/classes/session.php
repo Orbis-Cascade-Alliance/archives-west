@@ -117,9 +117,21 @@ class AW_Session {
     }
   }
   
+  // Delete all production text indexes
+  function drop_all_text_prod() {
+    foreach ($this->get_repos() as $repo_id => $repo_info) {
+      $this->session->execute('DROP DB text' . $repo_id . '-prod');
+    }
+  }
+  
   // Delete a single repository's text index
   function drop_text($repo_id) {
     $this->session->execute('DROP DB text' . $repo_id);
+  }
+  
+  // Delete a single repository's proudction text index
+  function drop_text_prod($repo_id) {
+    $this->session->execute('DROP DB text' . $repo_id . '-prod');
   }
   
   // Build text index for a sigle repository
@@ -200,6 +212,11 @@ class AW_Session {
     $this->session->execute('DROP DB index-brief');
   }
   
+  // Drop production brief_record index
+  function drop_brief_prod() {
+    $this->session->execute('DROP DB index-brief-prod');
+  }
+  
   // Build brief index
   function build_brief() {
     $this->session->execute('CREATE DB index-brief');
@@ -274,6 +291,14 @@ class AW_Session {
     $types = get_facet_types();
     foreach ($types as $facet_name => $local_names) {
       $this->session->execute('DROP DB facet-' . $facet_name);
+    }
+  }
+  
+  // Drop all production facets
+  function drop_facets_prod() {
+    $types = get_facet_types();
+    foreach ($types as $facet_name => $local_names) {
+      $this->session->execute('DROP DB facet-' . $facet_name . '-prod');
     }
   }
   

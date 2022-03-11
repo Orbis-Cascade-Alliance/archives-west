@@ -20,15 +20,6 @@ catch (Exception $e) {
 }
 
 if ($repo) {
-  // Remove finding aids from BaseX indexes and drop database
-  $session = new AW_Session();
-  $session->drop_text($repo_id);
-  $session->delete_repo_from_brief($repo_id);
-  $session->delete_repo_from_facets($repo_id);
-  $session->copy_indexes_to_prod();
-  $session->drop_db($repo_id);
-  $session->close();
-
   // Delete the file directories in eads, cache, qr, and tools/jobs
   $path = AW_REPOS . '/' . $repo->get_folder();
   if (is_dir($path)) {
@@ -93,6 +84,16 @@ if ($repo) {
   else {
     $errors[] = 'Could not connect to MySQL.';
   }
+  
+  // Remove finding aids from BaseX indexes and drop database
+  $session = new AW_Session();
+  $session->drop_text($repo_id);
+  $session->drop_text_prod($repo_id);
+  $session->delete_repo_from_brief($repo_id);
+  $session->delete_repo_from_facets($repo_id);
+  $session->drop_db($repo_id); 
+  $session->copy_indexes_to_prod();
+  $session->close();
 }
 
 $_SESSION['repo_deletion_id'] = $repo_id;

@@ -65,6 +65,7 @@ if ($mainagencycode && $oclc && $name && $folder) {
       $session->index_text($repo_id);
       $session->index_brief($repo_id);
       $session->index_facets($repo_id);
+      $session->copy_indexes_to_prod($repo_id);
       $session->close();
     }
     else {
