@@ -86,20 +86,6 @@ function get_id_from_mainagencycode($mainagencycode) {
   return $repo_id;
 }
 
-// Return opts for POST queries
-function get_opts($body) {
-  return array(
-    'http' => array(
-      'method' => 'POST',
-      'header' => array(
-        'Authorization: Basic ' . base64_encode(BASEX_USER.':'.BASEX_PASS),
-        'Content-type: application/x-www-form-urlencoded'
-      ),
-      'content' => $body
-    )
-  );
-}
-
 // Print previous and next buttons for search
 function print_nav() {
   return '<nav class="page-nav">
@@ -145,13 +131,13 @@ function print_sort($query, $sort) {
 
 // POST ARKs from ranked results to get-brief.xq
 function get_brief_records($arks) {
-  $body = '<run>
-    <variable name="a" value="' . implode('|', $arks) . '" />
-    <text>get-brief.xq</text>
-  </run>';
-  $opts = get_opts($body);
-  $context = stream_context_create($opts);
-  if ($brief_result_string = file_get_contents(BASEX_REST, FALSE, $context)) {
+  $session = new AW_Session();
+  $query = $session->get_query('get-brief.xq');
+  $query->bind('a', implode('|', $arks));
+  $brief_result_string = $query->execute();
+  $query->close();
+  $session->close();
+  if ($brief_result_string) {
     $brief_xml = simplexml_load_string($brief_result_string);
     $brief_records = array();
     $all_repos = get_all_repos();

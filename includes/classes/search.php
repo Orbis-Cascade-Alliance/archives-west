@@ -1,5 +1,5 @@
 <?php
-// AW_Search uses BaseX REST to perform fulltext keyword searches of Archives West
+// AW_Search performs fulltext keyword searches of Archives West
 
 class AW_Search {
   
@@ -192,30 +192,30 @@ class AW_Search {
         $fuzzy = 'false';
       }
       
-      // POST query results from BaseX
+      // Get results from BaseX
       $time_start = time();
       $results = array();
+      $session = new AW_Session();
       if ($filtered_query) {
-        $body = '<run>
-          <variable name="q" value="'. $filtered_query . '" />
-          <variable name="d" value="' . $repo_string . '" />
-          <variable name="a" value="' . $ark_string . '" />
-          <variable name="s" value="' . $this->get_sort() . '" />
-          <variable name="f" value="' . $fuzzy . '" />
-          <text>search-fulltext.xq</text>
-        </run>';
+        $query = $session->get_query('search-fulltext.xq');
+        $query->bind('q', $filtered_query);
+        $query->bind('d', $repo_string);
+        $query->bind('a', $ark_string);
+        $query->bind('s', $this->get_sort());
+        $query->bind('f', $fuzzy);
+        $result_string = $query->execute();
+        $query->close();
       }
       else {
-        $body = '<run>
-          <variable name="d" value="' . $repo_string . '" />
-          <variable name="a" value="' . $ark_string . '" />
-          <variable name="s" value="' . $this->get_sort() . '" />
-          <text>search-repo.xq</text>
-        </run>';
+        $query = $session->get_query('search-repo.xq');
+        $query->bind('d', $repo_string);
+        $query->bind('a', $ark_string);
+        $query->bind('s', $this->get_sort());
+        $result_string = $query->execute();
+        $query->close();
       }
-      $opts = get_opts($body);
-      $context = stream_context_create($opts);
-      if ($result_string = file_get_contents(BASEX_REST, FALSE, $context)) {
+      $session->close();
+      if ($result_string) {
         $time_stop = time();
         $this->time = $time_stop - $time_start;
         $results = $this->regex_arks($result_string);
@@ -241,14 +241,14 @@ class AW_Search {
         foreach ($facets as $facet_type => $facet_term) {
           $facet_strings[] = $facet_type . ':' . str_replace($to_replace, $replacements, $facet_term);
         }
-        $body = '<run>
-          <variable name="d" value="' . $repo_ids . '" />
-          <variable name="f" value="' . implode('|', $facet_strings) . '" />
-          <text>get-facet-arks.xq</text>
-        </run>';
-        $opts = get_opts($body);
-        $context = stream_context_create($opts);
-        if ($facet_string = file_get_contents(BASEX_REST, FALSE, $context)) {
+        $session = new AW_Session();
+        $query = $session->get_query('get-facet-arks.xq');
+        $query->bind('d', $repo_ids);
+        $query->bind('f', implode('|', $facet_strings));
+        $facet_string = $query->execute();
+        $query->close();
+        $session->close();
+        if ($facet_string) {
           if (stristr($facet_string, '<ark>')) {
             $results = $this->regex_arks($facet_string);
           }
@@ -310,15 +310,15 @@ class AW_Search {
     // POST ARKs to facet_terms.xq
     $types = get_facet_types();
     $max_shown = 20;
-    $body = '<run>
-      <variable name="n" value="' . implode('|', array_keys($types)) . '" />
-      <variable name="a" value="' . implode('|', $results) . '" />
-      <variable name="m" value="' . $max_shown . '" />
-      <text>get-facets.xq</text>
-    </run>';
-    $opts = get_opts($body);
-    $context = stream_context_create($opts);
-    if ($facet_result_string = file_get_contents(BASEX_REST, FALSE, $context)) {
+    $session = new AW_Session();
+    $query = $session->get_query('get-facets.xq');
+    $query->bind('n', implode('|', array_keys($types)));
+    $query->bind('a', implode('|', $results));
+    $query->bind('m', $max_shown);
+    $facet_result_string = $query->execute();
+    $query->close();
+    $session->close();
+    if ($facet_result_string) {
       $facet_xml = simplexml_load_string($facet_result_string);
       
       // Start output buffer

@@ -31,13 +31,14 @@ if ($repo_id != 0) {
   $repo = new AW_Repo($repo_id);
   
   // Get export information from BaseX
-  $body = '<run>
-    <variable name="d" value="' . $repo_id . '" />
-    <text>get-export.xq</text>
-  </run>';
-  $opts = get_opts($body);
-  $context = stream_context_create($opts);
-  if ($result_string = file_get_contents(BASEX_REST, FALSE, $context)) {
+  $session = new AW_Session();
+  $query = $session->get_query('get-export.xq');
+  $query->bind('d', $repo_id);
+  $query->bind('a', '');
+  $result_string = $query->execute();
+  $query->close();
+  $session->close();
+  if ($result_string) {
     
     // Place EADs in array for rows
     $eads = array();

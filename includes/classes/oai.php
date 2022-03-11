@@ -501,14 +501,14 @@ class AW_OAI {
       else {
         $repo_ids = array_keys(get_all_repos());
       }
-      $body = '<run>
-        <variable name="d" value="' . implode('|', $repo_ids) . '" />
-        <variable name="a" value="' . implode('|', $this->get_arks()) . '" />
-        <text>dublin-core.xq</text>
-      </run>';
-      $opts = get_opts($body);
-      $context = stream_context_create($opts);
-      if ($result_string = file_get_contents(BASEX_REST, FALSE, $context)) {
+      $session = new AW_Session();
+      $query = $session->get_query('dublin-core.xq');
+      $query->bind('d', implode('|', $repo_ids));
+      $query->bind('a', implode('|', $this->get_arks()));
+      $result_string = $query->execute();
+      $query->close();
+      $session->close();
+      if ($result_string) {
         $result_xml = simplexml_load_string($result_string);
         foreach ($result_xml->children() as $record) {
           $ark = (string) $record->ark;

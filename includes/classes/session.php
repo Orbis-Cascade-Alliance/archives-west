@@ -18,6 +18,12 @@ class AW_Session {
     $this->session = new Session("localhost", 1984, BASEX_USER, BASEX_PASS);
   }
   
+  // Return a query object
+  function get_query($file) {
+    $input = file_get_contents(AW_HTML . '/xquery/' . $file);
+    return $this->session->query($input);
+  }
+  
   // Close session
   function close() {
     $this->session->close();
@@ -152,8 +158,7 @@ class AW_Session {
   // Populate text index for one database
   function index_text($repo_id) {
     try {
-      $input = file_get_contents(AW_HTML . '/xquery/index-text-db.xq');
-      $query = $this->session->query($input);
+      $query = $this->get_query('index-text-db.xq');
       $query->bind("d", $repo_id);
       $query->bind("s", $this->get_stopwords());
       $query->execute();
@@ -168,8 +173,7 @@ class AW_Session {
   // Takes string {database ID}:{file}|{database ID 2}:{file 2} etc.
   function add_to_text($files) {
     try {
-      $input = file_get_contents(AW_HTML . '/xquery/index-text-files.xq');
-      $query = $this->session->query($input);
+      $query = $this->get_query('index-text-files.xq');
       $query->bind("f", $files);
       $query->bind("s", $this->get_stopwords());
       $query->execute();
@@ -184,8 +188,7 @@ class AW_Session {
   // Takes string {database ID}:{ark}|{database ID 2}:{ark 2} etc.
   function delete_from_text($arks) {
     try {
-      $input = file_get_contents(AW_HTML . '/xquery/delete-text-files.xq');
-      $query = $this->session->query($input);
+      $query = $this->get_query('delete-text-files.xq');
       $query->bind("a", $arks);
       $query->execute();
       $query->close();
@@ -233,8 +236,7 @@ class AW_Session {
   // Populate brief record index for one database
   function index_brief($repo_id) {
     try {
-      $input = file_get_contents(AW_HTML . '/xquery/index-brief-db.xq');
-      $query = $this->session->query($input);
+      $query = $this->get_query('index-brief-db.xq');
       $query->bind("d", $repo_id);
       $query->execute();
       $query->close();
@@ -247,8 +249,7 @@ class AW_Session {
   // Takes string {database ID}:{file}|{database ID 2}:{file 2} etc.
   function add_to_brief($files) {
     try {
-      $input = file_get_contents(AW_HTML . '/xquery/index-brief-files.xq');
-      $query = $this->session->query($input);
+      $query = $this->get_query('index-brief-files.xq');
       $query->bind("f", $files);
       $query->execute();
       $query->close();
@@ -262,8 +263,7 @@ class AW_Session {
   // Takes a string of arks separated by bars
   function delete_from_brief($arks) {
     try {
-      $input = file_get_contents(AW_HTML . '/xquery/delete-brief-files.xq');
-      $query = $this->session->query($input);
+      $query = $this->get_query('delete-brief-files.xq');
       $query->bind("a", $arks);
       $query->execute();
       $query->close();
@@ -320,9 +320,8 @@ class AW_Session {
   
   // Populate all facet indexes for one database
   function index_facets($repo_id) {
-    $input = file_get_contents(AW_HTML . '/xquery/index-facet-db.xq');
     try {
-      $query = $this->session->query($input);
+      $query = $this->get_query('index-facet-db.xq');
       $query->bind("t", get_facet_string());
       $query->bind("d", $repo_id);
       $query->execute();
@@ -335,8 +334,7 @@ class AW_Session {
   // Add/update facet terms for specific finding aids
   // Takes string {database ID}:{file}|{database ID 2}:{file 2} etc.
   function add_to_facets($files) {
-    $input = file_get_contents(AW_HTML . '/xquery/index-facet-files.xq');
-    $query = $this->session->query($input);
+    $query = $this->get_query('index-facet-files.xq');
     $query->bind("t", get_facet_string());
     $query->bind("f", $files); 
     $query->execute();
@@ -348,8 +346,7 @@ class AW_Session {
   function delete_from_facets($arks) {
     $types = get_facet_types();
     try {
-      $input = file_get_contents(AW_HTML . '/xquery/delete-facet-files.xq');
-      $query = $this->session->query($input);
+      $query = $this->get_query('delete-facet-files.xq');
       $query->bind("t", get_facet_string());
       $query->bind("a", $arks);
       $query->execute();

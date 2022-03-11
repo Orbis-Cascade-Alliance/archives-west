@@ -214,14 +214,14 @@ class AW_Finding_Aid {
   // Get title from BaseX
   function get_title() {
     if (!isset($this->title)) {
-      $body = '<run>
-        <variable name="d" value="' . $this->get_repo()->get_id() . '" />
-        <variable name="a" value="' . $this->get_ark() . '" />
-        <text>get-export.xq</text>
-      </run>';
-      $opts = get_opts($body);
-      $context = stream_context_create($opts);
-      if ($result_string = file_get_contents(BASEX_REST, FALSE, $context)) {
+      $session = new AW_Session();
+      $query = $session->get_query('get-export.xq');
+      $query->bind('d', $this->get_repo()->get_id());
+      $query->bind('a', $this->get_ark());
+      $result_string = $query->execute();
+      $query->close();
+      $session->close();
+      if ($result_string) {
         $result_xml = simplexml_load_string($result_string);
         $this->title = (string) $result_xml->ead->title;
       }
