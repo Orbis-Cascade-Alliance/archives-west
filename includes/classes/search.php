@@ -203,17 +203,15 @@ class AW_Search {
         $query->bind('a', $ark_string);
         $query->bind('s', $this->get_sort());
         $query->bind('f', $fuzzy);
-        $result_string = $query->execute();
-        $query->close();
       }
       else {
         $query = $session->get_query('search-repo.xq');
         $query->bind('d', $repo_string);
         $query->bind('a', $ark_string);
         $query->bind('s', $this->get_sort());
-        $result_string = $query->execute();
-        $query->close();
       }
+      $result_string = $query->execute();
+      $query->close();
       $session->close();
       if ($result_string) {
         $time_stop = time();
