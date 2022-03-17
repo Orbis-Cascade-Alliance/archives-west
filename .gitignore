@@ -1,4 +1,5 @@
 .htaccess
+log.txt
 dev/
 google/
 repos/
@@ -6,3 +7,4 @@ tools/analytics/oauth2/credentials.json
 tools/analytics/oauth2/token.json
 tools/archivesspace/
 tools/oai-pmh/
+sitemap.xml
