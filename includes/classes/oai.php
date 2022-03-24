@@ -271,7 +271,9 @@ class AW_OAI {
       $this->finding_aid = $finding_aid;
     }
     catch (Exception $e) {
-      $this->write_error('idDoesNotExist');
+      if ($this->get_verb() == 'GetRecord') {
+        $this->write_error('idDoesNotExist');
+      }
     }
   }
   
