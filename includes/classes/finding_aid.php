@@ -9,6 +9,7 @@ class AW_Finding_Aid {
   public $repo = 0; // AW_Repo object
   public $ark_file = ''; // String filename
   public $ark_date = ''; // String date
+  public $last_date = ''; // String date from updates table
   public $ark_cached = 0; // Boolean cached
   public $ark_active = 0; // Boolean active
   private $xml; // SimpleXML object
@@ -21,7 +22,7 @@ class AW_Finding_Aid {
   function __construct($ark) {
     $this->ark = $ark;
     if ($mysqli = connect()) {
-      $ark_stmt = $mysqli->prepare('SELECT id, file, date, repo_id, cached, active FROM arks WHERE ark=?');
+      $ark_stmt = $mysqli->prepare('SELECT arks.id, arks.file, arks.date, GREATEST(arks.date, COALESCE(updates.date, 0)) as last_date, arks.repo_id, arks.cached, arks.active FROM arks LEFT JOIN updates ON arks.ark=updates.ark WHERE arks.ark=?');
       $ark_stmt->bind_param('s', $ark);
       $ark_stmt->execute();
       if ($ark_result = $ark_stmt->get_result()) {
@@ -32,6 +33,7 @@ class AW_Finding_Aid {
             $this->repo = new AW_Repo($repo_id);
             $this->ark_file = $ark_row['file'];
             $this->ark_date = $ark_row['date'];
+            $this->last_date = $ark_row['last_date'];
             $this->ark_cached = $ark_row['cached'];
             $this->ark_active = $ark_row['active'];
           }
@@ -85,6 +87,11 @@ class AW_Finding_Aid {
   // Get date
   function get_date() {
     return $this->ark_date;
+  }
+  
+  // Get last update date
+  function get_last_date() {
+    return $this->last_date;
   }
   
   // Return cached value

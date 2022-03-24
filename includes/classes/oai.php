@@ -331,27 +331,27 @@ class AW_OAI {
     return $this->offset;
   }
   
-  // Get active ARKs with uploaded files for a given repository
+  // Get ARKs with uploaded files for a given repository
   // Also sets a resumptionToken for results over 100
   function get_arks() {
     if (!isset($this->arks)) {
       $arks = array();
       $max_records = $this->get_max_records();
       if ($mysqli = connect()) {
-        $ark_query = 'SELECT ark FROM arks WHERE file<>"" AND active=1';
+        $ark_query = 'SELECT arks.ark, GREATEST(arks.date, COALESCE(updates.date, 0)) as greatest_date FROM arks LEFT JOIN updates ON arks.ark=updates.ark WHERE arks.file<>""';
         if ($ark = $this->get_ark()) {
-          $ark_query .= ' AND ark="' . $ark . '"';
+          $ark_query .= ' AND arks.ark="' . $ark . '"';
         }
         if ($repo = $this->get_repo()) {
-          $ark_query .= ' AND repo_id=' . $repo->get_id();
+          $ark_query .= ' AND arks.repo_id=' . $repo->get_id();
         }
         if ($from = $this->get_from()) {
-          $ark_query .= ' AND date >= "' . $from . '"';
+          $ark_query .= ' AND greatest_date >= "' . $from . '"';
         }
         if ($until = $this->get_until()) {
-          $ark_query .= ' AND date <= "' . $until . '"';
+          $ark_query .= ' AND greatest_date <= "' . $until . '"';
         }
-        $ark_query .= ' ORDER BY date ASC';
+        $ark_query .= ' ORDER BY greatest_date ASC';
         
         // Run query to get total count
         $total_result = $mysqli->query($ark_query);
@@ -431,11 +431,13 @@ class AW_OAI {
     $finding_aid = $this->get_finding_aid();
     $header = $xml->createElement('header');
     $header->appendChild($xml->createElement('identifier', $ark));
-    $header->appendChild($xml->createElement('datestamp', date('Y-m-d', strtotime($finding_aid->get_date()))));
+    $header->appendChild($xml->createElement('datestamp', date('Y-m-d', strtotime($finding_aid->get_last_date()))));
     $header->appendChild($xml->createElement('setSpec', $finding_aid->get_repo()->get_mainagencycode()));
     // Add deleted status
     if (!$finding_aid->is_active()) {
-      $header->appendChild($xml->createAttribute('status', 'deleted'));
+      $status = $xml->createAttribute('status');
+      $status->value = 'deleted';
+      $header->appendChild($status);
     }
     return $header;
   }
