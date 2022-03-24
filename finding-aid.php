@@ -39,28 +39,33 @@ else {
 <?php include(AW_INCLUDES . '/header-end.php'); ?>
 
 <?php
-if ($finding_aid != null && $finding_aid->is_active()) {
-  if ($cache = $finding_aid->get_cache()) {
-    ?>
-    <div id="downloads">
-      <a class="btn" href="javascript:void(0)" onclick="print_finding_aid()">Print</a>
-      &#160;<a class="btn" href="<?php echo AW_DOMAIN; ?>/ark:/<?php echo $ark; ?>/xml" target="_blank" role="button">View XML</a>
-      <?php
-      if ($qr_code = $finding_aid->get_qr_code()) {
-        echo '&#160;<a id="btn-qr" class="btn" href="' . $qr_code . '" target="_blank" role="button">QR Code</a>';
-      }
+if ($finding_aid != null) {
+  if ($finding_aid->is_active()) {
+    if ($cache = $finding_aid->get_cache()) {
       ?>
-    </div>
-<?php
-    echo $cache;
+      <div id="downloads">
+        <a class="btn" href="javascript:void(0)" onclick="print_finding_aid()">Print</a>
+        &#160;<a class="btn" href="<?php echo AW_DOMAIN; ?>/ark:/<?php echo $ark; ?>/xml" target="_blank" role="button">View XML</a>
+        <?php
+        if ($qr_code = $finding_aid->get_qr_code()) {
+          echo '&#160;<a id="btn-qr" class="btn" href="' . $qr_code . '" target="_blank" role="button">QR Code</a>';
+        }
+        ?>
+      </div>
+  <?php
+      echo $cache;
+    }
+    else {
+      echo '<p>This finding aid is being processed. Please check back later.</p>';
+    }
   }
   else {
-    echo '<p>This finding aid is being processed. Please check back later.</p>';
+    $repo = $finding_aid->get_repo();
+    echo '<p>This finding aid has been deleted by <a href="/contact.php#' . $repo->get_mainagencycode() . '">' . $repo->get_name() . '</a>.</p>';
   }
 }
 else {
-  $repo = $finding_aid->get_repo();
-  echo '<p>This finding aid has been deleted by <a href="/contact.php#' . $repo->get_mainagencycode() . '">' . $repo->get_name() . '</a>.</p>';
+  echo '<p>This finding aid could not be found.</p>';
 }
 ?>
 
