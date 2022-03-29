@@ -28,7 +28,7 @@ if (isset($_POST['folder']) && !empty($_POST['folder'])) {
 }
 
 $errors = array();
-if ($mainagencycode && $oclc && $name && $folder) {
+if ($mainagencycode && $name && $folder) {
   
   // Create the directory with eads, cache, qr, and trash plus tools/jobs
   $repo_path = AW_REPOS . '/' . $folder;
