@@ -144,6 +144,9 @@ if ($repo_id != 0) {
 <div id="dialog-error" title="Error">
   <p>Finding aid <span class="ark"></span> could not be deleted. Submit the <a href="https://www.orbiscascade.org/programs/ulc/help-request/">ULC Help Request Form</a> for assistance.</p>
 </div>
+<div id="dialog-history" title="History">
+  <p>Loading...</p>
+</div>
 <?php
 include(AW_TOOL_INCLUDES . '/tools-footer.php');
 ?>

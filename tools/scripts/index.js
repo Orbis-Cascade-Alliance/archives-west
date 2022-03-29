@@ -28,6 +28,10 @@ $(document).ready(function() {
     autoOpen: false,
     width: 500
   });
+  $('#dialog-history').dialog({
+    autoOpen: false,
+    width: 500
+  });
   
   // Finding aids table
   if ($('#results').data('tab') == 'f') {
@@ -196,4 +200,17 @@ function load_jobs() {
     // Apply pagination
     apply_pagination();
   });
+}
+
+// View history of a finding aid
+function view_history(el) {
+  var ul = $(el).next('.history').clone();
+  var title = $(el).parents('.date').siblings('.title').text();
+  if (title != '') {
+    $('#dialog-history').dialog('option', 'title', 'History of ' + title);
+  }
+  else {
+    $('#dialog-history').dialog('option', 'title', 'History')
+  }
+  $('#dialog-history').html(ul).dialog('open');
 }

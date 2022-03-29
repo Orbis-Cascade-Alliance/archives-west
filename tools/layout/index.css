@@ -60,6 +60,16 @@
   white-space: nowrap;
 }
 
+#finding-aids .date span {
+  color: #0066cc;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+#finding-aids .history {
+  display: none;
+}
+
 #reset {
   background: #555555;
 }
@@ -114,6 +124,12 @@ button.btn-delete:focus {
 
 .prev button, .next button {
   display: none;
+}
+
+.ui-dialog .ui-dialog-title {
+  float: none;
+  white-space: normal;
+  display: inline-block;
 }
 
 /* Jobs Tab */
