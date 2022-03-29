@@ -32,7 +32,7 @@ if (isset($argv[1]) && !empty($argv[1]) && in_array($argv[1], $types)) {
   $type = $argv[1];
 }
 if (isset($argv[2]) && !empty($argv[2])) {
-  $pid = filter_var($argv[1], FILTER_SANITIZE_NUMBER_INT);
+  $pid = filter_var($argv[2], FILTER_SANITIZE_NUMBER_INT);
 }
 if ($type == 'cache') {
   $ark = '';
