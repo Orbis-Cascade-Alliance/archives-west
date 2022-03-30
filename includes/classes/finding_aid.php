@@ -29,9 +29,6 @@ class AW_Finding_Aid {
         ON arks.ark=max_updates.ark
         WHERE arks.ark=?';
       $ark_stmt = $mysqli->prepare($ark_query);
-      if ($mysqli->error) {
-        die($mysqli->error);
-      }
       $ark_stmt->bind_param('s', $ark);
       $ark_stmt->execute();
       if ($ark_result = $ark_stmt->get_result()) {
