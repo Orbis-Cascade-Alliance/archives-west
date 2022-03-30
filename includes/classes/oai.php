@@ -347,11 +347,15 @@ class AW_OAI {
         if ($repo = $this->get_repo()) {
           $ark_query .= ' AND arks.repo_id=' . $repo->get_id();
         }
-        if ($from = $this->get_from()) {
-          $ark_query .= ' AND greatest_date >= "' . $from . '"';
-        }
-        if ($until = $this->get_until()) {
-          $ark_query .= ' AND greatest_date <= "' . $until . '"';
+        if ($this->get_from() || $this->get_until()) {
+          $having = array();
+          if ($from = $this->get_from()) {
+            $having[] = 'greatest_date >= "' . $from . '"';
+          }
+          if ($until = $this->get_until()) {
+            $having[] = 'greatest_date <= "' . $until . '"';
+          }
+          $ark_query .= ' HAVING ' . implode(' AND ', $having);
         }
         $ark_query .= ' ORDER BY greatest_date ASC';
         
