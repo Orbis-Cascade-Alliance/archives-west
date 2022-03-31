@@ -96,7 +96,9 @@ if (isset($_FILES['ead']['tmp_name']) && !empty($_FILES['ead']['tmp_name'])) {
               $lower_value = preg_replace('/\s+/', '-', $lower_value);
             }
             $node->removeAttribute($attribute);
-            $node->setAttribute($attribute, $lower_value);
+            if ($lower_value) {
+              $node->setAttribute($attribute, $lower_value);
+            }
           }
         }
         
