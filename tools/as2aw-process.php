@@ -225,7 +225,7 @@ if (isset($_FILES['ead']['tmp_name']) && !empty($_FILES['ead']['tmp_name'])) {
           if ($titleproper->getAttribute('type') == 'filing') {
             $titleproper->setAttribute('altrender', 'nodisplay');
           }
-          $titleproper->nodeValue = trim($titleproper->nodeValue);
+          $titleproper->nodeValue = trim(htmlentities($titleproper->nodeValue));
         }
         
         // First titleproper: copy archdesc/did/unitdate into new date element
