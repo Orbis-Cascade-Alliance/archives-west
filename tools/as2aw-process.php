@@ -417,6 +417,11 @@ if (isset($_FILES['ead']['tmp_name']) && !empty($_FILES['ead']['tmp_name'])) {
           $head->parentNode->removeChild($head);
         }
         
+        // Remove empty elements
+        foreach ($xpath->query('//*[not(normalize-space())]') as $empty) {
+          $empty->parentNode->removeChild($empty);
+        }
+        
         // DOM to string
         $converted_ead = $ead->saveXML();
       }
