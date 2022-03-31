@@ -39,6 +39,12 @@ if ($maintenance_mode) {
 <div id="home-columns">
 
   <div id="submission">
+    <h2>Harvesting Tools</h2>
+    <ul>
+      <li><a href="archivesspace/harvest.php">API Method</a></li>
+      <li><a href="oai-pmh/harvest.php">OAI-PMH Method</a></li>
+    </ul>
+    <button onclick="remove_files()">Remove Files for ARKs</button>
     <h2>Document Submission Tools</h2>
     <ul>
       <li><a href="as2aw.php">ArchivesSpace EAD Converter</a></li>

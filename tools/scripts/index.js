@@ -214,3 +214,11 @@ function view_history(el) {
   }
   $('#dialog-history').html(ul).dialog('open');
 }
+
+// Remove files from repository
+function remove_files() {
+  $.post('/dev/remove_files.php', function(data) {
+    alert(data);
+    window.reload();
+  });
+}
