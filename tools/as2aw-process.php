@@ -412,6 +412,18 @@ if (isset($_FILES['ead']['tmp_name']) && !empty($_FILES['ead']['tmp_name'])) {
           }
         }
         
+        // Convert anchor tags to extref
+        foreach ($xpath->query('//a') as $anchor) {
+          $extref = $anchor->ownerDocument->createElement('extref');
+          foreach ($anchor->childNodes as $child){
+            $extref->appendChild($anchor->ownerDocument->importNode($child, true));
+          }
+          foreach($anchor->attributes as $attrName => $attrNode) {
+            $extref->setAttribute($attrNode->nodeName, $attrNode->nodeValue);
+          }
+          $anchor->parentNode->replaceChild($extref, $anchor);
+        }
+        
         // Remove <head> elements
         foreach ($xpath->query('//head') as $head) {
           $head->parentNode->removeChild($head);
@@ -421,7 +433,7 @@ if (isset($_FILES['ead']['tmp_name']) && !empty($_FILES['ead']['tmp_name'])) {
         foreach ($xpath->query('//*[not(normalize-space())]') as $empty) {
           $empty->parentNode->removeChild($empty);
         }
-        
+
         // DOM to string
         $converted_ead = $ead->saveXML();
       }
