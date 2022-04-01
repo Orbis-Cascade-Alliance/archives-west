@@ -140,13 +140,14 @@ if (isset($_FILES['ead']['tmp_name']) && !empty($_FILES['ead']['tmp_name'])) {
             $types = array();
             foreach ($dsc->childNodes as $c) {
               $level = $c->getAttribute('level');
+              $type = '';
               if ($level == 'series' || $level == 'subgrp') {
                 $type = 'analyticover';
               }
               else if ($level == 'file' || $level == 'item') {
                 $type = 'in-depth';
               }
-              if (!in_array($type, $types)) {
+              if ($type && !in_array($type, $types)) {
                 $types[] = $type;
               }
             }
@@ -154,7 +155,12 @@ if (isset($_FILES['ead']['tmp_name']) && !empty($_FILES['ead']['tmp_name'])) {
               $dsc->setAttribute('type', 'combined');
             }
             else {
-              $dsc->setAttribute('type', $types[0]);
+              if (!empty($types)) {
+                $dsc->setAttribute('type', $types[0]);
+              }
+              else {
+                $dsc->setAttribute('type', 'othertype');
+              }
             }
           }
           else {
