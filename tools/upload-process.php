@@ -75,8 +75,9 @@ if ($ark) {
       $xml = simplexml_load_file($_FILES['ead']['tmp_name']);
       $current_file_name = '';
       if ($ark_in_file = (string) $xml->eadheader->eadid['identifier']) {
-        if ($ark_in_file != $ark) {
-          $errors[] = 'The ARK in the submitted file, <strong>' . $ark_in_file . '</strong>, doesn\'t match the ARK selected.';
+        $trimmed_ark_in_file = trim($ark_in_file);
+        if ($trimmed_ark_in_file != $ark) {
+          $errors[] = 'The ARK in the submitted file, <strong>' . $trimmed_ark_in_file . '</strong>, doesn\'t match the ARK selected.';
         }
         else {
           // If replacing and new file name is different, remove old file
