@@ -135,17 +135,26 @@ if (isset($_FILES['ead']['tmp_name']) && !empty($_FILES['ead']['tmp_name'])) {
         
         // Dsc: add type attribute and add digits to names of <c> elements
         // Reiterative function to nest <c> is at the bottom of this file
+        $levels = array(
+          'class' => 'analyticover',
+          'collection' => 'analyticover',
+          'file' => 'in-depth',
+          'fonds' => 'analyticover',
+          'item' => 'in-depth',
+          'otherlevel' => 'othertype',
+          'recordgrp' => 'analyticover',
+          'series' => 'analyticover',
+          'subgrp' => 'analyticover',
+          'subseries' => 'analyticover'
+        );
         foreach ($xpath->query('//dsc') as $dsc) {
           if ($dsc->hasChildNodes()) {
             $types = array();
             foreach ($dsc->childNodes as $c) {
-              $level = $c->getAttribute('level');
               $type = '';
-              if ($level == 'series' || $level == 'subgrp') {
-                $type = 'analyticover';
-              }
-              else if ($level == 'file' || $level == 'item') {
-                $type = 'in-depth';
+              $level = $c->getAttribute('level');
+              if (isset($levels[$level])) {
+                $type = $levels[$level];
               }
               if ($type && !in_array($type, $types)) {
                 $types[] = $type;
@@ -157,9 +166,6 @@ if (isset($_FILES['ead']['tmp_name']) && !empty($_FILES['ead']['tmp_name'])) {
             else {
               if (!empty($types)) {
                 $dsc->setAttribute('type', $types[0]);
-              }
-              else {
-                $dsc->setAttribute('type', 'othertype');
               }
             }
           }
