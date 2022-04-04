@@ -205,7 +205,7 @@ if ($repo_id != 0) {
           }
         }
         echo '</td>
-        <td class="file"><a href="' . AW_DOMAIN . '/ark:/' . $ark . '/xml" target="_blank" title="View XML">' . mb_strimwidth($ark_info['file'], 0, 30, "...") . '</a></td>
+        <td class="file"><a href="' . AW_DOMAIN . '/ark:/' . $ark . '/xml" target="_blank" title="View XML for ' . $ark_info['file'] . '">' . mb_strimwidth($ark_info['file'], 0, 30, "...") . '</a></td>
         <td class="date">';
         echo '<span onclick="view_history(this);" title="View History">' . substr($ark_info['date'], 0, 10) . '</span>';
         echo '<ul class="history">';
