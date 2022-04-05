@@ -210,7 +210,7 @@ function view_history(el) {
     $('#dialog-history').dialog('option', 'title', 'History of ' + title);
   }
   else {
-    $('#dialog-history').dialog('option', 'title', 'History')
+    $('#dialog-history').dialog('option', 'title', 'History');
   }
   $('#dialog-history').html(ul).dialog('open');
 }

@@ -218,7 +218,7 @@ if ($repo_id != 0) {
         echo '<li>ARK created ' . date('F j, Y', strtotime($ark_info['creation_date'])) . '</li>';
         echo '</ul></td>
         <td class="upload"><a href="' . AW_DOMAIN . '/tools/upload.php?ark=' . $ark . '">' . ($ark_info['file']=='' ? 'Upload' : 'Replace') . '</a></td>
-        <td class="delete"><button class="btn-delete" type="button" onclick="confirm_deletion(\'' . $ark . '\', \'' . $ark_info['title'] . '\')">Delete</button></td>
+        <td class="delete"><button class="btn-delete" type="button" onclick="confirm_deletion(\'' . $ark . '\', \'' . str_replace('\'', '\\\'', $ark_info['title']) . '\')">Delete</button></td>
       </tr>';
     }
     echo '</tbody></table>';
