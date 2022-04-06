@@ -78,8 +78,8 @@ if ($repo_id != 0) {
   echo print_field('textarea', 'copy', 'Copy Information', $repo->get_copy_info());
   echo print_field('textarea', 'visit', 'Visitation Information', $repo->get_visit_info());
   echo print_field('rights', 'rights', 'Rights Statement', $repo->get_rights());
-  //echo print_field('text', 'as_host_api', 'ArchivesSpace Host for API', $repo->get_as_host_api());
-  //echo print_field('text', 'as_host_oaipmh', 'ArchivesSpace Host for OAI-PMH', $repo->get_as_host_oaipmh());
+  echo print_field('text', 'as_host_api', 'ArchivesSpace Host for API', $repo->get_as_host_api());
+  echo print_field('text', 'as_host_oaipmh', 'ArchivesSpace Host for OAI-PMH', $repo->get_as_host_oaipmh());
   ?>
   <p><input type="submit" value="Save Changes" /></p>
 </form>
