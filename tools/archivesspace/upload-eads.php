@@ -92,19 +92,19 @@ if (isset($argv[1]) && !empty($argv[1])) {
                         }
                       }
                       else {
-                        $upload_errors[] = 'Error converting ArchivesSpace EAD to Archives West for resource ' . $harvest_info['resource'];
+                        $upload_errors[] = 'Error converting ArchivesSpace EAD to Archives West for resource ' . $harvest_info['resource'] . ' (' . $ead_filename . ')';
                       }
                     }
                     else {
-                      $upload_errors[] = 'ARK ' . $ark . ' is already associated with a file (' . $finding_aid->get_file() . ')';
+                      $upload_errors[] = 'ARK ' . $ark . ' is already associated with file ' . $finding_aid->get_file();
                     }
                   }
                   catch (Exception $e) {
-                    $upload_errors[] = $e->getMessage() . ' for resource ' . $harvest_info['resource'];
+                    $upload_errors[] = $e->getMessage() . ' for resource ' . $harvest_info['resource'] . ' (' . $ead_filename . ')';
                   }
                 }
                 else {
-                  $upload_errors[] = 'No ARK found for ArchivesSpace resource ' . $harvest_info['resource'];
+                  $upload_errors[] = 'No ARK found for ArchivesSpace resource ' . $harvest_info['resource'] . ' (' . $ead_filename . ')';
                 }
               }
               else {
