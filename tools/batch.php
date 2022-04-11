@@ -21,7 +21,7 @@ if ($user->is_admin()) {
 if ($repo_id != 0) {
 ?>
 <p>Drag and drop XML files in the teal box, or click "Browse" to select files on your computer, then click "Upload" to submit them. A report will appear below showing the results of the <a href="validation.php">Document Validation</a>, <a href="compliance.php">Compliance Checker</a>, and <a href="upload.php">Document Upload</a> tools.</p>
-<p>You can upload up to <strong>20</strong> files at once. No file can exceed <strong><?php echo MAX_FILE_SIZE;?></strong>.</p>
+<p>You can upload up to <strong><?php echo MAX_FILES; ?></strong> files at once. No file can exceed <strong><?php echo MAX_FILE_SIZE;?></strong>.</p>
 <p>To prevent accidental overwrites, the batch uploader will upload <strong>new files only</strong>. To replace an existing finding aid, find it in the table on the homepage and click "Replace" at the end of the row.</p>
 <form id="form-files" action="<?php echo AW_DOMAIN; ?>/tools/batch-process.php" method="post" enctype="multipart/form-data">
   <div class="dropzone">
@@ -37,6 +37,7 @@ if ($repo_id != 0) {
   <p><input type="submit" id="upload" value="Upload" /></p>
 </form>
 <div id="report"></div>
+<div class="loading"></div>
 <div id="dialog-appnote" class="dialog" title="Comments/Application Notes"></div>
 <div id="dialog-source" class="dialog" title="Source"></div>
 <?php

@@ -14,7 +14,7 @@ if ($user->is_admin()) {
   // Print error and confirmation messages
   if (isset($_SESSION['repo_deletion_id'])) {
     if (isset($_SESSION['repo_deletion_errors']) && !empty($_SESSION['repo_deletion_errors'])) {
-      echo print_errors('repo_deletion_errors');
+      echo print_errors($_SESSION['repo_deletion_errors']);
     }
     else if ($_SESSION['repo_deletion_id'] != 0) {
       echo '<p class="success">Repository #' . $_SESSION['repo_deletion_id'] . ' deleted.</p>';

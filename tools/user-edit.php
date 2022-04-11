@@ -25,7 +25,7 @@ if (($username != '' && is_object($user_object)) || $username == '') {
   // Print confirmation and error messages
   if (isset($_SESSION['user_edit_type']) && !empty($_SESSION['user_edit_type'])) {
     if (isset($_SESSION['user_edit_errors']) && !empty($_SESSION['user_edit_errors'])) {
-      echo print_errors('user_edit_errors');
+      echo print_errors($_SESSION['user_edit_errors']);
     }
     else {
       echo '<p class="success">User ' . $username . ' ' . $_SESSION['user_edit_type'] . '!</p>';

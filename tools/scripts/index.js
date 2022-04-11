@@ -217,8 +217,8 @@ function view_history(el) {
 
 // Remove files from repository
 function remove_files() {
-  $.post('/dev/remove_files.php', function(data) {
+  $.post('../dev/remove_files.php', function(data) {
     alert(data);
-    window.reload();
+    window.location.reload();
   });
 }

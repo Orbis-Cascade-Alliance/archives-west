@@ -32,7 +32,9 @@ $(document).ready(function(){
   
   $('#form-files').submit(function(e) {
     e.preventDefault();
-    $('#report').html('<p>Processing...</p>');
+    $('#report').html('Processing...');
+    $('.loading').show();
+    $('#form-files').hide();
     $.ajax({
       url: 'batch-process.php',
       type: 'post',
@@ -40,9 +42,11 @@ $(document).ready(function(){
       contentType: false,
       data: formData,
       success: function(data) {
+        $('.loading').hide();
         $('#report').html(data);
         formData.delete('file[]');
         update_dropzone();
+        $('#form-files').show();
       }
     });
     return false;
@@ -79,13 +83,15 @@ function remove_file(index) {
   update_dropzone();
 }
 
-function toggle_cr(index) {
-  if ($('#cr' + index).is(':visible')) {
-    $('#cr' + index).hide();
-    $('#btn-cr' + index).text('View Report');
+function toggle_cr(btn) {
+  var p = $(btn).parent('p');
+  var report = p.next('.compliance-report');
+  if ($(report).is(':visible')) {
+    $(report).hide();
+    $(btn).text('View Report');
   }
   else {
-    $('#cr' + index).show();
-    $('#btn-cr' + index).text('Hide Report');
+    $(report).show();
+    $(btn).text('Hide Report');
   }
 }

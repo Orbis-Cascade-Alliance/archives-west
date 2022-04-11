@@ -19,13 +19,14 @@ if ($repo_id != 0) {
   // Query MySQL
   $jobs = array();
   if ($mysqli = connect()) {
-    $job_query = 'SELECT id, type, date FROM jobs WHERE repo_id=' . $repo_id . ' ORDER BY date DESC';
+    $job_query = 'SELECT id, type, complete, date FROM jobs WHERE repo_id=' . $repo_id . ' ORDER BY date DESC';
     $job_result = $mysqli->query($job_query);
     if ($job_result->num_rows > 0) {
       while ($job_row = $job_result->fetch_assoc()) {
         $jobs[$job_row['id']] = array(
           'type' => $job_row['type'],
-          'date' => $job_row['date']
+          'date' => $job_row['date'],
+          'complete' => $job_row['complete']
         );
       }
     }
@@ -53,12 +54,14 @@ if ($repo_id != 0) {
 
     // Print table
     $types = get_job_types();
-    echo '<table id="jobs"><thead><tr><th>Job ID</th><th>Date</th><th>Type</th><th>Report</th></tr></thead><tbody>';
+    echo '<table id="jobs"><thead><tr><th>Job ID</th><th>Date</th><th>Type</th><th>Status</th><th>Report</th></tr></thead><tbody>';
     foreach ($jobs as $job_id => $job_info) {
+      $status = $job_info['complete'] == 0 ? 'In Progress' : 'Complete';
       echo '<tr>
         <td>' . $job_id . '</td>
         <td class="no-break">' . date('Y-m-d h:i a', strtotime($job_info['date'])) . '</td>
         <td class="no-break">' . $types[$job_info['type']] . '</td>
+        <td class="no-break">' . $status . '</td>
         <td><a href="jobs-view.php?j=' . $job_id . '" class="no-break">View Report</a></td></tr>';
     }
     echo '</tbody></table>';

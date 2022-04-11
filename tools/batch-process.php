@@ -16,11 +16,20 @@ $repo_id = get_user_repo_id($user);
 // Get files
 if (isset($_FILES['file']) && !empty($_FILES['file'])) {
   
+  // Create array of names and contents
+  $files = array();
+  for ($f=0; $f < count($_FILES['file']['name']); $f++) {
+    $file_name = $_FILES['file']['name'][$f];
+    $file_contents = file_get_contents($_FILES['file']['tmp_name'][$f]);
+    $files[$file_name] = $file_contents;
+  }
+  
   // Create job and process files
-  if ($job_id = create_job('batch', $repo_id)) {
+  if ($job_id = create_job('batch', $repo_id, $user->get_id())) {
     try {
       $job = new AW_Job($job_id);
-      $job->process_files($_FILES['file']);
+      $job->process_files($files);
+      $job->set_complete();
     }
     catch (Exception $e) {
       $batch_errors[] = $e->getMessage();
@@ -32,12 +41,11 @@ if (isset($_FILES['file']) && !empty($_FILES['file'])) {
       echo $job->get_report();
     }
     else {
-      echo '<ul class="errors">';
-      foreach ($batch_errors as $error) {
-        echo '<li>' . $error . '</li>';
-      }
-      echo '</ul>';
+      echo print_errors($batch_errors);
     }
+    
+    // Optimize index
+    index_next();
   }
 }
 ?>

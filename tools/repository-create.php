@@ -21,7 +21,7 @@ if ($user->is_admin()) {
 // Print error and confirmation messages
 if (isset($_SESSION['repo_creation_id'])) {
   if (isset($_SESSION['repo_creation_errors']) && !empty($_SESSION['repo_creation_errors'])) {
-    echo print_errors('repo_creation_errors');
+    echo print_errors($_SESSION['repo_creation_errors']);
   }
   else if ($_SESSION['repo_creation_id'] != 0) {
     echo '<p class="success">Repository #' . $_SESSION['repo_creation_id'] . ' created!</p>';

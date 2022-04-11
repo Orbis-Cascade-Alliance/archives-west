@@ -18,7 +18,7 @@ class AW_Repo {
   public $rights;
   public $as_host_api;
   public $as_host_oaipmh;
-  private $harvesters;
+  public $users;
   
   function __construct($repo_id) {
     $this->id = $repo_id;
@@ -120,6 +120,23 @@ class AW_Repo {
   
   function get_as_host_oaipmh() {
     return $this->as_host_oaipmh;
+  }
+  
+  function get_users() {
+    if (!isset($this->users)) {
+      $users = array();
+      if ($mysqli = connect()) {
+        $user_result = $mysqli->query('SELECT username FROM users WHERE repo_id=' . $this->get_id());
+        if ($user_result->num_rows > 0) {
+          while ($user_row = $user_result->fetch_row()) {
+            $users[$user_row[0]] = new AW_User($user_row[0]);
+          }
+        }
+        $mysqli->close();
+      }
+      $this->users = $users;
+    }
+    return $this->users;
   }
 }
 

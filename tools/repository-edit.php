@@ -56,7 +56,7 @@ if ($repo_id != 0) {
   // Print error and confirmation messages
   if (isset($_SESSION['repo_edit_attempted']) && $_SESSION['repo_edit_attempted'] == true) {
     if (isset($_SESSION['repo_edit_errors']) && !empty($_SESSION['repo_edit_errors'])) {
-      echo print_errors('repo_edit_errors');
+      echo print_errors($_SESSION['repo_edit_errors']);
     }
     else {
       echo '<p class="success">Changes saved. See the <a href="' . AW_DOMAIN . '/contact.php#' . $repo->get_mainagencycode() . '" target="_blank">Contact page</a>.</p>';

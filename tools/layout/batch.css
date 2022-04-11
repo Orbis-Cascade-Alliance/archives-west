@@ -29,6 +29,10 @@
   border: 2px dashed #333333;
 }
 
+.loading {
+  display: none;
+}
+
 #list,
 #upload {
   display: none;

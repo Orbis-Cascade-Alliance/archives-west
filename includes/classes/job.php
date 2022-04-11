@@ -6,21 +6,29 @@ class AW_Job {
   public $job_id;
   public $type;
   public $repo_id;
+  public $user_id;
   public $arks;
   public $date;
+  public $set;
+  public $start;
+  public $complete;
   public $message;
   public $report_path;
   
   function __construct($job_id) {
     $this->job_id = $job_id;
     if ($mysqli = connect()) {
-      $job_query = 'SELECT id, type, repo_id, date FROM jobs WHERE id=' . $job_id;
+      $job_query = 'SELECT type, repo_id, user, date, as_set, start, complete FROM jobs WHERE id=' . $job_id;
       $job_result = $mysqli->query($job_query);
       if ($job_result->num_rows == 1) {
         while ($job_row = $job_result->fetch_assoc()) {
           $this->type = $job_row['type'];
           $this->repo_id = $job_row['repo_id'];
+          $this->user_id = $job_row['user'];
           $this->date = $job_row['date'];
+          $this->set = $job_row['as_set'];
+          $this->start = $job_row['start'];
+          $this->complete = $job_row['complete'];
         }
         try {
           $repo = new AW_Repo($this->get_repo_id());
@@ -52,8 +60,59 @@ class AW_Job {
     return $this->repo_id;
   }
   
+  function get_user_id() {
+    return $this->user_id;
+  }
+  
   function get_date() {
     return $this->date;
+  }
+  
+  function get_set() {
+    return $this->set;
+  }
+  
+  function add_set($as_set) {
+    if ($mysqli = connect()) {
+      $mysqli->query('UPDATE jobs SET as_set="' . $as_set . '" WHERE id=' . $this->get_id());
+      $mysqli->close();
+    }
+    else {
+      throw new Exception('MySQL connection error.');
+    }
+    $this->set = $as_set;
+  }
+  
+  function get_start() {
+    return $this->start;
+  }
+  
+  function add_start($start_date) {
+    if ($mysqli = connect()) {
+      $mysqli->query('UPDATE jobs SET start="' . $start_date . '" WHERE id=' . $this->get_id());
+      if ($mysqli->error) {
+        throw new Exception($mysqli->error);
+      }
+      $mysqli->close();
+    }
+    else {
+      throw new Exception('MySQL connection error.');
+    }
+    $this->start = $start_date;
+  }
+  
+  function get_complete() {
+    return $this->complete;
+  }
+  
+  function set_complete() {
+    if ($mysqli = connect()) {
+      $mysqli->query('UPDATE jobs SET complete=1 WHERE id=' . $this->get_id());
+      $mysqli->close();
+    }
+    else {
+      throw new Exception('MySQL connection error.');
+    }
   }
   
   function set_message($message) {
@@ -78,84 +137,70 @@ class AW_Job {
     }
   }
   
+  // Process an array of file names and contents
   function process_files($files) {
-    
+    $process_errors = array();
     // Print message, if set
     $report = $this->get_message();
-    
-    for ($f = 0; $f < count($files['name']); $f++) {
-      
-      // Set type variable to check in each of the scripts before redirecting
-      $type = 'batch';
-      
-      // Create singular file object to pass through other scripts
-      $file = array(
-        'name' => $files['name'][$f],
-        'type' => $files['type'][$f],
-        'tmp_name' => $files['tmp_name'][$f],
-        'error' => $files['error'][$f],
-        'size' => $files['size'][$f]
-      );
-      
-      $report .= '<h3>' . ($f+1) . '. ' . basename($file['name']) . '</h3>';
-      
+    foreach ($files as $file_name => $file_contents) {
+      $report .= '<h3>' . $file_name . '</h3>';
       // Validate
-      $_FILES['ead'] = $file;
-      include(AW_TOOLS . '/validation-process.php');
-      if (isset($_SESSION['validation_file']) && !empty($_SESSION['validation_file'])) {
+      if ($validation_result = validate_file($file_contents, $this->get_repo_id())) {
         $report .= '<h4>Validation</h4>';
-        if (isset($_SESSION['validation_errors']) && !empty($_SESSION['validation_errors'])) {
-          $report .= print_errors('validation_errors');
+        if ($validation_result['errors']) {
+          $report .= print_errors($validation_result['errors']);
         }
         else {
-          $ark = $_SESSION['validation_ark'];
-          $report .= '<p class="success">' . $_SESSION['validation_file'] . ' for ARK ' . $ark . ' is valid!</p>';
+          $ark = $validation_result['ark'];
+          $report .= '<p class="success">' . $file_name . ' for ARK ' . $ark . ' is valid!</p>';
           
           // Print compliance report
-          $_POST['all'] = 'no';
-          include(AW_TOOLS . '/compliance-process.php');
-          if (isset($_SESSION['compliance_report']) && !empty($_SESSION['compliance_report'])) {
+          if ($compliance_result = check_compliance($file_contents, 'no')) {
             $report .= '<h4>Compliance Report</h4>';
-            if (isset($_SESSION['compliance_errors']) && !empty($_SESSION['compliance_errors'])) {
-              $report .= print_errors('compliance_errors');
+            if ($compliance_result['errors']) {
+              $report .= print_errors($compliance_result['errors']);
             }
             else {
-              $report .= '<p><button type="button" class="btn-view" id="btn-cr' . $f . '" onclick="toggle_cr(\'' . $f . '\')">View Report</button></p>';
-              $report .= '<div class="compliance-report" id="cr' . $f . '">' . $_SESSION['compliance_report'] . '</div>';
+              $report .= '<p><button type="button" class="btn-view" onclick="toggle_cr(this)">View Report</button></p>';
+              $report .= '<div class="compliance-report">' . $compliance_result['report'] . '</div>';
               
               // Upload
-              $_POST['ark'] = $ark;
-              include(AW_TOOLS . '/upload-process.php');
-              if (isset($_SESSION['upload_file']) && $_SESSION['upload_file'] !== null) {
+              if ($upload_result = upload_file($file_contents, $file_name, $ark, 0, $this->get_user_id())) {
                 $report .= '<h4>Upload</h4>';
-                if (isset($_SESSION['upload_errors']) && !empty($_SESSION['upload_errors'])) {
-                  $report .= print_errors('upload_errors');
+                if ($upload_result['errors']) {
+                  $report .= print_errors($upload_result['errors']);
                 }
                 else {
-                  $report .= '<p class="success">Uploaded ' . $_SESSION['upload_file'] . '.</p>';
+                  $report .= '<p class="success">Uploaded ' . $file_name . '.</p>';
                 }
+              }
+              else {
+                $process_errors[] = 'Error uploading ' . $file_name;
               }
             }
           }
+          else {
+            $process_errors[] = 'Error checking compliance for ' . $file_name;
+          }
         }
       }
-      // Clear session variables
-      $_SESSION['validation_file'] = '';
-      $_SESSION['validation_ark'] = '';
-      $_SESSION['validation_errors'] = array();
-      $_SESSION['compliance_report'] = '';
-      $_SESSION['compliance_errors'] = array();
-      $_SESSION['upload_file'] = null;
-      $_SESSION['upload_errors'] = array();
+      else {
+        $process_errors[] = 'Error validating ' . $file_name;
+      }
     }
-    
-    // Start index process
-    index_next();
      
     // Save report file
-    $fh = fopen($this->get_report_path(), 'w');
+    $fh = fopen($this->get_report_path(), 'a');
     fwrite($fh, $report);
     fclose($fh);
+    
+    // Return true or errors
+    if (empty($process_errors)) {
+      return true;
+    }
+    else {
+      return $process_errors;
+    }
     
   }
   
