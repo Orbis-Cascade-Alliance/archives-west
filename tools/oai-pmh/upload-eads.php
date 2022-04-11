@@ -160,7 +160,6 @@ if (isset($argv[1]) && !empty($argv[1])) {
     else {
       $upload_errors[] = 'MySQL connection error.';
     }
-    
   }
   else {
     $upload_errors[] = 'Could not get harvest information.';

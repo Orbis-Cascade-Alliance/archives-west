@@ -56,6 +56,7 @@ if (isset($argv[1]) && !empty($argv[1])) {
     } 
   }
 }
+
 // If errors, terminate job and print to report
 if ($job && !empty($harvest_errors)) {
   $job->set_complete();

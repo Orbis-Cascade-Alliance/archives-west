@@ -22,6 +22,15 @@ if (isset($_GET['j']) && !empty($_GET['j'])) {
   $job_id = filter_var($_GET['j'], FILTER_SANITIZE_NUMBER_INT);
 }
 
+function print_as_details($job) {
+  $set = $job->get_set() == '' ? 'All Sets' : $job->get_set();
+  $to_return = '<p>Set: ' . $set . '</p>';
+  if ($job->get_start()) {
+    $to_return .= '<p>Date From: '. $job->get_start() . '</p>';
+  }
+  return $to_return;
+}
+
 if ($job_id != 0) {
   try {
     $job = new AW_Job($job_id);

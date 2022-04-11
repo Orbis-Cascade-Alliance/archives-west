@@ -26,7 +26,7 @@ try {
     }
     else {
       $errors[] = 'File is empty.';
-   }
+    }
   }
   else {
     $errors[] = 'File is required.';
