@@ -660,12 +660,7 @@ function upload_file($file_contents, $file_name, $ark, $replace, $user_id) {
           if (file_exists($file_path)) {
             if ($mysqli = connect()) {
               // Update arks table
-              if (!$replace) {
-                $update_stmt = $mysqli->prepare('UPDATE arks SET file=?, date=NOW() WHERE ark=?');
-              }
-              else {
-                $update_stmt = $mysqli->prepare('UPDATE arks SET file=? WHERE ark=?');
-              }
+              $update_stmt = $mysqli->prepare('UPDATE arks SET file=? WHERE ark=?');
               $update_stmt->bind_param('ss', $file_name, $ark);
               $update_stmt->execute();
               $update_stmt->close();
