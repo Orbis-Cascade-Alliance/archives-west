@@ -1,6 +1,13 @@
 var formData = new FormData();
 
 $(document).ready(function(){
+  // jQuery UI Dialogs
+  $('#dialog-error').dialog({
+    autoOpen: false,
+    width: 500
+  });
+  
+  // Dropzone behavior
   $('.dropzone').on({
     dragover: function(e) {
       e.stopPropagation();
@@ -24,31 +31,38 @@ $(document).ready(function(){
     }
   });
   
+  // Browse upload alternative
   $('#manual').change(function(e) {
     append_to_formdata(e.target.files);
     update_dropzone();
     $(this).val('');
   });
   
+  // Form submission
   $('#form-files').submit(function(e) {
     e.preventDefault();
-    $('#report').html('Processing...');
-    $('.loading').show();
-    $('#form-files').hide();
-    $.ajax({
-      url: 'batch-process.php',
-      type: 'post',
-      processData: false,
-      contentType: false,
-      data: formData,
-      success: function(data) {
-        $('.loading').hide();
-        $('#report').html(data);
-        formData.delete('file[]');
-        update_dropzone();
-        $('#form-files').show();
-      }
-    });
+    if (validate_files() === true) {
+      $('#report').html('Processing...');
+      $('.loading').show();
+      $('#form-files').hide();
+      $.ajax({
+        url: 'batch-process.php',
+        type: 'post',
+        processData: false,
+        contentType: false,
+        data: formData,
+        success: function(data) {
+          $('.loading').hide();
+          $('#report').html(data);
+          formData.delete('file[]');
+          update_dropzone();
+          $('#form-files').show();
+        }
+      });
+    }
+    else {
+      $('#dialog-error').dialog('open');
+    }
     return false;
   });
 });
@@ -93,5 +107,14 @@ function toggle_cr(btn) {
   else {
     $(report).show();
     $(btn).text('Hide Report');
+  }
+}
+
+function validate_files() {
+  if (formData.getAll('file[]').length > max_files) {
+    return false;
+  }
+  else {
+    return true;
   }
 }

@@ -6,6 +6,7 @@ if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }
 $batch_errors = array();
+$job = null;
 
 // Get user from session
 $user = get_session_user();

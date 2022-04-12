@@ -11,6 +11,9 @@ include(AW_TOOL_INCLUDES . '/tools-header.php');
 <link rel="stylesheet" href="<?php echo AW_DOMAIN; ?>/tools/layout/compliance.css" />
 <script src="<?php echo AW_DOMAIN; ?>/tools/scripts/batch.js"></script>
 <script src="<?php echo AW_DOMAIN; ?>/tools/scripts/compliance.js"></script>
+<script>
+  const max_files = <?php echo MAX_FILES; ?>;
+</script>
 <?php
 include(AW_TOOL_INCLUDES . '/tools-header-end.php');
 
@@ -40,6 +43,7 @@ if ($repo_id != 0) {
 <div class="loading"></div>
 <div id="dialog-appnote" class="dialog" title="Comments/Application Notes"></div>
 <div id="dialog-source" class="dialog" title="Source"></div>
+<div id="dialog-error" title="Error">You can upload a maximum of <?php echo MAX_FILES; ?> files per batch.</div>
 <?php
 }
 include(AW_TOOL_INCLUDES . '/tools-footer.php');

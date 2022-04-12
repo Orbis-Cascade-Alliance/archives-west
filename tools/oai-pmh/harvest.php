@@ -82,6 +82,7 @@ if ($repo_id != 0) {
       <p><input type="submit" value="Harvest Finding Aids" /></p>
     </form>
     <div id="results"></div>
+    <div id="dialog-error" title="Error">Date format must be YYYY-MM-DD</div>
 <?php
   }
 }
