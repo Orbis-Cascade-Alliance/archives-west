@@ -53,8 +53,8 @@ if (isset($_GET['j']) && !empty($_GET['j'])) {
             echo '<div id="step3" class="active">Converting and uploading ArchivesSpace EADs.</div>';
           }
           else {
-            if ($uploads_processed < $total) {
-              echo '<div id="step3" class="active">Uploaded ' . $uploaded . ' of ' . $total . ' EADs.</div>';
+            if ($uploads_processed < $downloads_processed) {
+              echo '<div id="step3" class="active">Uploaded ' . $uploaded . ' of ' . $downloads_processed . ' EADs.</div>';
             }
             else {
               echo '<div id="step3" class="finished">Uploaded all available ArchivesSpace EADs.</div>';
