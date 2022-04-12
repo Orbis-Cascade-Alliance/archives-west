@@ -30,22 +30,24 @@ if (isset($_FILES['file']) && !empty($_FILES['file'])) {
       $job = new AW_Job($job_id);
       $job->process_files($files);
       $job->set_complete();
+      // Optimize index
+      index_next();
     }
     catch (Exception $e) {
       $batch_errors[] = $e->getMessage();
     }
+  }
+  else {
+    $batch_errors[] = 'Error creating batch job';
+  }
   
-    // Print report
-    echo '<h2>Results</h2>';
-    if (empty($batch_errors)) {
-      echo $job->get_report();
-    }
-    else {
-      echo print_errors($batch_errors);
-    }
-    
-    // Optimize index
-    index_next();
+  // Print report
+  echo '<h2>Results</h2>';
+  if ($job && empty($batch_errors)) {
+    echo $job->get_report();
+  }
+  else {
+    echo print_errors($batch_errors);
   }
 }
 ?>

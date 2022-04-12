@@ -34,21 +34,31 @@ if (isset($_POST['start_date']) && !empty($_POST['start_date'])) {
   $start_date = filter_var($_POST['start_date'], FILTER_SANITIZE_STRING);
 }
 
+// Create job and start harvest process
+if (empty($harvest_errors)) {
+  if ($job_id = create_job('as', $repo_id, $user->get_id())) {
+    try {
+      $job = new AW_Job($job_id);
+      if ($as_set != null) {
+        $job->add_set($as_set);
+      }
+      if ($start_date != null) {
+        $job->add_start($start_date);
+      }
+      new AW_Process('php ' . AW_HTML . '/tools/oai-pmh/start-harvest.php ' . $job_id);
+      echo '<p>Harvest job #' . $job_id . ' has been created. <a href="' . AW_DOMAIN . '/tools/jobs-view.php?j=' . $job_id . '">View progress</a>.</p>';
+    }
+    catch (Exception $e) {
+      $harvest_errors[] = $e->getMessage();
+    }
+  }
+  else {
+    $harvest_errors[] = 'Error creating harvest job';
+  }
+}
+
 // Print errors
 if (!empty($harvest_errors)) {
   echo print_errors($harvest_errors);
 }
 
-// Create job and start harvest process
-else {
-  $job_id = create_job('as', $repo_id, $user->get_id());
-  $job = new AW_Job($job_id);
-  if ($as_set != null) {
-    $job->add_set($as_set);
-  }
-  if ($start_date != null) {
-    $job->add_start($start_date);
-  }
-  new AW_Process('php ' . AW_HTML . '/tools/oai-pmh/start-harvest.php ' . $job_id);
-  echo '<p>Harvest job #' . $job_id . ' has been created. <a href="' . AW_DOMAIN . '/tools/jobs-view.php?j=' . $job_id . '">View progress</a>.</p>';
-}

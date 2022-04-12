@@ -33,15 +33,27 @@ if (!isset($_SESSION['as_session']) || (isset($_SESSION['as_expires']) && time()
   $harvest_errors[] = 'ArchivesSpace authentication expired.';
 }
 
+// Create job and start harvest process
+if (empty($harvest_errors)) {
+  if ($job_id = create_job('as', $repo_id, $user->get_id())) {
+    try {
+      $job = new AW_Job($job_id);
+      if ($as_repo_id != null) {
+        $job->add_set($as_repo_id);
+      }
+      new AW_Process('php ' . AW_HTML . '/tools/archivesspace/start-harvest.php ' . $job_id . ' ' . $_SESSION['as_session'] . ' ' . $_SESSION['as_expires']);
+      echo '<p>Harvest job #' . $job_id . ' has been created. <a href="' . AW_DOMAIN . '/tools/jobs-view.php?j=' . $job_id . '">View progress</a>.</p>';
+    }
+    catch (Exception $e) {
+      $harvest_errors[] = $e->getMessage();
+    }
+  }
+  else {
+    $harvest_errors[] = 'Error creating harvest job';
+  }
+}
+
+// Print errors
 if (!empty($harvest_errors)) {
   echo print_errors($harvest_errors);
-}
-else {
-  $job_id = create_job('as', $repo_id, $user->get_id());
-  $job = new AW_Job($job_id);
-  if ($as_repo_id != null) {
-    $job->add_set($as_repo_id);
-  }
-  new AW_Process('php ' . AW_HTML . '/tools/archivesspace/start-harvest.php ' . $job_id . ' ' . $_SESSION['as_session'] . ' ' . $_SESSION['as_expires']);
-  echo '<p>Harvest job #' . $job_id . ' has been created. <a href="' . AW_DOMAIN . '/tools/jobs-view.php?j=' . $job_id . '">View progress</a>.</p>';
 }
