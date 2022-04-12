@@ -503,7 +503,7 @@ This stylesheet was generated automatically from 'createbpgstyles.xsl' by  URL -
 ARKs may be obtained either individually or in batches from the Utility Site; an ARK may not be formulated locally. Direct your browser to:
 <br/>
                
-                                                <a href="https://nwda.orbiscascade.org/tools/Login.aspx" target="_blank">https://nwda.orbiscascade.org/tools/Login.aspx</a>
+                                                <a href="https://archiveswest.orbiscascade.org/tools" target="_blank">https://archiveswest.orbiscascade.org/tools</a>
 
                                                 <br/>
 
@@ -516,7 +516,7 @@ The resulting screen will present a table containing the number of ARKs requeste
 <br/>
 
                                                 <br/>
-               The complete URL for the finding is displayed in the “URL” column. This URL may be copied to the URL attribute in the &lt;eadid&gt; element (although this is not required). The URL may also be used in EAD linking elements, such as linking from one finding aid to another in the database and in the 856 field of a MARC catalog record, for linking from the catalog record to the finding aid. See the <a href="https://www.orbiscascade.org/file_viewer.php?id=2445">EAD Best Practices</a> for further guidance on linking.
+               The complete URL for the finding is displayed in the “URL” column. This URL may be copied to the URL attribute in the &lt;eadid&gt; element (although this is not required). The URL may also be used in EAD linking elements, such as linking from one finding aid to another in the database and in the 856 field of a MARC catalog record, for linking from the catalog record to the finding aid. See the <a href="https://drive.google.com/file/d/1u7IbWDMAH2sk59nU3YMpIU5bAUEpZp92/view?usp=sharing">EAD Best Practices</a> for further guidance on linking.
 <br/>
 
                                                 <br/>
@@ -548,13 +548,13 @@ Note: If your institution requests ARKs in batches, make sure to keep track of y
                                              <h4>Comments/Application Notes for ead/eadheader/eadid</h4>
                                              <p>
                                                 <appnotes>If desired, enter here the URL of the finding aid obtained from the utility site. The format is:
-               http://archiveswest.orbiscascade.org/ark:/80444/[fill in the assigned ARK, like xv06841/]
+               https://archiveswest.orbiscascade.org/ark:[fill in the assigned ARK, like 80444/xv06841/]
 <br/>
 Example:
 <br/>
 
                                                    <br/>
-http://archiveswest.orbiscascade.org/ark:/80444/xv06841/</appnotes>
+https://archiveswest.orbiscascade.org/ark:80444/xv06841/</appnotes>
                                              </p>
                                           </div>
                                           <br/>
@@ -633,19 +633,19 @@ http://archiveswest.orbiscascade.org/ark:/80444/xv06841/</appnotes>
 &gt; does not appear in this document.<div class="appnotes" id="app.d0e100">
                                  <h4>Comments/Application Notes for ead/eadheader/eadid</h4>
                                  <p>
-                                    <appnotes>EAD identifier. The content of this element, together with its attributes, uniquely identifies the EAD finding aid document. In the &lt;eadid&gt; element, recommended practice is to enter the filename of the finding aid. For details on naming finding aid files, see Naming and Saving a Document in the <a href="https://www.orbiscascade.org/file_viewer.php?id=2445">EAD Best Practices</a>.<br/>
+                                    <appnotes>EAD identifier. The content of this element, together with its attributes, uniquely identifies the EAD finding aid document. In the &lt;eadid&gt; element, recommended practice is to enter the filename of the finding aid. For details on naming finding aid files, see Naming and Saving a Document in the <a href="https://drive.google.com/file/d/1u7IbWDMAH2sk59nU3YMpIU5bAUEpZp92/view?usp=sharing">EAD Best Practices</a>.<br/>
          
                                        <br/>
 Format of the &lt;eadid&gt; element, if all attributes are used, is:<br/>
 
                                        <br/>
-&lt;eadid countrycode=”us” mainagencycode=”[enter your institution’s MARC repository code]” identifier=”[enter assigned ARK]” url=”http://archiveswest.orbiscascade.org/ark:/80444/[fill in the finding aid’s assigned ARK, like xv06841/]”&gt;[fill in filename of finding aid, like WaPSMss065.xml]&lt;/eadid&gt;<br/>
+&lt;eadid countrycode=”us” mainagencycode=”[enter your institution’s MARC repository code]” identifier=”[enter assigned ARK]” url=”https://archiveswest.orbiscascade.org/ark:[fill in the finding aid’s assigned ARK, like 80444/xv06841/]”&gt;[fill in filename of finding aid, like WaPSMss065.xml]&lt;/eadid&gt;<br/>
 
                                        <br/>
 Example:<br/>
 
                                        <br/>
-&lt;eadid countrycode=”us” mainagencycode=”WaPS” identifier=”80444/xv60194” url=”http://archiveswest.orbiscascade.org/ark:/80444/xv06841/”&gt;WaPSMss065.xml&lt;/eadid&gt;</appnotes>
+&lt;eadid countrycode=”us” mainagencycode=”WaPS” identifier=”80444/xv60194” url=”https://archiveswest.orbiscascade.org/ark:80444/xv06841/”&gt;WaPSMss065.xml&lt;/eadid&gt;</appnotes>
                                  </p>
                               </div>
                               <br/>
@@ -902,7 +902,7 @@ Example:<br/>
             <a href="http://www.iso.org/iso/en/CatalogueDetailPage.CatalogueDetail?CSNUMBER=26780&amp;ICS1=1&amp;ICS2=140&amp;ICS3=30" target="_blank">ISO 8601</a>
 
 format (e.g., 1923/1996). See examples in Dates section of the 
-               <a href="https://www.orbiscascade.org/file_viewer.php?id=2445">Best Practice Guidelines</a>.
+               <a href="https://drive.google.com/file/d/1u7IbWDMAH2sk59nU3YMpIU5bAUEpZp92/view?usp=sharing">Best Practice Guidelines</a>.
 
            </appnotes>
                                                    </p>
@@ -935,7 +935,7 @@ format (e.g., 1923/1996). See examples in Dates section of the
             <a href="http://www.iso.org/iso/en/CatalogueDetailPage.CatalogueDetail?CSNUMBER=26780&amp;ICS1=1&amp;ICS2=140&amp;ICS3=30" target="_blank">ISO 8601</a>
 
 format (e.g., 1923/1996). See examples in Dates section of the 
-               <a href="https://www.orbiscascade.org/file_viewer.php?id=2445">Best Practice Guidelines</a>.
+               <a href="https://drive.google.com/file/d/1u7IbWDMAH2sk59nU3YMpIU5bAUEpZp92/view?usp=sharing">Best Practice Guidelines</a>.
 
            </appnotes>
                                              </p>
@@ -1682,7 +1682,7 @@ format (e.g., 1923/1996). See examples in Dates section of the
             <b>2004</b>
 
             ). See examples in Dates section of the 
-               <a href="https://www.orbiscascade.org/file_viewer.php?id=2445">Best Practice Guidelines</a>
+               <a href="https://drive.google.com/file/d/1u7IbWDMAH2sk59nU3YMpIU5bAUEpZp92/view?usp=sharing">Best Practice Guidelines</a>
 
             section.</appnotes>
                                                 </p>
@@ -1716,7 +1716,7 @@ format (e.g., 1923/1996). See examples in Dates section of the
             <b>2004</b>
 
             ). See examples in Dates section of the 
-               <a href="https://www.orbiscascade.org/file_viewer.php?id=2445">Best Practice Guidelines</a>
+               <a href="https://drive.google.com/file/d/1u7IbWDMAH2sk59nU3YMpIU5bAUEpZp92/view?usp=sharing">Best Practice Guidelines</a>
 
             section.</appnotes>
                                           </p>
@@ -2537,7 +2537,7 @@ format (e.g., 1923/1996). See examples in Dates section of the
             <b>2008-08</b>
 
             ). See examples in Dates section of the 
-               <a href="https://www.orbiscascade.org/file_viewer.php?id=2445">Best Practice Guidelines</a>.</appnotes>
+               <a href="https://drive.google.com/file/d/1u7IbWDMAH2sk59nU3YMpIU5bAUEpZp92/view?usp=sharing">Best Practice Guidelines</a>.</appnotes>
                                                    </p>
                                                 </div>
                                                 <br/>
@@ -2571,7 +2571,7 @@ format (e.g., 1923/1996). See examples in Dates section of the
             <b>2008-08</b>
 
             ). See examples in Dates section of the 
-               <a href="https://www.orbiscascade.org/file_viewer.php?id=2445">Best Practice Guidelines</a>.</appnotes>
+               <a href="https://drive.google.com/file/d/1u7IbWDMAH2sk59nU3YMpIU5bAUEpZp92/view?usp=sharing">Best Practice Guidelines</a>.</appnotes>
                                              </p>
                                           </div>
                                           <br/>
@@ -3950,7 +3950,7 @@ format (e.g., 1923/1996). See examples in Dates section of the
             <a href="http://www.iso.org/iso/en/CatalogueDetailPage.CatalogueDetail?CSNUMBER=26780&amp;ICS1=1&amp;ICS2=140&amp;ICS3=30" target="_blank">ISO 8601</a>
 
             format (e.g., 1893/1992). See examples in Dates section of the
-               <a href="https://www.orbiscascade.org/file_viewer.php?id=2445">Best Practice Guidelines</a>.</appnotes>
+               <a href="https://drive.google.com/file/d/1u7IbWDMAH2sk59nU3YMpIU5bAUEpZp92/view?usp=sharing">Best Practice Guidelines</a>.</appnotes>
                                                 </p>
                                              </div>
                                              <br/>
@@ -3979,7 +3979,7 @@ format (e.g., 1923/1996). See examples in Dates section of the
             <a href="http://www.iso.org/iso/en/CatalogueDetailPage.CatalogueDetail?CSNUMBER=26780&amp;ICS1=1&amp;ICS2=140&amp;ICS3=30" target="_blank">ISO 8601</a>
 
             format (e.g., 1893/1992). See examples in Dates section of the
-               <a href="https://www.orbiscascade.org/file_viewer.php?id=2445">Best Practice Guidelines</a>.</appnotes>
+               <a href="https://drive.google.com/file/d/1u7IbWDMAH2sk59nU3YMpIU5bAUEpZp92/view?usp=sharing">Best Practice Guidelines</a>.</appnotes>
                                           </p>
                                        </div>
                                        <br/>
@@ -5048,7 +5048,7 @@ format (e.g., 1923/1996). See examples in Dates section of the
                                     <h4>Comments/Application Notes for ead/archdesc//bioghist/chronlist</h4>
                                     <p>
                                        <appnotes>See the Lists section of the 
-            <a href="https://www.orbiscascade.org/file_viewer.php?id=2445">Best Practice Guidelines</a>, or see the EAD Tag Library for more information on encoding a chronological list of significant biographical or historical events.</appnotes>
+            <a href="https://drive.google.com/file/d/1u7IbWDMAH2sk59nU3YMpIU5bAUEpZp92/view?usp=sharing">Best Practice Guidelines</a>, or see the EAD Tag Library for more information on encoding a chronological list of significant biographical or historical events.</appnotes>
                                     </p>
                                  </div>
                                  <br/>
@@ -8123,7 +8123,7 @@ With the exception of a period needed for an initial, do not end a subject headi
 							<div class="appnotes" id="app.d0e2715">
                                  <h4>Comments/Application Notes for ead/archdesc//controlaccess//subject AW browsing terms</h4>
                                  <p>
-                                    <appnotes>To facilitate browsing of collections included in the database, encoders should add topical “browsing” terms as appropriate to the materials described. Only use terms included on the alphabetically arranged <a href="https://www.orbiscascade.org/file_viewer.php?id=2445" target="_blank">EAD Best Practices</a>. Assign terms representing topics, places, and material types that are represented significantly in the collection.
+                                    <appnotes>To facilitate browsing of collections included in the database, encoders should add topical “browsing” terms as appropriate to the materials described. Only use terms included on the alphabetically arranged <a href="https://drive.google.com/file/d/1u7IbWDMAH2sk59nU3YMpIU5bAUEpZp92/view?usp=sharing" target="_blank">EAD Best Practices</a>. Assign terms representing topics, places, and material types that are represented significantly in the collection.
 <br/>
 
                                        <br/>

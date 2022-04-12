@@ -30,7 +30,7 @@ if ($mysqli = connect()) {
   $all_arks = $mysqli->query('SELECT ark, date FROM arks WHERE active=1 AND file<>""');
   while ($ark_row = $all_arks->fetch_assoc()) {
     $url = $xml->addChild('url');
-    $url->addChild('loc', AW_DOMAIN . '/ark:/' . $ark_row['ark']);
+    $url->addChild('loc', AW_DOMAIN . '/ark:' . $ark_row['ark']);
     $url->addChild('lastmod', date("Y-m-d", strtotime($ark_row['date'])));
     $url->addChild('priority', '0.5');
   }

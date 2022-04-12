@@ -170,7 +170,7 @@ function print_brief_records($arks, $query) {
     if (isset($brief_records[$ark])) {
       $result = $brief_records[$ark];
       echo '<div class="result">';
-      echo '<h4><a href="' . AW_DOMAIN . '/ark:/' . $ark;
+      echo '<h4><a href="' . AW_DOMAIN . '/ark:' . $ark;
       if ($query) {echo '?q=' . $query;}
       echo '" target="_blank">' . $result['title'] . '</a></h4>';
       echo '<p class="repo"><span class="label">Repository:</span> <a href="/contact.php#' . $result['repo_info']['mainagencycode'] . '">' . $result['repo_info']['name'] . '</a></p>';

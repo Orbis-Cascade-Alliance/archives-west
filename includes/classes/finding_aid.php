@@ -248,7 +248,7 @@ class AW_Finding_Aid {
       $qr_file = $this->get_qualifier() . '.svg';
       $qr_path = $this->get_repo()->get_folder() . '/qr/' . $qr_file;
       if (!file_exists($qr_path)) {
-        exec('zint -b QRCODE -o ' . AW_REPOS . '/' . $qr_path . ' -d "' . AW_DOMAIN . '/ark:/' . $this->get_ark() . '" --scale 4');
+        exec('zint -b QRCODE -o ' . AW_REPOS . '/' . $qr_path . ' -d "' . AW_DOMAIN . '/ark:' . $this->get_ark() . '" --scale 4');
       }
       $this->qr_code = AW_DOMAIN . '/repos/' . $qr_path;
     }

@@ -59,7 +59,7 @@ if ($ark) {
         }
         // If the file with the same name is for a different ARK, print error whether we're replacing or not
         else if ($associated_ark != $ark) {
-          $errors[] = 'A file with the name <strong>' . $file_name . '</strong> is associated with <a href="' . AW_DOMAIN . '/ark:/' . $associated_ark . '" target="_blank">' . $associated_ark . '</a>. Change the file name and try again.';
+          $errors[] = 'A file with the name <strong>' . $file_name . '</strong> is associated with <a href="' . AW_DOMAIN . '/ark:' . $associated_ark . '" target="_blank">' . $associated_ark . '</a>. Change the file name and try again.';
           $upload = false;
         }
       }

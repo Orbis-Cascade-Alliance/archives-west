@@ -1,7 +1,7 @@
 <?php
 // Include definitions
 $page_title = 'Analytics Report';
-require_once('/var/www/defs.php');
+require_once(getenv('AW_HOME') . '/defs.php');
 include(AW_INCLUDES . '/server-header.php');
 include(AW_TOOL_INCLUDES . '/tools-header.php');
 ?>

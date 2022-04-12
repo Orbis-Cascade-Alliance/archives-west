@@ -34,7 +34,7 @@ if ($repo_id != 0) {
     echo '<h2>Results</h2>';
     echo '<table><thead><tr><th>Ark ID</th><th>URL</th></tr></thead><tbody>';
     foreach ($arks as $ark) {
-      echo '<tr><td>' . $ark . '</td><td>https://archiveswest.orbiscascade.org/ark:/' . $ark . '</td></tr>';
+      echo '<tr><td>' . $ark . '</td><td>' . AW_DOMAIN . '/ark:' . $ark . '</td></tr>';
     }
     echo '</tbody></table>';
     $_SESSION['new_arks'] = array();

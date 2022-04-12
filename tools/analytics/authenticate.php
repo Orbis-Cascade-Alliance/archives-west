@@ -1,13 +1,14 @@
 <?php
 // Get Google client
-require '/var/www/html/google/vendor/autoload.php';
+require_once(getenv('AW_HOME') . '/defs.php');
+require AW_HTML . '/google/vendor/autoload.php';
 $client = new Google_Client();
 $client->setApplicationName('Analytics');
-$client->setAuthConfig('/var/www/html/tools/analytics/oauth2/credentials.json');
+$client->setAuthConfig(AW_TOOLS . '/analytics/oauth2/credentials.json');
 $client->setAccessType('offline');
 $client->addScope(Google_Service_Analytics::ANALYTICS_READONLY);
 
-$tokenPath = '/var/www/html/tools/analytics/oauth2/token.json';
+$tokenPath = AW_TOOLS . '/analytics/oauth2/token.json';
 if (file_exists($tokenPath)) {
   $accessToken = json_decode(file_get_contents($tokenPath), true);
   

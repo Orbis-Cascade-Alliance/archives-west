@@ -2,7 +2,7 @@
 // Use the Analytics Reporting API v4 to get pageviews for repository finding aids within a date range
 // Documentation: https://developers.google.com/analytics/devguides/reporting/core/v4
 
-require_once('/var/www/defs.php');
+require_once(getenv('AW_HOME') . '/defs.php');
 include(AW_INCLUDES . '/server-header.php');
 include(AW_TOOL_INCLUDES . '/tools-functions.php');
 session_start();
@@ -81,7 +81,7 @@ if ($start_date && $end_date) {
       $filter = new Google_Service_AnalyticsReporting_DimensionFilter();
       $filter->setDimensionName("ga:pagePath");
       $filter->setOperator("PARTIAL");
-      $filter->setExpressions('ark:/' . $ark);
+      $filter->setExpressions($ark);
       $filters[] = $filter;
     }
     $filter_clause = new Google_Service_AnalyticsReporting_DimensionFilterClause();
@@ -178,7 +178,7 @@ if ($start_date && $end_date) {
             if (isset($info['title'])) {
               $title = $info['title'];
             }
-            echo '<tr><td><a href="' . AW_DOMAIN . '/ark:/' . $ark . '" target="_blank">' . $ark . '</a></td><td>' . $title . '</td><td>' . $info['views'] . '</td></tr>';
+            echo '<tr><td><a href="' . AW_DOMAIN . '/ark:' . $ark . '" target="_blank">' . $ark . '</a></td><td>' . $title . '</td><td>' . $info['views'] . '</td></tr>';
           }
           echo '</tbody></table>';
         }

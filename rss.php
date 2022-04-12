@@ -37,7 +37,7 @@ if (!empty($arks)) {
   foreach ($arks as $ark => $date) {
     if (isset($brief_records[$ark])) {
       $result = $brief_records[$ark];
-      $link = AW_DOMAIN . '/ark:/' . $ark;
+      $link = AW_DOMAIN . '/ark:' . $ark;
       $item = $rss->channel->addChild('item');
       $item->addChild('title', $result['title']);
       $item->addChild('link', $link);

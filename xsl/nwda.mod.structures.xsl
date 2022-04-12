@@ -70,10 +70,6 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
         <xsl:call-template name="toc"/>
       </div>
       <div id="main" role="main">
-        <!--<div id="downloads">
-          <a class="btn" href="/ark:/{$identifier}/pdf" target="_blank" role="button">PDF</a>
-          &#160;<a class="btn" href="/ark:/{$identifier}/xml" target="_blank" role="button">XML</a>
-        </div>-->
         <h2>
           <xsl:value-of select="$titleproper"/>
         </h2>
