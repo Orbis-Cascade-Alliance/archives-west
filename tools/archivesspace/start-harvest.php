@@ -27,17 +27,25 @@ if (isset($argv[1]) && !empty($argv[1])) {
       // Get identifiers
       $list_response = get_as_response($as_host . '/repositories/' . $as_repo_id . '/resources?all_ids=true', 'json', $as_session);
       if (is_array($list_response)) {
-        if ($mysqli = connect()) {
-          $insert_stmt = $mysqli->prepare('INSERT INTO harvests (job_id, resource_id) VALUES (?, ?)');
-          $insert_stmt->bind_param('ii', $job_id, $resource_id);
-          foreach ($list_response as $resource_id) {
-            $insert_stmt->execute();
+        if (!empty($list_response)) {
+          if ($mysqli = connect()) {
+            $insert_stmt = $mysqli->prepare('INSERT INTO harvests (job_id, resource_id) VALUES (?, ?)');
+            $insert_stmt->bind_param('ii', $job_id, $resource_id);
+            foreach ($list_response as $resource_id) {
+              $insert_stmt->execute();
+            }
+            $insert_stmt->close();
+            $mysqli->close();
+            // Start harvest process
+            harvest_next_api($job_id, $as_session, $as_expires);
           }
-          $insert_stmt->close();
-          $mysqli->close();
+          else {
+            $harvest_errors[] = 'Error writing ArchivesSpace resource identifiers to database.';
+          }
         }
-        // Start harvest process
-        harvest_next_api($job_id, $as_session, $as_expires);
+        else {
+          $harvest_errors[] = 'ArchivesSpace returned an empty resource list.';
+        }
       }
       else {
         $harvest_errors[] = 'Error fetching identifiers from ArchivesSpace';
@@ -48,8 +56,9 @@ if (isset($argv[1]) && !empty($argv[1])) {
     } 
   }
 }
-// Print errors to job report
+// If errors, terminate job and print to report
 if ($job && !empty($harvest_errors)) {
+  $job->set_complete();
   $report = print_errors($harvest_errors);
   $fh = fopen($job->get_report_path(), 'a');
   fwrite($fh, $report);

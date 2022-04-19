@@ -33,8 +33,9 @@ if (isset($argv[1]) && !empty($argv[1])) {
     $harvest_errors[] = $e->getMessage();
   } 
 }
-// Print errors to job report
+// If errors, terminate job and print to report
 if ($job && !empty($harvest_errors)) {
+  $job->set_complete();
   $report = print_errors($harvest_errors);
   $fh = fopen($job->get_report_path(), 'a');
   fwrite($fh, $report);

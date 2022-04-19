@@ -70,41 +70,46 @@ if (isset($argv[1]) && !empty($argv[1])) {
               $ead_url = (string) $ead->eadheader->eadid['url'];
               if ($ead_filename = (string) $ead->eadheader->eadid) {
                 $ead_filename = strtolower($ead_filename);
-                $harvests[$harvest_id]['file'] = $ead_filename;
-                $ark = extract_ark($ead_url);
-                if ($ark) {
-                  // Update ARK column
-                  $update_stmt->execute();
-                  try {
-                    $finding_aid = new AW_Finding_Aid($ark);
-                    if ($finding_aid->get_file() == '') {
-                      // Convert AS to AW EAD
-                      $xml_string = $ead->asXML(); 
-                      if ($conversion_result = convert_file($xml_string, $repo->get_mainagencycode())) {
-                        if ($conversion_result['errors']) {
-                          foreach ($conversion_result['errors'] as $error) {
-                            $upload_errors[] = $error;
+                if (preg_match('/^[a-z0-9\-\_]+\.xml$/', $ead_filename)) {
+                  $harvests[$harvest_id]['file'] = $ead_filename;
+                  $ark = extract_ark($ead_url);
+                  if ($ark) {
+                    // Update ARK column
+                    $update_stmt->execute();
+                    try {
+                      $finding_aid = new AW_Finding_Aid($ark);
+                      if ($finding_aid->get_file() == '') {
+                        // Convert AS to AW EAD
+                        $xml_string = $ead->asXML(); 
+                        if ($conversion_result = convert_file($xml_string, $repo->get_mainagencycode())) {
+                          if ($conversion_result['errors']) {
+                            foreach ($conversion_result['errors'] as $error) {
+                              $upload_errors[] = $error;
+                            }
+                          }
+                          else {
+                            // Place in files array for job
+                            $files[$ead_filename] = $conversion_result['ead'];
                           }
                         }
                         else {
-                          // Place in files array for job
-                          $files[$ead_filename] = $conversion_result['ead'];
+                          $upload_errors[] = 'Error converting ArchivesSpace EAD to Archives West for resource ' . $harvest_info['resource'] . ' (' . $ead_filename . ')';
                         }
                       }
                       else {
-                        $upload_errors[] = 'Error converting ArchivesSpace EAD to Archives West for resource ' . $harvest_info['resource'] . ' (' . $ead_filename . ')';
+                        $upload_errors[] = 'ARK ' . $ark . ' is already associated with file ' . $finding_aid->get_file();
                       }
                     }
-                    else {
-                      $upload_errors[] = 'ARK ' . $ark . ' is already associated with file ' . $finding_aid->get_file();
+                    catch (Exception $e) {
+                      $upload_errors[] = $e->getMessage() . ' for resource ' . $harvest_info['resource'] . ' (' . $ead_filename . ')';
                     }
                   }
-                  catch (Exception $e) {
-                    $upload_errors[] = $e->getMessage() . ' for resource ' . $harvest_info['resource'] . ' (' . $ead_filename . ')';
+                  else {
+                    $upload_errors[] = 'No ARK found for ArchivesSpace resource ' . $harvest_info['resource'] . ' (' . $ead_filename . ')';
                   }
                 }
                 else {
-                  $upload_errors[] = 'No ARK found for ArchivesSpace resource ' . $harvest_info['resource'] . ' (' . $ead_filename . ')';
+                  $upload_errors[] = 'Invalid filename in <eadid>. A filename must have the extension ".xml" and can contain letters, numbers, hyphens (-), and underscores (_) only.';
                 }
               }
               else {

@@ -43,8 +43,8 @@ if ($as_host && isset($_POST) && !empty($_POST)) {
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     $raw_response = curl_exec($ch);
     if ($response = json_decode($raw_response)) {
-      if ($session = (string) $response->session) {
-        $_SESSION['as_session'] = $session;
+      if (isset($response->session)) {
+        $_SESSION['as_session'] = (string) $response->session;
         $_SESSION['as_expires'] = strtotime('+1 hour');
         header('Location: harvest.php');
       }
