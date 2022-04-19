@@ -10,7 +10,6 @@ class AW_Harvest {
     $this->set = $set;
     $this->start = $start;
     $this->ids = array();
-    $this->harvest_ids();
   }
   
   function get_host() {
@@ -29,7 +28,6 @@ class AW_Harvest {
   
   // Get identifiers from ArchivesSpace
   function harvest_ids() {
-    // ADD DATE RESTRICTIONS
     $initial_url = $this->host . '/oai?verb=ListIdentifiers&metadataPrefix=oai_ead';
     if ($this->set != null) {
       $initial_url .= '&set=' . $this->set;

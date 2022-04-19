@@ -2,3 +2,7 @@ label {
   display: block;
   font-weight: bold;
 }
+
+#form-harvest-single input[type="text"] {
+  width: 95%; 
+}
