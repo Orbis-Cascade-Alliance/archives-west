@@ -62,48 +62,58 @@ if (isset($argv[1]) && !empty($argv[1])) {
           $file = get_temp_filepath($repo, $harvest_id);
           if (file_exists($file)) {
             $ead = simplexml_load_file($file);
-            $ead_url = (string) $ead->eadheader->eadid['url'];
-            if ($ead_filename = (string) $ead->eadheader->eadid) {
-              $ead_filename = strtolower($ead_filename);
-              $harvests[$harvest_id]['file'] = $ead_filename;
-              $ark = extract_ark($ead_url);
-              if ($ark) {
-                // Update ARK column
-                $update_stmt->execute();
-                try {
-                  $finding_aid = new AW_Finding_Aid($ark);
-                  if ($finding_aid->get_file() == '') {
-                    // Convert AS to AW EAD
-                    $xml_string = $ead->asXML(); 
-                    if ($conversion_result = convert_file($xml_string, $repo->get_mainagencycode())) {
-                      if ($conversion_result['errors']) {
-                        foreach ($conversion_result['errors'] as $error) {
-                          $upload_errors[] = $error;
+            if (isset($ead->eadheader->eadid['url'])) {
+              $ead_url = (string) $ead->eadheader->eadid['url'];
+              if ($ead_filename = (string) $ead->eadheader->eadid) {
+                $ead_filename = strtolower($ead_filename);
+                if (preg_match('/^[a-z0-9\-\_]+\.xml$/', $ead_filename)) {
+                  $harvests[$harvest_id]['file'] = $ead_filename;
+                  $ark = extract_ark($ead_url);
+                  if ($ark) {
+                    // Update ARK column
+                    $update_stmt->execute();
+                    try {
+                      $finding_aid = new AW_Finding_Aid($ark);
+                      if ($finding_aid->get_file() == '') {
+                        // Convert AS to AW EAD
+                        $xml_string = $ead->asXML(); 
+                        if ($conversion_result = convert_file($xml_string, $repo->get_mainagencycode())) {
+                          if ($conversion_result['errors']) {
+                            foreach ($conversion_result['errors'] as $error) {
+                              $upload_errors[] = $error;
+                            }
+                          }
+                          else {
+                            // Place in files array for job
+                            $files[$ead_filename] = $conversion_result['ead'];
+                          }
+                        }
+                        else {
+                          $upload_errors[] = 'Error converting ArchivesSpace EAD to Archives West for resource ' . $harvest_info['resource'];
                         }
                       }
                       else {
-                        // Place in files array for job
-                        $files[$ead_filename] = $conversion_result['ead'];
+                        $upload_errors[] = 'ARK ' . $ark . ' is already associated with a file (' . $finding_aid->get_file() . ')';
                       }
                     }
-                    else {
-                      $upload_errors[] = 'Error converting ArchivesSpace EAD to Archives West for resource ' . $harvest_info['resource'];
+                    catch (Exception $e) {
+                      $upload_errors[] = $e->getMessage() . ' for resource ' . $harvest_info['resource'];
                     }
                   }
                   else {
-                    $upload_errors[] = 'ARK ' . $ark . ' is already associated with a file (' . $finding_aid->get_file() . ')';
+                    $upload_errors[] = 'No ARK found for ArchivesSpace resource ' . $harvest_info['resource'];
                   }
                 }
-                catch (Exception $e) {
-                  $upload_errors[] = $e->getMessage() . ' for resource ' . $harvest_info['resource'];
+                else {
+                  $upload_errors[] = 'Invalid filename <i>' . $ead_filename . '</i> in eadheader/eadid. A filename must have the extension ".xml" and can contain letters, numbers, hyphens (-), and underscores (_) only.';
                 }
               }
               else {
-                $upload_errors[] = 'No ARK found for ArchivesSpace resource ' . $harvest_info['resource'];
+                $upload_errors[] = 'No filename found in eadheader/eadid for ArchivesSpace resource ' . $harvest_info['resource'];
               }
             }
             else {
-              $uploaded_errors[] = 'No filename found in eadheader/eadid for ArchivesSpace resource ' . $harvest_info['resource'];
+              $upload_errors[] = 'No URL attribute found in eadheader/eadid for ArchivesSpace resource ' . $harvest_info['resource'];
             }
           }
           else {
@@ -123,7 +133,7 @@ if (isset($argv[1]) && !empty($argv[1])) {
       try {
         $process_result = $job->process_files($files);
         foreach ($process_result as $error) {
-          $uploaded_errors[] = $error;
+          $upload_errors[] = $error;
         }
       }
       catch (Exception $e) {
@@ -135,9 +145,8 @@ if (isset($argv[1]) && !empty($argv[1])) {
     if ($mysqli = connect()) {
       $upload_stmt = $mysqli->prepare('UPDATE harvests SET uploaded=? WHERE id=?');
       $upload_stmt->bind_param('ii', $uploaded, $harvest_id);
-      $eads = AW_REPOS . '/' . $repo->get_folder() . '/eads';
       foreach ($harvests as $harvest_id => $harvest_info) {
-        if (file_exists($eads . '/' . $harvest_info['file'])) {
+        if (isset($harvest_info['file']) && file_exists(AW_REPOS . '/' . $repo->get_folder() . '/eads/' . $harvest_info['file'])) {
           $uploaded = 1;
         }
         else {
@@ -147,6 +156,9 @@ if (isset($argv[1]) && !empty($argv[1])) {
         unlink(get_temp_filepath($repo, $harvest_id));
       }
       $mysqli->close();
+    }
+    else {
+      $upload_errors[] = 'MySQL connection error.';
     }
     
   }

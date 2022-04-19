@@ -114,7 +114,7 @@ if ($user->is_admin()) {
 
 if ($repo_id != 0) {
   // Print tabs
-  echo '<ul id="tabs">';
+  echo '<ul id="tabs" class="tabs">';
   foreach (array('f'=>'Finding Aids', 'j' => 'Jobs') as $tab_key => $tab_name) {
     echo '<li';
     if ($tab == $tab_key) {
@@ -125,7 +125,7 @@ if ($repo_id != 0) {
   echo '</ul>';
   ?>
 
-  <div id="tab-contents">
+  <div id="tab-contents" class="tab-contents">
     <?php
     // Print tab contents
     $repo = new AW_Repo($repo_id);

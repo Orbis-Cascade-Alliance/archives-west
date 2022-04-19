@@ -18,6 +18,7 @@ class AW_Repo {
   public $rights;
   public $as_host_api;
   public $as_host_oaipmh;
+  public $as_prefix;
   public $users;
   
   function __construct($repo_id) {
@@ -42,6 +43,7 @@ class AW_Repo {
             $this->rights = $row['rights'];
             $this->as_host_api = $row['as_host_api'];
             $this->as_host_oaipmh = $row['as_host_oaipmh'];
+            $this->as_prefix = $row['as_prefix'];
           }
         }
         else {
@@ -122,6 +124,35 @@ class AW_Repo {
     return $this->as_host_oaipmh;
   }
   
+  function get_oaipmh_prefix() {
+    if (!$this->as_prefix && $this->get_as_host_oaipmh()) {
+      $url = $this->get_as_host_oaipmh() . '/oai?verb=Identify';
+      $response = get_as_oaipmh($url);
+      if (isset($response->Identify->description->{'oai-identifier'})) {
+        $identifier = $response->Identify->description->{'oai-identifier'};
+        $scheme = (string) $identifier->scheme;
+        $repositoryIdentifier = (string) $identifier->repositoryIdentifier;
+        $delimiter = (string) $identifier->delimiter;
+        $prefix = $scheme . $delimiter . $repositoryIdentifier;
+        if ($mysqli = connect()) {
+          $mysqli->query('UPDATE repos SET as_prefix="' . $prefix . '" WHERE id=' . $this->get_id());
+          if ($mysqli->error) {
+            throw new Exception('Error saving OAI-PMH prefix for this repository.');
+          }
+          $mysqli->close();
+        }
+        else {
+          throw new Exception('MySQL connection failed.');
+        }
+        $this->as_prefix = $prefix;
+      }
+      else {
+        throw new Exception('Could not find oai-identifier for this repository.');
+      }
+    }
+    return $this->as_prefix;
+  }
+  
   function get_users() {
     if (!isset($this->users)) {
       $users = array();
@@ -133,6 +164,9 @@ class AW_Repo {
           }
         }
         $mysqli->close();
+      }
+      else {
+        throw new Exception('MySQL connection failed.');
       }
       $this->users = $users;
     }

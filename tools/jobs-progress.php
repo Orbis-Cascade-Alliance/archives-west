@@ -39,7 +39,11 @@ if (isset($_GET['j']) && !empty($_GET['j'])) {
       echo '<div id="step1" class="active">Getting identifiers from ArchivesSpace</div>';
     }
     else {
-      echo '<div id="step1" class="finished">Found ' . $total . ' identifiers in ArchivesSpace.</div>';
+      echo '<div id="step1" class="finished">Found ' . $total . ' identifier';
+      if ($total != 1 ) {
+        echo 's';
+      }
+      echo ' in ArchivesSpace.</div>';
       if ($downloaded == 0) {
         echo '<div id="step2" class="active">Downloading EADs of ArchivesSpace resources.</div>';
       }

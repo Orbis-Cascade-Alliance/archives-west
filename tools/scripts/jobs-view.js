@@ -3,6 +3,7 @@ $(document).ready(function() {
   var params = new URLSearchParams(window.location.search);
   job_id = params.get('j');
   if ($('#progress').length > 0) {
+    check_progress();
     var interval = setInterval(check_progress, 5000);
   }
 });

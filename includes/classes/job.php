@@ -171,7 +171,8 @@ class AW_Job {
                   $report .= print_errors($upload_result['errors']);
                 }
                 else {
-                  $report .= '<p class="success">Uploaded ' . $file_name . '.</p>';
+                  $report .= '<p class="success">Uploaded ' . $file_name . '.
+                    <a href="' . AW_DOMAIN . '/ark:' . $ark . '" target="_blank">View in Archives West</a>.</p>';
                 }
               }
               else {

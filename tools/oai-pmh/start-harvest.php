@@ -21,6 +21,7 @@ if (isset($argv[1]) && !empty($argv[1])) {
     // Get identifiers
     try {
       $harvest = new AW_Harvest($as_host, $as_set, $start_date);
+      $harvest->harvest_ids();
       if (!empty($harvest->get_ids())) {
         $harvest->harvest_eads($job_id);
       }
