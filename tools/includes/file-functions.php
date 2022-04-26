@@ -476,8 +476,8 @@ function convert_file($file_contents, $mainagencycode) {
         $head->parentNode->removeChild($head);
       }
       
-      // Remove empty elements
-      foreach ($xpath->query('//*[not(normalize-space())]') as $empty) {
+      // Remove empty <prefercite> elements
+      foreach ($xpath->query('//prefercite[not(normalize-space())]') as $empty) {
         $empty->parentNode->removeChild($empty);
       }
       
