@@ -48,9 +48,9 @@ if ($repo_id != 0) {
   // Query MySQL and get titles from BaseX
   $arks = array();
   if ($mysqli = connect()) {
-    $ark_query = 'SELECT arks.id, arks.ark, arks.date, arks.file, arks.cached, concat_updates.history
+    $ark_query = 'SELECT arks.id, arks.ark, arks.date, arks.file, arks.cached, concat_updates.history, last_update
       FROM arks LEFT JOIN (
-        SELECT ark, GROUP_CONCAT(CONCAT(action, ",", date) ORDER BY date DESC SEPARATOR \'|\') as history FROM updates GROUP BY ark
+        SELECT ark, GROUP_CONCAT(CONCAT(action, ",", date) ORDER BY date DESC SEPARATOR \'|\') as history, MAX(date) as last_update FROM updates GROUP BY ark
       ) as concat_updates
       ON arks.ark=concat_updates.ark
       WHERE arks.repo_id=' . $repo_id . ' AND arks.active=1';
@@ -64,7 +64,7 @@ if ($repo_id != 0) {
           'file' => $ark_row['file'],
           'cached' => $ark_row['cached'],
           'title' => 'Unknown',
-          'date' => $ark_row['date'],
+          'date' => $ark_row['last_update'] > $ark_row['date'] ? $ark_row['last_update'] : $ark_row['date'],
           'creation_date' => $ark_row['date'],
           'history' => $ark_row['history']
         );
@@ -90,9 +90,7 @@ if ($repo_id != 0) {
         $ark = (string) $ead->ark;
         if (isset($arks[$ark])) {
           $title = (string) $ead->title;
-          $date = (string) $ead->modified;
           $arks[$ark]['title'] = $title;
-          $arks[$ark]['date'] = date('Y-m-d', strtotime($date));
         }
       }
     }
