@@ -48,7 +48,7 @@ if ($repo_id != 0) {
   // Query MySQL and get titles from BaseX
   $arks = array();
   if ($mysqli = connect()) {
-    $ark_query = 'SELECT arks.id, arks.ark, arks.date, arks.file, arks.cached, concat_updates.history, last_update
+    $ark_query = 'SELECT arks.id, arks.ark, arks.date, arks.file, arks.cached, concat_updates.history, concat_updates.last_update
       FROM arks LEFT JOIN (
         SELECT ark, GROUP_CONCAT(CONCAT(action, ",", date) ORDER BY date DESC SEPARATOR \'|\') as history, MAX(date) as last_update FROM updates GROUP BY ark
       ) as concat_updates
