@@ -819,7 +819,7 @@ Changes:
 			<!-- i.e. no second <arc> element -->
 			<xsl:otherwise>
 				<xsl:choose>
-					<xsl:when test="arc[1][@show='embed' or @xlink:show='embed'] and arc[1][@actuate='onload' or @xlink:actuate='onLoad']">
+					<xsl:when test="arc[1][@show='embed' or @xlink:show='embed'] and arc[1][@actuate='onload' or @actuate='onLoad' or @xlink:actuate='onLoad']">
 						<xsl:for-each select="daoloc">
 							<xsl:if test="@label = following-sibling::arc[1]/@to">
 								<img src="{@href}" class="daoimage" border="0">
@@ -842,7 +842,7 @@ Changes:
 						</xsl:for-each>
 					</xsl:when>
 					<xsl:when test="arc[@show='replace' or @xlink:show='replace' or @show='new' or @xlink:show='new'] and
-						arc[@actuate='onrequest' or @xlink:actuate='onRequest']">
+						arc[@actuate='onrequest' or @actuate='onRequest' or @xlink:actuate='onRequest']">
 						&#160;
             <a>
 							<xsl:if test="daoloc[1]/@title">
