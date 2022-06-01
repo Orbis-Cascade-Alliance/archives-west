@@ -105,6 +105,7 @@ include(AW_INCLUDES . '/header.php');
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=waplp">Pacific Lutheran University, Archives and Special Collections</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=wasmar">Seattle Municipal Archives</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=waspc">Seattle Pacific University</a></li>
+              <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=was">Seattle Public Library, Special Collections</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=wasu">Seattle University, Lemieux Library and McGoldrick Learning Commons, Special Collections</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=wat">Tacoma Public Library Northwest Room, Special Collections &amp; Archives</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=waoe">The Evergreen State College, Malcolm Stilson Archives and Special Collections</a></li>
