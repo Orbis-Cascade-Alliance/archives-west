@@ -27,11 +27,11 @@ catch (Exception $e) {
 $resource_id = null;
 if (isset($_POST['as_resource']) && !empty($_POST['as_resource'])) {
   $as_resource = filter_var($_POST['as_resource'], FILTER_SANITIZE_STRING);
-  $prefix = $repo->get_oaipmh_prefix();
-  if (substr($as_resource, 0, strlen($prefix)) == $prefix) {
+  if (substr($as_resource, 0, 1) == '/') {
     $resource_id = $as_resource;
   }
   else {
+    $prefix = $repo->get_oaipmh_prefix();
     $path = parse_url($as_resource, PHP_URL_PATH);
     $resource_id = $prefix . '/' . $path;
   }

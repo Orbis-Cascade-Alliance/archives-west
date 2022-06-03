@@ -59,10 +59,10 @@ if ($repo_id != 0) {
       <p>Enter one of the following in the field below:</p>
       <ul>
         <li>The direct link to the published resource, e.g., https://pinestate.libraryhost.com/repositories/3/resources/22</li>
-        <li>The ArchivesSpace resource ID, e.g., oai:archivesspace//repositories/3/resources/22</li>
+        <li>The resource URI under Basic Information, e.g., /repositories/3/resources/22</li>
       </ul>
       <p>
-        <label for="as_resource">Published Link:</label>
+        <label for="as_resource">Published Link or URI:</label>
         <input type="text" name="as_resource" id="as_resource" />
       </p>
       <p>
@@ -109,7 +109,7 @@ if ($repo_id != 0) {
       <p><label for="start_date">Harvest resources modified since:</label><input type="text" class="date" id="start_date" name="start_date" value="<?php echo $start_date; ?>" /></p>
       <p>
         <input type="checkbox" name="replace_file" id="replace_file" />
-        <label for="replace_file" class="inline">Replace existing file</label>
+        <label for="replace_file" class="inline">Replace existing files</label>
       </p>
       <p><input type="submit" value="Harvest Finding Aids" /></p>
     </form>
