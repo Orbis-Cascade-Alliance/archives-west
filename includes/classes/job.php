@@ -11,6 +11,7 @@ class AW_Job {
   public $date;
   public $set;
   public $start;
+  public $replace;
   public $complete;
   public $message;
   public $report_path;
@@ -18,7 +19,7 @@ class AW_Job {
   function __construct($job_id) {
     $this->job_id = $job_id;
     if ($mysqli = connect()) {
-      $job_query = 'SELECT type, repo_id, user, date, as_set, start, complete FROM jobs WHERE id=' . $job_id;
+      $job_query = 'SELECT type, repo_id, user, date, as_set, start, replace_file, complete FROM jobs WHERE id=' . $job_id;
       $job_result = $mysqli->query($job_query);
       if ($job_result->num_rows == 1) {
         while ($job_row = $job_result->fetch_assoc()) {
@@ -28,6 +29,7 @@ class AW_Job {
           $this->date = $job_row['date'];
           $this->set = $job_row['as_set'];
           $this->start = $job_row['start'];
+          $this->replace = $job_row['replace_file'];
           $this->complete = $job_row['complete'];
         }
         try {
@@ -101,6 +103,20 @@ class AW_Job {
     $this->start = $start_date;
   }
   
+  function get_replace() {
+    return $this->replace;
+  }
+  
+  function set_replace($bool) {
+    if ($mysqli = connect()) {
+      $mysqli->query('UPDATE jobs SET replace_file=' . $bool . ' WHERE id=' . $this->get_id());
+      $mysqli->close();
+    }
+    else {
+      throw new Exception('MySQL connection error.');
+    }
+  }
+  
   function get_complete() {
     return $this->complete;
   }
@@ -165,7 +181,7 @@ class AW_Job {
               $report .= '<div class="compliance-report">' . $compliance_result['report'] . '</div>';
               
               // Upload
-              if ($upload_result = upload_file($file_contents, $file_name, $ark, 0, $this->get_user_id())) {
+              if ($upload_result = upload_file($file_contents, $file_name, $ark, $this->get_replace(), $this->get_user_id())) {
                 $report .= '<h4>Upload</h4>';
                 if ($upload_result['errors']) {
                   $report .= print_errors($upload_result['errors']);

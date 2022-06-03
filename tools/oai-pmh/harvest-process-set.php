@@ -34,6 +34,12 @@ if (isset($_POST['start_date']) && !empty($_POST['start_date'])) {
   $start_date = filter_var($_POST['start_date'], FILTER_SANITIZE_STRING);
 }
 
+// Get replace checkbox
+$replace = 0;
+if (isset($_POST['replace_file']) && $_POST['replace_file'] == 1) {
+  $replace = 1;
+}
+
 // Create job and start harvest process
 if (empty($harvest_errors)) {
   if ($job_id = create_job('as', $repo_id, $user->get_id())) {
@@ -44,6 +50,9 @@ if (empty($harvest_errors)) {
       }
       if ($start_date != null) {
         $job->add_start($start_date);
+      }
+      if ($replace == 1) {
+        $job->set_replace(1);
       }
       new AW_Process('php ' . AW_HTML . '/tools/oai-pmh/start-harvest.php ' . $job_id);
       echo '<p>Harvest job #' . $job_id . ' has been created. <a href="' . AW_DOMAIN . '/tools/jobs-view.php?j=' . $job_id . '">View progress</a>.</p>';

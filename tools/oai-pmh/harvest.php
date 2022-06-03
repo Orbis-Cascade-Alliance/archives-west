@@ -9,9 +9,7 @@ include(AW_TOOL_INCLUDES . '/tools-header.php');
 <script src="<?php echo AW_DOMAIN; ?>/tools/scripts/harvest-oaipmh.js"></script>
 <?php
 include(AW_TOOL_INCLUDES . '/tools-header-end.php');
-?>
-<p style="font-weight:bold;">This page is for testing by the Archives West Standing Group only.</p>
-<?php
+
 if ($user->is_admin()) {
   // Print repo select form
   include('../repo-form.php');
@@ -49,7 +47,6 @@ if ($repo_id != 0) {
     ?>
     <p>This tool harvests resources from an ArchivesSpace repository and uploads them to Archives West using the <a href="https://archivesspace.github.io/tech-docs/architecture/oai-pmh/" target="_blank">OAI-PMH interface</a>.</p>
     <p>Each resource must contain an XML file name in the <strong>EAD ID</strong> field and a URL with a valid ARK in the <strong>EAD Location</strong> field. See <a href="https://www.orbiscascade.org/programs/ulc/archives-and-manuscripts-collections/archivesspace/as-resource-records/">ArchivesSpace Resource Records</a> for instructions and a list of all fields required to comply with the Alliance's EAD Best Practices.</p>
-    <p>This tool will import <strong>new finding aids only</strong>. To update an existing finding aid in Archives West, export the EAD from ArchivesSpace and use the ArchivesSpace EAD Converter tool. After validating and checking compliance, locate the finding aid on the homepage and click "Replace" to upload the new file.</p>
     <p>Unpublished and suppressed ArchivesSpace resources cannot be harvested through this tool.</p>
     <ul id="form-tabs" class="tabs">
       <li<?php if ($tab == 'single') {echo ' class="active"';}?>><a href="?tab=single">Single Resource by URL</a></li>
@@ -59,9 +56,19 @@ if ($repo_id != 0) {
     if ($tab == 'single') {
     ?>
     <form id="form-harvest-single" class="tab-contents" action="harvest-process-single.php" method="post">
-      <p>Enter the direct link to the published resource, e.g., https://pinestate.libraryhost.com/repositories/3/resources/22</p>
-      <label for="as_resource">Published Link:</label>
-      <input type="text" name="as_resource" id="as_resource" />
+      <p>Enter one of the following in the field below:</p>
+      <ul>
+        <li>The direct link to the published resource, e.g., https://pinestate.libraryhost.com/repositories/3/resources/22</li>
+        <li>The ArchivesSpace resource ID, e.g., oai:archivesspace//repositories/3/resources/22</li>
+      </ul>
+      <p>
+        <label for="as_resource">Published Link:</label>
+        <input type="text" name="as_resource" id="as_resource" />
+      </p>
+      <p>
+        <input type="checkbox" name="replace_file" id="replace_file" />
+        <label for="replace_file" class="inline">Replace existing file</label>
+      </p>
       <p><input type="submit" value="Harvest Finding Aid" /></p>
     </form>
     <?php }
@@ -100,6 +107,10 @@ if ($repo_id != 0) {
       ?>
       </select>
       <p><label for="start_date">Harvest resources modified since:</label><input type="text" class="date" id="start_date" name="start_date" value="<?php echo $start_date; ?>" /></p>
+      <p>
+        <input type="checkbox" name="replace_file" id="replace_file" />
+        <label for="replace_file" class="inline">Replace existing file</label>
+      </p>
       <p><input type="submit" value="Harvest Finding Aids" /></p>
     </form>
     <?php } ?>

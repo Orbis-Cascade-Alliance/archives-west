@@ -74,7 +74,7 @@ if (isset($argv[1]) && !empty($argv[1])) {
                     $update_stmt->execute();
                     try {
                       $finding_aid = new AW_Finding_Aid($ark);
-                      if ($finding_aid->get_file() == '') {
+                      if ($job->get_replace() || $finding_aid->get_file() == '') {
                         // Convert AS to AW EAD
                         $xml_string = $ead->asXML(); 
                         if ($conversion_result = convert_file($xml_string, $repo->get_mainagencycode())) {

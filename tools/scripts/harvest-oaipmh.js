@@ -9,7 +9,8 @@ $(document).ready(function() {
   $('#form-harvest-single').submit(function(e) {
     e.preventDefault();
     var as_resource = $('#as_resource').val();
-    submit_form('single', {as_resource: as_resource});
+    var replace_file = ($('#replace_file').is(":checked") ? 1 : 0);
+    submit_form('single', {as_resource: as_resource, replace_file: replace_file});
     return false;
   });
   
