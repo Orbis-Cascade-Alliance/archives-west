@@ -19,7 +19,7 @@ if ($user->is_admin()) {
 if ($repo_id != 0) {
   try {
     $repo = new AW_Repo($repo_id);
-    $as_host = $repo->get_as_host_oaipmh();
+    $as_host = $repo->get_as_host();
     if (!$as_host) {
       $errors[] = 'This repository does not have an ArchivesSpace host for OAI-PMH requests defined. Add one in the <a href="' . AW_DOMAIN . '/tools/repository-edit.php">Repository Registry Editor</a>.';
     }

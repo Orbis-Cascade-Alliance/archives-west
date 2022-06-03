@@ -17,7 +17,7 @@ if (isset($argv[1]) && !empty($argv[1])) {
     $as_set = $job->get_set();
     $start_date = $job->get_start();
     $repo = new AW_Repo($job->get_repo_id());
-    $as_host = $repo->get_as_host_oaipmh();
+    $as_host = $repo->get_as_host();
     // Get identifiers
     try {
       $harvest = new AW_Harvest($as_host, $as_set, $start_date);

@@ -17,7 +17,7 @@ $user = get_session_user();
 $repo_id = get_user_repo_id($user);
 try {
   $repo = new AW_Repo($repo_id);
-  $as_host = $repo->get_as_host_oaipmh();
+  $as_host = $repo->get_as_host();
 }
 catch (Exception $e) {
   $harvest_errors[] = $e->getMessage();

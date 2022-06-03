@@ -16,8 +16,7 @@ class AW_Repo {
   public $copy_info;
   public $visit_info;
   public $rights;
-  public $as_host_api;
-  public $as_host_oaipmh;
+  public $as_host;
   public $as_prefix;
   public $users;
   
@@ -41,8 +40,7 @@ class AW_Repo {
             $this->copy_info = $row['copy'];
             $this->visit_info = $row['visit'];
             $this->rights = $row['rights'];
-            $this->as_host_api = $row['as_host_api'];
-            $this->as_host_oaipmh = $row['as_host_oaipmh'];
+            $this->as_host = $row['as_host'];
             $this->as_prefix = $row['as_prefix'];
           }
         }
@@ -116,17 +114,13 @@ class AW_Repo {
     return $this->rights;
   }
   
-  function get_as_host_api() {
-    return $this->as_host_api;
-  }
-  
-  function get_as_host_oaipmh() {
-    return $this->as_host_oaipmh;
+  function get_as_host() {
+    return $this->as_host;
   }
   
   function get_oaipmh_prefix() {
-    if (!$this->as_prefix && $this->get_as_host_oaipmh()) {
-      $url = $this->get_as_host_oaipmh() . '/oai?verb=Identify';
+    if (!$this->as_prefix && $this->get_as_host()) {
+      $url = $this->get_as_host() . '/oai?verb=Identify';
       $response = get_as_oaipmh($url);
       if (isset($response->Identify->description->{'oai-identifier'})) {
         $identifier = $response->Identify->description->{'oai-identifier'};

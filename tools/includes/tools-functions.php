@@ -105,28 +105,6 @@ function build_ark_select($repo_id, $active = 1, $null_file = 0) {
   return $ark_select;
 }
 
-// Get a response from the ArchivesSpace REST API
-function get_as_response($url, $type, $as_session) {
-  $ch = curl_init();
-  curl_setopt($ch, CURLOPT_URL, $url);
-  curl_setopt($ch, CURLOPT_HTTPHEADER, array('X-ArchivesSpace-Session: ' . $as_session));
-  curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-  $raw_response = curl_exec($ch);
-  if ($raw_response === false) {
-    $response = curl_error($ch);
-  }
-  else {
-    if ($type == 'json') {
-      $response = json_decode($raw_response);
-    }
-    else {
-      $response = $raw_response;
-    }
-  }
-  curl_close($ch);
-  return $response;
-}
-
 // Get a response from the ArchivesSpace OAI-PMH interface
 // Returns SimpleXml object or exception
 function get_as_oaipmh($url) {

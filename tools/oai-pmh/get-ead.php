@@ -30,7 +30,7 @@ if (isset($argv[1]) && !empty($argv[1])) {
     
     // Get EAD from ArchivesSpace
     $repo = new AW_Repo($repo_id);
-    $host = $repo->get_as_host_oaipmh();
+    $host = $repo->get_as_host();
     $url = $host . '/oai?verb=GetRecord&metadataPrefix=oai_ead&identifier=' . $resource_id;
     try {
       $record_xml = get_as_oaipmh($url);
