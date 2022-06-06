@@ -20,18 +20,23 @@ $pages = array(
 foreach ($pages as $page) {
   $url = $xml->addChild('url');
   $url->addChild('loc', AW_DOMAIN . '/' . $page);
-  $url->addChild('lastmod', date("Y-m-d", filemtime($page)));
+  $url->addChild('lastmod', date("Y-m-d", filemtime(AW_HTML . '/' . $page)));
   $url->addChild('changefreq', 'yearly');
   $url->addChild('priority', '1.0');
 }
 
 // Finding aids
 if ($mysqli = connect()) {
-  $all_arks = $mysqli->query('SELECT ark, date FROM arks WHERE active=1 AND file<>""');
+  $all_arks = $mysqli->query('SELECT arks.ark, GREATEST(arks.date, COALESCE(max_updates.max_date, 0)) as last_date
+    FROM arks LEFT JOIN (
+      SELECT ark, MAX(date) as max_date FROM updates GROUP BY ark
+    ) as max_updates
+    ON arks.ark=max_updates.ark
+    WHERE arks.active=1 AND arks.file<>""');
   while ($ark_row = $all_arks->fetch_assoc()) {
     $url = $xml->addChild('url');
     $url->addChild('loc', AW_DOMAIN . '/ark:' . $ark_row['ark']);
-    $url->addChild('lastmod', date("Y-m-d", strtotime($ark_row['date'])));
+    $url->addChild('lastmod', date("Y-m-d", strtotime($ark_row['last_date'])));
     $url->addChild('priority', '0.5');
   }
 }
