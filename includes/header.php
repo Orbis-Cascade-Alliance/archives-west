@@ -8,4 +8,11 @@
     <link rel="stylesheet" href="<?php echo AW_DOMAIN; ?>/layout/print.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="<?php echo AW_DOMAIN; ?>/scripts/global.js"></script>
-    <script src="<?php echo AW_DOMAIN; ?>/scripts/analytics.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-82490564-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'UA-82490564-1');
+    </script>
