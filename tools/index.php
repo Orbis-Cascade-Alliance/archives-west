@@ -65,6 +65,7 @@ if ($maintenance_mode) {
       <li><a href="https://drive.google.com/file/d/1kNFMUjlvmhABIgDr7LEplU4Qitx0QjZv/view?usp=sharing" target="_blank">Alliance EAD Best Practices</a></li>
       <li><a href="https://www.orbiscascade.org/programs/ulc/archives-and-manuscripts-collections/ead/" target="_blank">Archives West Tutorials and Documentation</a></li>
       <li><a href="https://www.orbiscascade.org/programs/ulc/archives-and-manuscripts-collections/archivesspace/" target="_blank">ArchivesSpace Tutorials and Documentation</a></li>
+      <li><a href="https://docs.google.com/document/d/1jlZXNyNlmRuDBV8YknPkEV0Kyiyqd7r4V6ia2gKoQes/edit?usp=sharing" target="_blank">Identify XML Errors with Notepad++</a></li>
     </ul>
   </div>
   
