@@ -3384,7 +3384,7 @@ format (e.g., 1923/1996). See examples in Dates section of the
                                  <axsl:choose>
                                     <axsl:when test="@rules">
                                        <axsl:choose>
-                                          <axsl:when test="@rules='aacr2' "/>
+                                          <axsl:when test="@rules='aacr2' or @rules='rda'"/>
                                           <axsl:otherwise>
                                              <tr>
                                                 <td>archdesc origination persname or famname or corpname
@@ -3405,7 +3405,7 @@ format (e.g., 1923/1996). See examples in Dates section of the
                                                    <a class="appnotes-link" onclick="getAppNotes('app.d0e928')">View Comments/Application Notes</a>
 
 				 </td>
-                                                <td>'aacr2' 
+                                                <td>'aacr2', 'rda' 
 				 </td>
                                              </tr>
                                           </axsl:otherwise>
@@ -3430,7 +3430,7 @@ format (e.g., 1923/1996). See examples in Dates section of the
                                              <a class="appnotes-link" onclick="getAppNotes('app.d0e928')">View Comments/Application Notes</a>
 
 				 </td>
-                                          <td>'aacr2' 
+                                          <td>'aacr2', 'rda'
 				 </td>
                                        </tr>
                                     </axsl:otherwise>
