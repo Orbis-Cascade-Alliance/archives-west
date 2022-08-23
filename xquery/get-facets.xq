@@ -9,7 +9,7 @@ let $names := tokenize($n, '\|')
 for $name in $names
   let $facet_db := 'facet-' || $name || '-prod'
   let $sorted_terms := <terms>{
-    for $term in db:open($facet_db)/terms/term[ark/text()=$arks]
+    for $term in db:get($facet_db)/terms/term[ark/text()=$arks]
       group by $text := $term/@text
       let $count := count($term/ark[text()=$arks])
       order by $count descending

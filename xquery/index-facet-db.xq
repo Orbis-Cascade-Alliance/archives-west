@@ -8,7 +8,7 @@ let $add_terms := %updating function($types) {
     let $facet_db := 'facet-' || substring-before($type, ':')
     let $local_names := tokenize(substring-after($type, ':'), ',')
     let $result := <terms db="{$d}">{
-      for $terms in db:open('eads' || $d)//controlaccess/*[local-name()=$local_names]
+      for $terms in db:get('eads' || $d)//controlaccess/*[local-name()=$local_names]
         let $text := normalize-space(translate($terms, '&#160;', ' '))
         group by $text
           where not($text="")

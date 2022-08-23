@@ -7,7 +7,7 @@ declare variable $s as xs:string external;
 let $arks := tokenize($a, '\|')
 return <results>{
   for $db_id in tokenize($d, '\|')
-    for $ead in db:open('index-brief-prod')/eads[@db=$db_id]/ead
+    for $ead in db:get('index-brief-prod')/eads[@db=$db_id]/ead
       let $ark := string($ead/@ark)
       let $title := string($ead/title)
       let $aw_date := string($ead/date)

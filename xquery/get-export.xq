@@ -6,7 +6,7 @@ declare variable $d as xs:string external;
 declare variable $a as xs:string external;
 let $db := 'eads' || $d
 return <eads>{
-  for $ead in db:open($db)/ead
+  for $ead in db:get($db)/ead
     let $ark := aw:get_ark($ead)
     where $a="" or $ark=$a
       let $title := aw:get_title($ead)

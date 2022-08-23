@@ -6,7 +6,7 @@ let $delete_from_text := %updating function($db_arks) {
   for $db_ark in $db_arks
     let $db_id := substring-before($db_ark, ':')
     let $ark := substring-after($db_ark, ':')
-    return delete node db:open('text' || $db_id)/eads/ead[@ark=$ark]
+    return delete node db:get('text' || $db_id)/eads/ead[@ark=$ark]
 }
 return updating $delete_from_text($db_arks), 
 

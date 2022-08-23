@@ -11,7 +11,7 @@ let $add_to_text := %updating function($db_files, $stopwords) {
     let $file := substring-after($db_file, ':')
     let $ead := doc('eads' || $db_id || '/' || $file)/ead 
     let $ark := aw:get_ark($ead)
-    where not(db:open('text' || $db_id)/eads/ead[@ark=$ark])
+    where not(db:get('text' || $db_id)/eads/ead[@ark=$ark])
       let $title := aw:remove_stopwords(ft:tokenize(aw:get_title($ead)), $stopwords)
       let $aw_date := aw:get_aw_date($ead)
       let $tokens := aw:remove_stopwords(ft:tokenize(string-join($ead//text(), ' ')), $stopwords)
@@ -20,7 +20,7 @@ let $add_to_text := %updating function($db_files, $stopwords) {
         <date>{$aw_date}"</date>
         <tokens>{$tokens}</tokens>
       </ead>
-     return insert node $result as last into db:open('text' || $db_id)/eads
+     return insert node $result as last into db:get('text' || $db_id)/eads
   }
 return updating $add_to_text($db_files, $stopwords), 
 

@@ -7,7 +7,7 @@ let $arks := tokenize($a, '\|')
 return <records>{
   for $db_id in $db_ids
     let $db := 'eads' || $db_id
-    for $ead in db:open($db)/ead[eadheader/eadid/@identifier=$arks]
+    for $ead in db:get($db)/ead[eadheader/eadid/@identifier=$arks]
       let $ark := aw:get_ark($ead)
       let $title := aw:get_title($ead)
       let $date := aw:get_date($ead)

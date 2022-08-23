@@ -4,7 +4,7 @@ declare variable $f as xs:string external;
 declare function local:get_arks($facet as xs:string, $db_ids as item()+) as item()* {
   let $type := substring-before($facet, ':')
   let $term := substring-after($facet, ':')
-  return db:open('facet-' || $type || '-prod')/terms[@db=$db_ids]/term[@text=$term]/ark
+  return db:get('facet-' || $type || '-prod')/terms[@db=$db_ids]/term[@text=$term]/ark
 };
 let $db_ids := tokenize($d, '\|')
 let $facets := tokenize($f, '\|')
