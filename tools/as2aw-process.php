@@ -352,7 +352,7 @@ if (isset($_FILES['ead']['tmp_name']) && !empty($_FILES['ead']['tmp_name'])) {
                 $type = 'subject-aw';
               }
             }
-            $heading->nodeValue = str_replace(' -- ', '--', $heading->nodeValue);
+            $heading->nodeValue = str_replace(' -- ', '--', htmlentities($heading->nodeValue));
             $headings_by_type[$type][] = $heading;
           }
           foreach (array('persname', 'corpname', 'famname', 'geogname', 'subject', 'subject-aw', 'function', 'genreform', 'occupation', 'title') as $type) {
