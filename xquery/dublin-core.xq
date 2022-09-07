@@ -11,7 +11,7 @@ return <records>{
       let $ark := aw:get_ark($ead)
       let $title := aw:get_title($ead)
       let $date := aw:get_date($ead)
-      let $creators := $ead/archdesc/did/origination/persname/text()
+      let $creators := $ead/archdesc/did/origination/*/text()
       let $subjects := $ead/archdesc/controlaccess/controlaccess/subject[@source="lcsh"]/text()
       let $languages := $ead/archdesc/did/langmaterial/language/text()
       let $abstract := aw:get_abstract($ead)
