@@ -66,7 +66,7 @@ class AW_Search {
   function decode_query() {
     $query = $this->query;
     $to_replace = array('&#34;', '&#39;');
-    $replacements = array('"', '');
+    $replacements = array('"', ' ');
     return str_replace($to_replace, $replacements, $query);
   }
   
