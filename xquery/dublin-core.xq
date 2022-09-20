@@ -11,7 +11,7 @@ return <records>{
       let $ark := aw:get_ark($ead)
       let $title := aw:get_title($ead)
       let $date := aw:get_date($ead)
-      let $creator := aw:concat_children($ead/archdesc/did/origination, '; ')
+      let $creators := $ead/archdesc/did/origination/*/text()
       let $subjects := $ead/archdesc/controlaccess/controlaccess/subject[@source="lcsh"]/text()
       let $languages := $ead/archdesc/did/langmaterial/language/text()
       let $abstract := aw:get_abstract($ead)
@@ -22,7 +22,10 @@ return <records>{
         <ark>{$ark}</ark>
         <title>{$title}</title>
         <date>{$date}</date>
-        <creator>{$creator}</creator>
+        <creators>{
+          for $creator in $creators
+            return <creator>{normalize-space($creator)}</creator>
+        }</creators>
         <subjects>{
           for $subject in $subjects
             return <subject>{normalize-space($subject)}</subject>

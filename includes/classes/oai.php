@@ -459,7 +459,7 @@ class AW_OAI {
       $dc->setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
       $dc->setAttributeNS('http://www.w3.org/2001/XMLSchema-instance', 'xsi:schemaLocation', 'http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd');
       
-      // Get title, creator, subjects, languages, description, date, and identifier from XQuery
+      // Get title, creators, subjects, languages, description, date, and identifier from XQuery
       $dc_record = $dc_records[$ark];
       $repo_id = $dc_record['repo_id'];
       $repo_name = $this->all_repos[$repo_id]['name'];
@@ -470,7 +470,6 @@ class AW_OAI {
       // Single elements
       $map = array(
         'title' => 'dc:title',
-        'creator' => 'dc:creator',
         'abstract' => 'dc:description',
         'extent' => 'dc:format',
         'date' => 'dc:date'
@@ -482,6 +481,7 @@ class AW_OAI {
       }
       // Repeating elements
       $map2 = array(
+        'creators' => 'dc:creator',
         'languages' => 'dc:language',
         'subjects' => 'dc:subject'
       );
@@ -520,6 +520,10 @@ class AW_OAI {
         $result_xml = simplexml_load_string($result_string);
         foreach ($result_xml->children() as $record) {
           $ark = (string) $record->ark;
+          $creators = array();
+          foreach($record->creators->creator as $creator) {
+            $creators[] = $creator;
+          }
           $languages = array();
           foreach ($record->languages->language as $language) {
             $languages[] = $language;
@@ -532,7 +536,7 @@ class AW_OAI {
             'repo_id' => (string) $record->db,
             'title' => (string) $record->title,
             'date' => (string) $record->date,
-            'creator' => (string) $record->creator,
+            'creators' => $creators,
             'subjects' => $subjects,
             'languages' => $languages,
             'abstract' => (string) $record->abstract,
