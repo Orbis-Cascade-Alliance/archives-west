@@ -387,7 +387,7 @@ function convert_file($file_contents, $mainagencycode) {
               $type = 'subject-aw';
             }
           }
-          $heading->nodeValue = str_replace(' -- ', '--', $heading->nodeValue);
+          $heading->nodeValue = str_replace(' -- ', '--', htmlentities($heading->nodeValue));
           $headings_by_type[$type][] = $heading;
         }
         foreach (array('persname', 'corpname', 'famname', 'geogname', 'subject', 'subject-aw', 'function', 'genreform', 'occupation', 'title') as $type) {
