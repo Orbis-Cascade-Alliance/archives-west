@@ -283,6 +283,11 @@ if (isset($_FILES['ead']['tmp_name']) && !empty($_FILES['ead']['tmp_name'])) {
           $profiledesc->appendChild($new_langusage);
           $profiledesc->appendChild($profiledesc->getElementsByTagName('descrules')->item(0));
         }
+        else if ($language = $xpath->query('//eadheader/profiledesc/langusage/language[not(@encodinganalog)]')->item(0)) {
+          $language_attribute = $ead->createAttribute('encodinganalog');
+          $language_attribute->value = 'language';
+          $language->appendChild($language_attribute);
+        }
         
         // Descrules: Change old notice to new notice
         $descrules = $xpath->query('//descrules')->item(0);
