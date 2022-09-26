@@ -111,7 +111,7 @@ class AW_Session {
   
   // Get stopwords as a string separated by bars
   function get_stopwords() {
-    $file = BASEX_INSTALL . '/etc/stopwords.txt';
+    $file = AW_INCLUDES . '/stopwords.txt';
     $contents = file_get_contents($file, true);
     return preg_replace('/\s/', '|', $contents);
   }
