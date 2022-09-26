@@ -87,7 +87,7 @@ class AW_Search {
     
     // Remove stopwords
     $filtered_query = $decoded_query;
-    if ($fh = fopen(BASEX_INSTALL . '/etc/stopwords.txt', 'r')) {
+    if ($fh = fopen(AW_INCLUDES . '/stopwords.txt', 'r')) {
       
       // Separate query into terms
       // Retains phrases in double quotes
