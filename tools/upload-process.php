@@ -24,7 +24,9 @@ if (isset($_POST['replace']) && $_POST['replace'] == 1) {
 // Upload file 
 if (isset($_FILES['ead']) && !empty($_FILES['ead'])) {
   $file_contents = file_get_contents($_FILES['ead']['tmp_name']);
-  $file_name = strtolower(basename($_FILES['ead']['name']));
+  $to_replace = array(' ');
+  $replacements = array('_');
+  $file_name = str_replace($to_replace, $replacements, strtolower(basename($_FILES['ead']['name'])));
   $upload_result = upload_file($file_contents, $file_name, $ark, $replace, $user->get_id());
   $_SESSION['upload_file'] = $file_name;
   $_SESSION['upload_errors'] = $upload_result['errors'];
