@@ -62,11 +62,11 @@ class AW_Search {
   }
   
   // Decode query for searching
-  // Removes single quotes entirely
+  // Removes single quotes and hyphens entirely
   function decode_query() {
     $query = $this->query;
-    $to_replace = array('&#34;', '&#39;');
-    $replacements = array('"', ' ');
+    $to_replace = array('&#34;', '&#39;', '-');
+    $replacements = array('"', ' ', ' ');
     return str_replace($to_replace, $replacements, $query);
   }
   
