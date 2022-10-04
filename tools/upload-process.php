@@ -35,7 +35,9 @@ if ($ark) {
     
     // Build file path
     $repo_path = AW_REPOS . '/' . $repo->get_folder() . '/eads';
-    $file_name = strtolower(basename($_FILES['ead']['name']));
+    $to_replace = array(' ');
+    $replacements = array('_');
+    $file_name = str_replace($to_replace, $replacements, strtolower(basename($_FILES['ead']['name'])));
     $file_path = $repo_path . '/' . $file_name;
     
     // If file with the same name exists, check if it's for the current ARK or a different one
