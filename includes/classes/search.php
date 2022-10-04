@@ -62,12 +62,16 @@ class AW_Search {
   }
   
   // Decode query for searching
-  // Removes single quotes and hyphens entirely
   function decode_query() {
     $query = $this->query;
-    $to_replace = array('&#34;', '&#39;', '-');
-    $replacements = array('"', ' ', ' ');
-    return str_replace($to_replace, $replacements, $query);
+    
+    // Quotes
+    $to_replace = array('&#34;', '&#39;');
+    $replacements = array('"', ' ');
+    $query = str_replace($to_replace, $replacements, $query);
+    
+    // Hyphens
+    return preg_replace('/(\S+)\-(\S+)/', '"\1 \2"', $query);
   }
   
   // Get the filtered version of the query submitted to BaseX
