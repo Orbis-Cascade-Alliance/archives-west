@@ -199,14 +199,17 @@ class AW_Search {
       // Get results from BaseX
       $time_start = time();
       $results = array();
+      $query = null;
       $session = new AW_Session();
-      if ($filtered_query) {
-        $query = $session->get_query('search-fulltext.xq');
-        $query->bind('q', $filtered_query);
-        $query->bind('d', $repo_string);
-        $query->bind('a', $ark_string);
-        $query->bind('s', $this->get_sort());
-        $query->bind('f', $fuzzy);
+      if ($this->get_query()) {
+        if ($filtered_query) {
+          $query = $session->get_query('search-fulltext.xq');
+          $query->bind('q', $filtered_query);
+          $query->bind('d', $repo_string);
+          $query->bind('a', $ark_string);
+          $query->bind('s', $this->get_sort());
+          $query->bind('f', $fuzzy);
+        }
       }
       else {
         $query = $session->get_query('search-repo.xq');
@@ -214,16 +217,18 @@ class AW_Search {
         $query->bind('a', $ark_string);
         $query->bind('s', $this->get_sort());
       }
-      $result_string = $query->execute();
-      $query->close();
-      $session->close();
-      if ($result_string) {
-        $time_stop = time();
-        $this->time = $time_stop - $time_start;
-        $results = $this->regex_arks($result_string);
-      }
-      else {
-        throw new Exception('An error occurred in full-text searching.');
+      if ($query) {
+        $result_string = $query->execute();
+        $query->close();
+        $session->close();
+        if ($result_string) {
+          $time_stop = time();
+          $this->time = $time_stop - $time_start;
+          $results = $this->regex_arks($result_string);
+        }
+        else {
+          throw new Exception('An error occurred in full-text searching.');
+        }
       }
       $this->results = $results;
     }
