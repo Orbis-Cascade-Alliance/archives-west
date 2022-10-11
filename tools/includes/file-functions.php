@@ -595,6 +595,11 @@ function upload_file($file_contents, $file_name, $ark, $replace, $user_id) {
     $repo = $current_finding_aid->get_repo();
     $repo_id = $repo->get_id();
     
+    // Modify file name
+    $to_replace = array(' ');
+    $replacements = array('_');
+    $file_name = str_replace($to_replace, $replacements, strtolower($file_name));
+    
     // Build file path
     $repo_path = AW_REPOS . '/' . $repo->get_folder() . '/eads';
     $file_path = $repo_path . '/' . $file_name;
