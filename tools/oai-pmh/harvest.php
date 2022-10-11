@@ -1,6 +1,6 @@
 <?php
 // Include definitions
-$page_title = 'ArchivesSpace Harvester (OAI-PMH)';
+$page_title = 'ArchivesSpace Harvester';
 require_once(getenv('AW_HOME') . '/defs.php');
 include(AW_INCLUDES . '/server-header.php');
 include(AW_TOOL_INCLUDES . '/tools-header.php');
