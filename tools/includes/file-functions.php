@@ -609,7 +609,7 @@ function upload_file($file_contents, $file_name, $ark, $replace, $user_id) {
     if (file_exists($file_path)) {
       $associated_ark = '';
       if ($mysqli = connect()) {
-        $ark_result = $mysqli->query('SELECT ark FROM arks WHERE file="' . $file_name . '"');
+        $ark_result = $mysqli->query('SELECT ark FROM arks WHERE file="' . $file_name . '" AND repo_id=' . $repo_id . ' AND active=1');
         if ($ark_result->num_rows == 1) {
           while ($ark_row = $ark_result->fetch_row()) {
             $associated_ark = $ark_row[0];
