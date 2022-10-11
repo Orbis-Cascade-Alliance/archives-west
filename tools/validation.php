@@ -18,7 +18,7 @@ if ($repo_id != 0) {
   // Print error and confirmation messages
   if (isset($_SESSION['validation_file']) && !empty($_SESSION['validation_file'])) {
     if (isset($_SESSION['validation_errors']) && !empty($_SESSION['validation_errors'])) {
-      echo print_errors('validation_errors');
+      echo print_errors($_SESSION['validation_errors']);
     }
     else {
       echo '<p class="success">' . $_SESSION['validation_file'] . ' for ARK ' . $_SESSION['validation_ark'] . ' is valid!</p>';

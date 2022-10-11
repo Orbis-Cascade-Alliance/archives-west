@@ -18,7 +18,7 @@ if ($user->is_admin()) {
 if ($repo_id != 0) {
   if (isset($_SESSION['preview_html']) && !empty($_SESSION['preview_html'])) {
     if (isset($_SESSION['preview_errors']) && !empty($_SESSION['preview_errors'])) {
-      echo print_errors('preview_errors');
+      echo print_errors($_SESSION['preview_errors']);
     }
     else {
       echo '<div id="preview">' . $_SESSION['preview_html'] . '</div>';

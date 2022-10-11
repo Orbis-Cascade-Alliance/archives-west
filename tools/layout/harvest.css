@@ -1,0 +1,13 @@
+label {
+  display: block;
+  font-weight: bold;
+}
+
+label.inline {
+  display: inline;
+  font-weight: normal;
+}
+
+#form-harvest-single input[type="text"] {
+  width: 95%; 
+}

@@ -25,7 +25,7 @@ if ($repo_id != 0) {
   // Print error and confirmation messages
   if (isset($_SESSION['restoration_ark']) && !empty($_SESSION['restoration_ark'])) {
     if (isset($_SESSION['restoration_errors']) && !empty($_SESSION['restoration_errors'])) {
-      echo print_errors('restoration_errors');
+      echo print_errors($_SESSION['restoration_errors']);
     }
     else {
       echo '<p class="success">' . $_SESSION['restoration_ark'] . ' successfully restored.</p>';

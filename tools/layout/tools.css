@@ -168,3 +168,45 @@ form.table-layout input[type="checkbox"] {
   background-repeat: no-repeat;
   height: 120px;
 }
+
+/* Tabs */
+
+.tabs {
+  display: block;
+  padding-left: 0;
+  margin: 0;
+}
+
+.tabs li {
+  display: inline-block;
+  margin-right: .5rem;
+  border-top-left-radius: .25rem;
+  border-top-right-radius: .25rem;
+  border: 1px solid #aaaaaa;
+  background: #dddddd;
+}
+
+.tabs li.active {
+  background: #f9f9f9;
+  border-bottom: 1px solid #f9f9f9;
+}
+
+.tabs li a {
+  display: block;
+  padding: .5rem;
+  color: #333333;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.tabs li.active a {
+  pointer-events: none;
+  cursor: default;
+}
+
+.tab-contents {
+  background: #f9f9f9;
+  border: 1px solid #aaaaaa;
+  margin-top: -1px;
+  padding: 1rem;
+}

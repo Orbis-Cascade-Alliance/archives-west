@@ -1,0 +1,15 @@
+#progress div {
+  background-repeat: no-repeat;
+  background-position: left top;
+  background-size: 32px;
+  min-height: 32px;
+  padding-left: 40px;
+}
+
+#progress .active {
+  background-image: url('../../layout/images/loading-small.gif');
+}
+
+#progress .finished {
+  background-image: url('../../layout/images/checkmark.png');
+}

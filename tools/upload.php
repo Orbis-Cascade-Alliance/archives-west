@@ -48,7 +48,7 @@ if ($repo_id != 0) {
     echo '<h2>Upload document for ARK ' . $ark . '</h2>';
     if (isset($_SESSION['upload_file']) && $_SESSION['upload_file'] !== null) {
       if (isset($_SESSION['upload_errors']) && !empty($_SESSION['upload_errors'])) {
-        echo print_errors('upload_errors');
+        echo print_errors($_SESSION['upload_errors']);
       }
       else {
         //$now = time();

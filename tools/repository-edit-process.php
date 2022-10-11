@@ -24,8 +24,7 @@ $collection = $repo->get_collection_info();
 $copy = $repo->get_copy_info();
 $visit = $repo->get_visit_info();
 $rights = $repo->get_rights();
-$as_host_api = $repo->get_as_host_api();
-$as_host_oaipmh = $repo->get_as_host_oaipmh();
+$as_host = $repo->get_as_host();
 if (isset($_POST['name']) && !empty($_POST['name'])) {
   $name = htmlspecialchars(filter_var($_POST['name'], FILTER_SANITIZE_STRING));
   $name = str_replace('&amp;#39;', '\'', $name);
@@ -60,18 +59,15 @@ if (isset($_POST['rights']) && !empty($_POST['rights'])) {
     $rights = $_POST['rights'];
   }
 }
-if (isset($_POST['as_host_api'])) {
-  $as_host_api = filter_var($_POST['as_host_api'], FILTER_SANITIZE_URL);
-}
-if (isset($_POST['as_host_oaipmh'])) {
-  $as_host_oaipmh = filter_var($_POST['as_host_oaipmh'], FILTER_SANITIZE_URL);
+if (isset($_POST['as_host'])) {
+  $as_host = filter_var($_POST['as_host'], FILTER_SANITIZE_URL);
 }
 
 if ($mysqli = connect()) {
   // Update repos table
   $serialized_address = $mysqli->real_escape_string(serialize($address_array));
-  $update_stmt = $mysqli->prepare('UPDATE repos SET name=?, email=?, url=?, phone=?, fax=?, address=?, collection=?, copy=?, visit=?, rights=?, as_host_api=?, as_host_oaipmh=? WHERE id=?');
-  $update_stmt->bind_param('ssssssssssssi', $name, $email, $url, $phone, $fax, $serialized_address, $collection, $copy, $visit, $rights, $as_host_api, $as_host_oaipmh, $repo_id);
+  $update_stmt = $mysqli->prepare('UPDATE repos SET name=?, email=?, url=?, phone=?, fax=?, address=?, collection=?, copy=?, visit=?, rights=?, as_host=? WHERE id=?');
+  $update_stmt->bind_param('ssssssssssi', $name, $email, $url, $phone, $fax, $serialized_address, $collection, $copy, $visit, $rights, $as_host, $repo_id);
   $update_stmt->execute();
   if ($mysqli->error) {
     $errors[] = $mysqli->error;

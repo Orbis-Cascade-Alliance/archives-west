@@ -56,7 +56,7 @@ if ($repo_id != 0) {
   // Print error and confirmation messages
   if (isset($_SESSION['repo_edit_attempted']) && $_SESSION['repo_edit_attempted'] == true) {
     if (isset($_SESSION['repo_edit_errors']) && !empty($_SESSION['repo_edit_errors'])) {
-      echo print_errors('repo_edit_errors');
+      echo print_errors($_SESSION['repo_edit_errors']);
     }
     else {
       echo '<p class="success">Changes saved. See the <a href="' . AW_DOMAIN . '/contact.php#' . $repo->get_mainagencycode() . '" target="_blank">Contact page</a>.</p>';
@@ -78,8 +78,7 @@ if ($repo_id != 0) {
   echo print_field('textarea', 'copy', 'Copy Information', $repo->get_copy_info());
   echo print_field('textarea', 'visit', 'Visitation Information', $repo->get_visit_info());
   echo print_field('rights', 'rights', 'Rights Statement', $repo->get_rights());
-  //echo print_field('text', 'as_host_api', 'ArchivesSpace Host for API', $repo->get_as_host_api());
-  //echo print_field('text', 'as_host_oaipmh', 'ArchivesSpace Host for OAI-PMH', $repo->get_as_host_oaipmh());
+  echo print_field('text', 'as_host', 'ArchivesSpace Host for OAI-PMH', $repo->get_as_host());
   ?>
   <p><input type="submit" value="Save Changes" /></p>
 </form>

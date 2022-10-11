@@ -32,7 +32,7 @@ if ($repo_id != 0) {?>
   <?php
   if (isset($_SESSION['converted_ead']) && $_SESSION['converted_ead'] !== null) {
     if (isset($_SESSION['conversion_errors']) && !empty($_SESSION['conversion_errors'])) {
-      echo print_errors('conversion_errors');
+      echo print_errors($_SESSION['conversion_errors']);
     }
     else {
   ?>

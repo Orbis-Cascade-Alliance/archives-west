@@ -1,6 +1,13 @@
 var formData = new FormData();
 
 $(document).ready(function(){
+  // jQuery UI Dialogs
+  $('#dialog-error').dialog({
+    autoOpen: false,
+    width: 500
+  });
+  
+  // Dropzone behavior
   $('.dropzone').on({
     dragover: function(e) {
       e.stopPropagation();
@@ -24,27 +31,38 @@ $(document).ready(function(){
     }
   });
   
+  // Browse upload alternative
   $('#manual').change(function(e) {
     append_to_formdata(e.target.files);
     update_dropzone();
     $(this).val('');
   });
   
+  // Form submission
   $('#form-files').submit(function(e) {
     e.preventDefault();
-    $('#report').html('<p>Processing...</p>');
-    $.ajax({
-      url: 'batch-process.php',
-      type: 'post',
-      processData: false,
-      contentType: false,
-      data: formData,
-      success: function(data) {
-        $('#report').html(data);
-        formData.delete('file[]');
-        update_dropzone();
-      }
-    });
+    if (validate_files() === true) {
+      $('#report').html('Processing...');
+      $('.loading').show();
+      $('#form-files').hide();
+      $.ajax({
+        url: 'batch-process.php',
+        type: 'post',
+        processData: false,
+        contentType: false,
+        data: formData,
+        success: function(data) {
+          $('.loading').hide();
+          $('#report').html(data);
+          formData.delete('file[]');
+          update_dropzone();
+          $('#form-files').show();
+        }
+      });
+    }
+    else {
+      $('#dialog-error').dialog('open');
+    }
     return false;
   });
 });
@@ -79,13 +97,24 @@ function remove_file(index) {
   update_dropzone();
 }
 
-function toggle_cr(index) {
-  if ($('#cr' + index).is(':visible')) {
-    $('#cr' + index).hide();
-    $('#btn-cr' + index).text('View Report');
+function toggle_cr(btn) {
+  var p = $(btn).parent('p');
+  var report = p.next('.compliance-report');
+  if ($(report).is(':visible')) {
+    $(report).hide();
+    $(btn).text('View Report');
   }
   else {
-    $('#cr' + index).show();
-    $('#btn-cr' + index).text('Hide Report');
+    $(report).show();
+    $(btn).text('Hide Report');
+  }
+}
+
+function validate_files() {
+  if (formData.getAll('file[]').length > max_files) {
+    return false;
+  }
+  else {
+    return true;
   }
 }

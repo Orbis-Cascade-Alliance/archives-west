@@ -45,16 +45,16 @@ class AW_Finding_Aid {
           }
         }
         else {
-          throw new Exception('ARK ' . $ark . ' not found.');
+          throw new Exception('ARK ' . $ark . ' not found');
         }
       }
       else {
-        throw new Exception('Error in MySQL query.');
+        throw new Exception('Error in MySQL query');
       }
       $mysqli->close();
     }
     else {
-      throw new Exception('MySQL connection failed.');
+      throw new Exception('MySQL connection failed');
     }
     $this->qualifier = substr($ark, 6);
     $this->cache_path = AW_REPOS . '/' . $this->get_repo()->get_folder() . '/cache/' . $this->get_qualifier() . '.html';
@@ -199,15 +199,15 @@ class AW_Finding_Aid {
             $this->transformed = $stripped_transformed;
           }
           else {
-            throw new Exception('Transformation of ' . $filepath . ' is empty.');
+            throw new Exception('Transformation of ' . $filepath . ' is empty');
           }
         }
         else {
-          throw new Exception('File ' . $filepath . ' does not exist.');
+          throw new Exception('File ' . $filepath . ' does not exist');
         }
       }
       else {
-        throw new Exception('File is not set for this ARK.');
+        throw new Exception('File is not set for this ARK');
       }
     }
     return $this->transformed;

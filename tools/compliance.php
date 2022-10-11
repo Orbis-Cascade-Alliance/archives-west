@@ -28,7 +28,7 @@ include(AW_TOOL_INCLUDES . '/tools-header-end.php');
 // Print error and confirmation messages
 if (isset($_SESSION['compliance_report']) && !empty($_SESSION['compliance_report'])) {
   if (isset($_SESSION['compliance_errors']) && !empty($_SESSION['compliance_errors'])) {
-    echo print_errors('compliance_errors');
+    echo print_errors($_SESSION['compliance_errors']);
   }
   echo '<frame>' . $_SESSION['compliance_report'] . '</frame>';
   $_SESSION['compliance_report'] = '';
