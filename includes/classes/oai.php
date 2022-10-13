@@ -11,6 +11,7 @@ class AW_OAI {
   public $until;
   public $resumption_token;
   private $arks;
+  private $finding_aids;
   private $dc_records;
   private $finding_aid;
   private $repo;
@@ -32,6 +33,7 @@ class AW_OAI {
       $this->set = null;
     }
     $this->ark = null;
+    $this->finding_aid = null;
     $this->from = null;
     $this->until = null;
     $this->resumption_token = null;
@@ -266,11 +268,11 @@ class AW_OAI {
   
   function set_ark($ark) {
     $this->ark = $ark;
-    try {
-      $finding_aid = new AW_Finding_Aid($ark);
-      $this->finding_aid = $finding_aid;
+    $finding_aids = $this->get_finding_aids();
+    if (isset($finding_aids[$ark])) {
+      $this->finding_aid = $finding_aids[$ark];
     }
-    catch (Exception $e) {
+    else {
       if ($this->get_verb() == 'GetRecord') {
         $this->write_error('idDoesNotExist');
       }
@@ -383,6 +385,31 @@ class AW_OAI {
     return $this->arks;
   }
   
+  // Return finding aid information for all arks in one query
+  function get_finding_aids() {
+    if (!isset($this->finding_aids)) {
+      $finding_aids = array();
+      if ($arks = $this->get_arks()) {
+        if ($mysqli = connect()) {
+          $finding_aid_query = 'SELECT arks.ark, arks.active, GREATEST(arks.date, COALESCE(max_updates.max_date, 0)) as last_date, repos.mainagencycode
+            FROM (arks LEFT JOIN (SELECT ark, MAX(date) as max_date FROM updates GROUP BY ark) as max_updates ON arks.ark=max_updates.ark) LEFT JOIN repos ON arks.repo_id=repos.id
+            WHERE arks.ark IN ("' . implode('","', $arks) . '")';
+          $results = $mysqli->query($finding_aid_query);
+          while ($row = $results->fetch_assoc()) {
+            $finding_aids[$row['ark']] = array(
+              'last_date' => $row['last_date'],
+              'active' => $row['active'],
+              'mainagencycode' => $row['mainagencycode']
+            );
+          }
+          $mysqli->close();
+        }
+      }
+      $this->finding_aids = $finding_aids;
+    }
+    return $this->finding_aids;
+  }
+  
   // Return the root DOM element for the document, regardless of verb
   function get_dom() {
     if (!isset($this->dom)) {
@@ -437,10 +464,10 @@ class AW_OAI {
     $finding_aid = $this->get_finding_aid();
     $header = $xml->createElement('header');
     $header->appendChild($xml->createElement('identifier', $ark));
-    $header->appendChild($xml->createElement('datestamp', date('Y-m-d', strtotime($finding_aid->get_last_date()))));
-    $header->appendChild($xml->createElement('setSpec', $finding_aid->get_repo()->get_mainagencycode()));
+    $header->appendChild($xml->createElement('datestamp', date('Y-m-d', strtotime($finding_aid['last_date']))));
+    $header->appendChild($xml->createElement('setSpec', $finding_aid['mainagencycode']));
     // Add deleted status
-    if (!$finding_aid->is_active()) {
+    if ($finding_aid['active'] == 0) {
       $status = $xml->createAttribute('status');
       $status->value = 'deleted';
       $header->appendChild($status);
