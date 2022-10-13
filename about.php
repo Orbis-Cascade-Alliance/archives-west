@@ -13,7 +13,7 @@ include(AW_INCLUDES . '/header.php');
 
 <h1>About Us</h1>
 
-<p>This site, which was previously known as Northwest Digital Archives, offers descriptions of archival and manuscript materials held by institutions in Washington, Oregon, Idaho, Alaska, Montana, and Utah. This means that if an institution has a collection&mdash;whether it's digitized or not&mdash;and has created a description of it, you can find out that they have it and use the available options for getting materials.</p>
+<p>Archives West offers descriptions of archival and manuscript materials held by participating institutions in the Pacific Northwest and Mountain West. Researchers and the general public can search over 40,000 finding aids to locate collections, then contact repositories directly to access materials.</p>
 
 <p>Similar sites with information about archival collections in the West include:</p>
 <ul>
