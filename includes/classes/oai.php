@@ -472,7 +472,8 @@ class AW_OAI {
         'title' => 'dc:title',
         'abstract' => 'dc:description',
         'extent' => 'dc:format',
-        'date' => 'dc:date'
+        'date' => 'dc:date',
+        'rights' => 'dc:rights'
       );
       foreach ($map as $key => $name) {
         if ($encoded_value = htmlspecialchars($dc_record[$key])) {
@@ -540,7 +541,8 @@ class AW_OAI {
             'subjects' => $subjects,
             'languages' => $languages,
             'abstract' => (string) $record->abstract,
-            'extent' => (string) $record->extent
+            'extent' => (string) $record->extent,
+            'rights' => (string) $record->rights
           );
         }
       }
