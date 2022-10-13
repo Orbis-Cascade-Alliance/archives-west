@@ -37,6 +37,12 @@ declare function aw:get_abstract($ead as node()*) as xs:string {
   return $abstract
 };
 
+declare function aw:get_rights($ead as node()*) as xs:string {
+  let $accessrestrict := aw:concat_children($ead/archdesc/accessrestrict, ' ')
+  let $userestrict := aw:concat_children($ead/archdesc/userestrict, ' ')
+  return normalize-space(string-join(($accessrestrict, $userestrict), ' '))
+};
+
 declare function aw:remove_stopwords($tokens as xs:string*, $stopwords as xs:string+)  {  
   string-join($tokens[not(. = $stopwords)], ' ')
 };  

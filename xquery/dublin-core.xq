@@ -16,6 +16,7 @@ return <records>{
       let $languages := $ead/archdesc/did/langmaterial/language/text()
       let $abstract := aw:get_abstract($ead)
       let $extent := aw:concat_children($ead/archdesc/did/physdesc/extent, '; ')
+      let $rights := aw:get_rights($ead)
       return
       <record>
         <db>{$db_id}</db>
@@ -36,5 +37,6 @@ return <records>{
         }</languages>
         <abstract>{$abstract}</abstract>
         <extent>{$extent}</extent>
+        <rights>{$rights}</rights>
       </record>
 }</records>
