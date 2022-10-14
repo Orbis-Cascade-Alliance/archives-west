@@ -6,6 +6,8 @@ if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }
 
+$errors = array();
+
 // Get user from session
 $user = get_session_user();
 
@@ -67,7 +69,7 @@ if ($mysqli = connect()) {
   // Update repos table
   $serialized_address = $mysqli->real_escape_string(serialize($address_array));
   $update_stmt = $mysqli->prepare('UPDATE repos SET name=?, email=?, url=?, phone=?, fax=?, address=?, collection=?, copy=?, visit=?, rights=?, as_host=? WHERE id=?');
-  $update_stmt->bind_param('ssssssssssi', $name, $email, $url, $phone, $fax, $serialized_address, $collection, $copy, $visit, $rights, $as_host, $repo_id);
+  $update_stmt->bind_param('sssssssssssi', $name, $email, $url, $phone, $fax, $serialized_address, $collection, $copy, $visit, $rights, $as_host, $repo_id);
   $update_stmt->execute();
   if ($mysqli->error) {
     $errors[] = $mysqli->error;
