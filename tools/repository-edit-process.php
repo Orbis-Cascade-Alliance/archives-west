@@ -63,6 +63,9 @@ if (isset($_POST['rights']) && !empty($_POST['rights'])) {
 }
 if (isset($_POST['as_host'])) {
   $as_host = filter_var($_POST['as_host'], FILTER_SANITIZE_URL);
+  if (substr($as_host, -1) == '/') {
+    $as_host = substr($as_host, 0, (strlen($as_host) - 1));
+  }
 }
 
 if ($mysqli = connect()) {
