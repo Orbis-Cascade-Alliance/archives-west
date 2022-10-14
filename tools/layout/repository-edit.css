@@ -1,0 +1,5 @@
+/* Test ArchivesSpace host button */
+button#as-test {
+  margin-left: .5rem;
+  display: none;
+}
