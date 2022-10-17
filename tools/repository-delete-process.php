@@ -23,7 +23,7 @@ if ($repo) {
   // Delete the file directories in eads, cache, qr, and tools/jobs
   $path = AW_REPOS . '/' . $repo->get_folder();
   if (is_dir($path)) {
-    foreach (array('eads', 'cache', 'qr', 'trash', 'jobs') as $child) {
+    foreach (array('eads', 'cache', 'qr', 'trash', 'jobs', 'temp') as $child) {
       $dir = opendir($path . '/' . $child);
       while (($file = readdir($dir)) !== false) {
         if ($file != '.' && $file != '..') {
