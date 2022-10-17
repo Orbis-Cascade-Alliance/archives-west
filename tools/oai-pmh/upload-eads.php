@@ -40,7 +40,13 @@ if (isset($argv[1]) && !empty($argv[1])) {
           $harvests[$harvest_row['id']]['resource'] = $harvest_row['resource_id'];
         }
       }
+      else {
+        $upload_errors[] = 'No harvest entries found for job #' . $job_id;
+      }
       $mysqli->close();
+    }
+    else {
+      $upload_errors[] = 'Error connecting to MySQL database.';
     }
   }
   catch (Exception $e) {
