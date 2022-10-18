@@ -1,4 +1,5 @@
 var query;
+var filtered_query;
 var facets;
 var mainagencycode;
 var sort;
@@ -64,6 +65,12 @@ function search(page) {
         $('#results').html(results);
       }
       
+      // Store filtered query globally
+      if ($(results).find('#filtered-query').length > 0) {
+        filtered_query = $(results).find('#filtered-query').text();
+        $(results).find('#filtered-query').remove();
+      }
+      
     }
   }).done(function() {
     if (arks.length > 0) {
@@ -103,12 +110,10 @@ function update_page() {
   $('#brief-loading').show();
   var slice_end = offset + per_page;
   var sliced_arks = arks.slice(offset, slice_end);
-  var urlParams = new URLSearchParams(window.location.search);
-  var query = urlParams.get('q');
   $.ajax({
     url: "search-page.php",
     method: "post",
-    data: {arks: sliced_arks, per_page: per_page, q: query},
+    data: {arks: sliced_arks, per_page: per_page, q: query, fq: filtered_query},
     success: function(results) {
       if (results != '') {
         $('#brief-loading').hide();

@@ -98,6 +98,7 @@ if (!empty($_POST)) {
       
       // All result ARKs to store in JS for pagination
       echo '<div id="all-arks">' . implode('|', $all_arks) . '</div>';
+      echo '<div id="filtered-query">' . $search->get_filtered_query() . '</div>';
       
       // End flex row
       echo '</div><!-- end flex -->';
