@@ -91,7 +91,7 @@ if (!empty($_POST)) {
       echo print_nav();
       echo '<div id="brief-loading" class="loading"></div>';
       echo '<div id="brief-records">';
-      echo print_brief_records($first_arks, $query);
+      echo print_brief_records($first_arks, $query, $search->get_filtered_query(), $type, true);
       echo '</div>';
       echo print_nav();
       echo '</div>';

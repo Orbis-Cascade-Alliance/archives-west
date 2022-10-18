@@ -130,6 +130,13 @@ h1 {
   font-weight: bold;
 }
 
+.result .match {
+  padding: .25rem;
+  margin-right: .25rem;
+  border: 1px solid #ccc;
+  border-radius: .17rem;
+}
+
 #all-arks {
   display: none;
 }

@@ -138,44 +138,73 @@ function get_brief_records($arks) {
   $query->close();
   $session->close();
   if ($brief_result_string) {
-    $brief_xml = simplexml_load_string($brief_result_string);
-    $brief_records = array();
-    $all_repos = get_all_repos();
-    foreach ($brief_xml->children() as $result) {
-      $db = (string) $result['db'];
-      $ark = (string) $result['ark'];
-      $title = (string) $result->title;
-      $date = (string) $result->date;
-      $repo_info = $all_repos[$db];
-      $abstract = (string) $result->abstract;
-      $brief_records[$ark] = array(
-        'title' => $title,
-        'date' => $date,
-        'repo_info' => $repo_info,
-        'abstract' => $abstract
-      );
-    }
-    return $brief_records;
+    return parse_brief_records($brief_result_string);
   }
   else {
     throw new Exception('Could not connect to BaseX server.');
   }
 }
 
+// POST ARKs, query, and type from ranked results to get-brief-matches.xq
+function get_brief_matches($arks, $filtered_query, $type) {
+  $session = new AW_Session();
+  $query = $session->get_query('get-brief-matches.xq');
+  $query->bind('a', implode('|', $arks));
+  $query->bind('q', $filtered_query);
+  $query->bind('f', ($type == 'fuzzy' ? 'true' : 'false'));
+  $brief_result_string = $query->execute();
+  $query->close();
+  $session->close();
+  if ($brief_result_string) {
+    return parse_brief_records($brief_result_string);
+  }
+  else {
+    throw new Exception('Could not connect to BaseX server.');
+  }
+}
+
+// Parse brief result XML
+function parse_brief_records($brief_result_string) {
+  $brief_xml = simplexml_load_string($brief_result_string);
+  $brief_records = array();
+  $all_repos = get_all_repos();
+  foreach ($brief_xml->children() as $result) {
+    $db = (string) $result['db'];
+    $ark = (string) $result['ark'];
+    $brief_records[$ark] = array(
+      'title' => (string) $result->title,
+      'date' => (string) $result->date,
+      'repo_info' => $all_repos[$db],
+      'abstract' => (string) $result->abstract,
+      'matches' => (string) $result->matches
+    );
+  }
+  return $brief_records;
+}
+
 // Print brief records from array of ARKs
-function print_brief_records($arks, $query) {
-  $brief_records = get_brief_records($arks);
+function print_brief_records($arks, $raw_query, $filtered_query, $type, $include_matches = false) {
+  if ($include_matches) {
+    $brief_records = get_brief_matches($arks, $filtered_query, $type);
+  }
+  else {
+    $brief_records = get_brief_records($arks);
+  }
   ob_start();
   foreach ($arks as $ark) {
     if (isset($brief_records[$ark])) {
       $result = $brief_records[$ark];
       echo '<div class="result">';
       echo '<h4><a href="' . AW_DOMAIN . '/ark:' . $ark;
-      if ($query) {echo '?q=' . $query;}
+      if ($query) {echo '?q=' . $raw_query;}
       echo '" target="_blank">' . $result['title'] . '</a></h4>';
       echo '<p class="repo"><span class="label">Repository:</span> <a href="/contact.php#' . $result['repo_info']['mainagencycode'] . '">' . $result['repo_info']['name'] . '</a></p>';
       if ($result['abstract']) {
         echo '<p class="abstract"><span class="label">Abstract:</span> ' . add_links($result['abstract']) . '</p>';
+      }
+      if ($result['matches']) {
+        $matches = explode(',', $result['matches']);
+        echo '<p class="matches"><span class="label">Matches:</span> <span class="match">' . implode('</span><span class="match">', $matches) . '</span></p>';
       }
       echo '</div>';
     }
