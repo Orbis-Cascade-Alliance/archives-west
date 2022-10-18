@@ -68,7 +68,7 @@ function search(page) {
       // Store filtered query globally
       if ($(results).find('#filtered-query').length > 0) {
         filtered_query = $(results).find('#filtered-query').text();
-        $(results).find('#filtered-query').remove();
+        $('#results').html(results).find('#filtered-query').remove();
       }
       
     }
