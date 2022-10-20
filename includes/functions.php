@@ -205,8 +205,33 @@ function print_brief_records($arks, $raw_query, $filtered_query, $type, $include
       if ($result['matches']) {
         $terms = explode('|', $filtered_query);
         $matches = explode(',', $result['matches']);
-        $exact_matches = array();
+        // Check for apostrophes
+        foreach (explode(' ', $raw_query) as $raw_term) {
+          $raw_term = str_replace('&#34;', '', $raw_term);
+          if (stristr($raw_term, '&#39;')) {
+            $parts = explode('&#39;', $raw_term);
+            for ($t = 0; $t < count($terms); $t++) {
+              $term = $terms[$t];
+              if (str_replace(' ', '&#39;', $term) == $raw_term) {
+                $terms[$t] = str_replace(' ', '&#39;', $term);
+              }
+            }
+            $first_match = null;
+            for ($m = 0; $m < count($matches); $m++) {
+              $match = $matches[$m];
+              if (in_array($match, $parts)) {
+                unset($matches[$m]);
+                if ($first_match == null) {
+                  $first_match = $m;
+                }
+              }
+            }
+            $matches[$first_match] = $raw_term;
+            ksort($matches);
+          }
+        }
         // Check for exact matches
+        $exact_matches = array();
         foreach ($terms as $term) {
           if (in_array($term, $matches)) {
             $exact_matches[] = $term;
