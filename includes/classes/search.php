@@ -64,14 +64,9 @@ class AW_Search {
   // Decode query for searching
   function decode_query() {
     $query = $this->query;
-    
-    // Quotes
     $to_replace = array('&#34;', '&#39;');
-    $replacements = array('"', ' ');
-    $query = str_replace($to_replace, $replacements, $query);
-    
-    // Hyphens
-    return preg_replace('/(\S+)\-(\S+)/', '"\1 \2"', $query);
+    $replacements = array('"', '\'');
+    return str_replace($to_replace, $replacements, $query);
   }
   
   // Get the filtered version of the query submitted to BaseX
@@ -115,6 +110,9 @@ class AW_Search {
             unset($exploded_query[$key]);
             $excluded_words[] = $term;
           }
+          else if (stristr($term, '\'')) {
+            $exploded_query[$key] = str_replace('\'', ' ', $term);
+          }
           else {
             $exploded_query[$key] = $this->strip_chars($term);
           }
@@ -127,6 +125,7 @@ class AW_Search {
             $lowercase_word = strtolower($word);
             if ($lowercase_word && isset($stopwords[$lowercase_word])) {
               $replaced_term = str_replace($word, '', $replaced_term);
+              $excluded_words[] = $word;
             }
           }
           $exploded_query[$key] = $this->strip_chars($replaced_term);
