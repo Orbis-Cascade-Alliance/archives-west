@@ -203,8 +203,22 @@ function print_brief_records($arks, $raw_query, $filtered_query, $type, $include
         echo '<p class="abstract"><span class="label">Abstract:</span> ' . add_links($result['abstract']) . '</p>';
       }
       if ($result['matches']) {
+        $terms = explode('|', $filtered_query);
         $matches = explode(',', $result['matches']);
-        echo '<p class="matches"><span class="label">Matches:</span> <span class="match">' . implode('</span><span class="match">', $matches) . '</span></p>';
+        $exact_matches = array();
+        // Check for exact matches
+        foreach ($terms as $term) {
+          if (in_array($term, $matches)) {
+            $exact_matches[] = $term;
+          }
+        }
+        if (count($exact_matches) == count($terms)) {
+          $to_print = $exact_matches;
+        }
+        else {
+          $to_print = $matches;
+        }
+        echo '<p class="matches"><span class="label">Matches:</span> <span class="match">' . implode('</span><span class="match">', $to_print) . '</span></p>';
       }
       echo '</div>';
     }
