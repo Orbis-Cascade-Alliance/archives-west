@@ -65,14 +65,13 @@ class AW_Search {
   function decode_query() {
     $query = $this->query;
     
-    // Hyphens and apostrophes
-    return preg_replace('/(\S+)(\-|&#39;)(\S+)/', '"\1 \3"', $query);
-    
     // Quotes
     $to_replace = array('&#34;', '&#39;');
     $replacements = array('"', ' ');
     $query = str_replace($to_replace, $replacements, $query);
     
+    // Hyphens
+    return preg_replace('/(\S+)\-(\S+)/', '"\1 \2"', $query);
   }
   
   // Get the filtered version of the query submitted to BaseX
