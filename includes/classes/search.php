@@ -127,6 +127,9 @@ class AW_Search {
               $replaced_term = str_replace($word, '', $replaced_term);
               $excluded_words[] = $word;
             }
+            else if (stristr($replaced_term, '\'')) {
+              $replaced_term= str_replace('\'', ' ', $replaced_term);
+            }
           }
           $exploded_query[$key] = $this->strip_chars($replaced_term);
         }
