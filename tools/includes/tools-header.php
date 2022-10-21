@@ -42,6 +42,9 @@ else {
       $repo_id = $user->get_repo_id();
     }
   }
+  else {
+    die('User not found.');
+  }
 }
 ?>
 <!DOCTYPE html>

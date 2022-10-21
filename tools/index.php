@@ -7,6 +7,11 @@ require_once(getenv('AW_HOME') . '/defs.php');
 include(AW_INCLUDES . '/server-header.php');
 include(AW_TOOL_INCLUDES . '/tools-header.php');
 
+// Double check for user object
+if (!is_object($user)) {
+  die('User not found.');
+}
+
 // Get maintenance mode status
 $maintenance_mode = check_maintenance_mode();
 

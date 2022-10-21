@@ -26,7 +26,7 @@ if (isset($_POST) && !empty($_POST)) {
   if ($username && $password) {
     try {
       $user = new AW_User($username);
-      $redirect = '/tools/index.php';
+      $redirect = AW_DOMAIN . '/tools/index.php';
       if (isset($_GET['redirect']) || !empty($_GET['redirect'])) {
         $redirect = $_GET['redirect'];
       }
