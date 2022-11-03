@@ -39,6 +39,9 @@ include(AW_TOOL_INCLUDES . '/tools-header-end.php');
 if ($maintenance_mode) {
   echo '<div class="alert">Maintenance mode is on.</div>';
 }
+else if ($alert_message = get_alert('tools')) {
+  echo '<div class="alert">' . $alert_message . '</div>';
+}
 ?>
 
 <div id="home-columns">
