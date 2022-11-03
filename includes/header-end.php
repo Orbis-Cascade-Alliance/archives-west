@@ -23,3 +23,8 @@
       </div>
     </div><!-- end header -->
     <div id="main-content" class="width-wrapper">
+      <?php
+      if ($alert_message = get_alert('all')) {
+        echo '<div class="alert">' . $alert_message . '</div>';
+      }
+      ?>

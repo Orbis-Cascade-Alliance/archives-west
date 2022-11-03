@@ -205,6 +205,30 @@ function print_rss() {
   return $rss_html;
 }
 
+// Get alert message of a type
+// "all" - all pages of the public website, in /includes/header-end.php
+// "finding_aid" - all finding aids for a repository, in /finding-aid.php
+// "tools" - homepage of the management tools, in /tools/index.php
+function get_alert($type, $repo_id = 0) {
+  $alert = '';
+  if ($mysqli = connect()) {
+    $today = date('Y-m-d');
+    $alert_query = 'SELECT message FROM alerts
+      WHERE type="' . $type . '"
+      AND repo_id=' . $repo_id . '
+      AND start <= "' . $today . '"
+      AND end >= "' . $today . '"';
+    $result = $mysqli->query($alert_query);
+    if ($result->num_rows == 1) {
+      while ($row = $result->fetch_row()) {
+        $alert = $row[0];
+      }
+    }
+    $mysqli->close();
+  }
+  return $alert;
+}
+
 // Check maintenance mode
 function check_maintenance_mode() {
   return file_exists(AW_HTML . '/maintenance.html');
