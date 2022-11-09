@@ -41,5 +41,8 @@ if ($user->is_admin()) {
 <?php
   }
 }
+else {
+  echo '<p>This tool is for admins only.</p>';
+}
 include(AW_TOOL_INCLUDES . '/tools-footer.php');
 ?>

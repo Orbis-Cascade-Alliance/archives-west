@@ -65,6 +65,7 @@ else if ($alert_message = get_alert('tools')) {
     <ul>
       <li><a href="analytics/report.php">Finding Aid Views</a></li>
       <?php if ($repo_id != 0) {?><li><a href="export.php">Export List of Finding Aids</a></li><?php } ?>
+      <?php if ($user->is_admin()) {?><li><a href="admin-reports.php">Administrator Reports</a></li><?php } ?>
     </ul>
     
     <h2>Get Help</h2>
