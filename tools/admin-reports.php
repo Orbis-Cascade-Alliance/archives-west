@@ -40,7 +40,7 @@ class AW_Admin_Report {
           }
           echo '<tr>';
           foreach ($keys as $key) {
-            echo '<td>' . $row[$key] . '</td>';
+            echo '<td class="' . strtolower($key) . '">' . $row[$key] . '</td>';
           }
           echo '</tr>';
         }
