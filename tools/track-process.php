@@ -37,7 +37,7 @@ if (isset($argv[2]) && !empty($argv[2])) {
 if ($type == 'cache') {
   $ark = '';
   if (isset($argv[3]) && !empty($argv[3])) {
-    $ark = filter_var($argv[2], FILTER_SANITIZE_STRING);
+    $ark = filter_var($argv[3], FILTER_SANITIZE_STRING);
   }
 }
 else if ($type == 'harvest' || $type == 'upload' || $type == 'harvest-api' || $type == 'upload-api') {
