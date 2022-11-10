@@ -25,7 +25,7 @@ if ($repo_id != 0) {
 ?>
 <p>Drag and drop XML files in the teal box, or click "Browse" to select files on your computer, then click "Upload" to submit them. A report will appear below showing the results of the <a href="validation.php">Document Validation</a>, <a href="compliance.php">Compliance Checker</a>, and <a href="upload.php">Document Upload</a> tools.</p>
 <p>You can upload up to <strong><?php echo MAX_FILES; ?></strong> files at once. No file can exceed <strong><?php echo MAX_FILE_SIZE;?></strong>.</p>
-<p>Check "Replace existing files" to allow overwrites of existing finding aids.</p>
+<p>Check "Replace existing files" to allow overwrites of previously uploaded finding aids.</p>
 <ul>
   <li>The tool will overwrite the finding aids identified by the ARKs in eadheader/eadid/@identifier. Please double-check all ARKs in your files to avoid accidental overwrites.</li>
   <li>File names do not need to match previous uploads.</li>
