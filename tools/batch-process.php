@@ -25,10 +25,19 @@ if (isset($_FILES['file']) && !empty($_FILES['file'])) {
     $files[$file_name] = $file_contents;
   }
   
+  // Get replace option
+  $replace = 0;
+  if (isset($_POST['replace_files']) && $_POST['replace_files'] == '1') {
+    $replace = 1;
+  }
+  
   // Create job and process files
   if ($job_id = create_job('batch', $repo_id, $user->get_id())) {
     try {
       $job = new AW_Job($job_id);
+      if ($replace == 1) {
+        $job->set_replace(1);
+      }
       $job->process_files($files);
       $job->set_complete();
       // Optimize index
