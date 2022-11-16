@@ -10,6 +10,8 @@ reduce the post-transformation filesize to be comparable to the size of the XML 
 
 Changes:
 
+11/16/2022  TKM     Print c0x/did/daogrp as generic links when unittitle is absent.
+                    (Templates "indepth" and c02|c03|etc.) 
 03/01/13    KEF     The "c01//did" template was counting <head /> and <p /> elements as
                     siblings when generating the "ppos" variable, leading to "off-by-one" errors
                     for "Detailed descripton" sidelinks to internal anchors.  I fixed this
@@ -114,7 +116,17 @@ Changes:
 								<xsl:text>: </xsl:text>
 							</xsl:if>
 						</xsl:if>
-						<xsl:apply-templates select="did/unittitle"/>
+						<xsl:choose>
+							<!-- 2022-11-16 print unittitle if present, or generic link if not -->
+							<xsl:when test="did/unittitle">
+								<xsl:apply-templates select="did/unittitle"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:if test="did/daogrp">
+									<xsl:apply-templates select="did/daogrp"/>
+								</xsl:if>
+							</xsl:otherwise>
+						</xsl:choose>
 						<xsl:call-template name="c0x_children"/>
 					</td>
 
@@ -270,27 +282,35 @@ Changes:
 					<xsl:for-each select="*[@id] | did/*[@id]">
 						<a id="{@id}"/>
 					</xsl:for-each>
-					<xsl:if test="did/unittitle">
-						<xsl:choose>
-							<!-- series, subseries, etc are bold -->
-							<xsl:when test="(@level='series' or @level='subseries' or @otherlevel='sub-subseries' or @level='otherlevel') and child::node()/did">
-								<b>
+					<!-- 2022-11-16 print unittitle if present, or generic link if not -->
+					<xsl:choose>
+						<xsl:when test="did/unittitle">
+							<xsl:choose>
+								<!-- series, subseries, etc are bold -->
+								<xsl:when test="(@level='series' or @level='subseries' or @otherlevel='sub-subseries' or @level='otherlevel') and child::node()/did">
+									<b>
+										<xsl:if test="string(did/unitid)">
+											<xsl:apply-templates select="did/unitid"/>
+											<xsl:text>: </xsl:text>
+										</xsl:if>
+										<xsl:apply-templates select="did/unittitle"/>
+									</b>
+								</xsl:when>
+								<xsl:otherwise>
 									<xsl:if test="string(did/unitid)">
-										<xsl:apply-templates select="did/unitid"/>
+										<xsl:value-of select="did/unitid"/>
 										<xsl:text>: </xsl:text>
 									</xsl:if>
-									<xsl:apply-templates select="did/unittitle"/>
-								</b>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:if test="string(did/unitid)">
-									<xsl:value-of select="did/unitid"/>
-									<xsl:text>: </xsl:text>
-								</xsl:if>
-								<xsl:apply-templates select="did/unittitle"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:if>
+									<xsl:apply-templates select="did/unittitle" />
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:if test="did/daogrp">
+								<xsl:apply-templates select="did/daogrp"/>
+							</xsl:if>
+						</xsl:otherwise>
+					</xsl:choose>
 					<xsl:call-template name="c0x_children"/>
 
 				</div>
