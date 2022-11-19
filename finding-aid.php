@@ -40,8 +40,12 @@ else {
 
 <?php
 if ($finding_aid != null) {
+  $repo = $finding_aid->get_repo();
   if ($finding_aid->is_active()) {
     if ($cache = $finding_aid->get_cache()) {
+      if ($alert_message = get_alert('finding_aid', $repo->get_id())) {
+        echo '<div class="alert">' . $alert_message . '</div>';
+      }
       ?>
       <div id="downloads">
         <a class="btn" href="javascript:void(0)" onclick="print_finding_aid()">Print</a>
@@ -60,7 +64,6 @@ if ($finding_aid != null) {
     }
   }
   else {
-    $repo = $finding_aid->get_repo();
     echo '<p>This finding aid has been deleted by <a href="/contact.php#' . $repo->get_mainagencycode() . '">' . $repo->get_name() . '</a>.</p>';
   }
 }

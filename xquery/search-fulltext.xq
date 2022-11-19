@@ -7,24 +7,18 @@ declare variable $s as xs:string external;
 declare variable $f as xs:string external;
 
 declare function local:calculate_score($terms as xs:string+, $result as node()*, $title as xs:string, $basex_score as xs:double) as xs:double {
-  let $boost := fold-left(
+  let $in_title := xs:integer(ft:contains($title, $terms))
+  let $exact := fold-left(
     $terms,
-    local:calculate_boost(string(head($terms)), $result, $title),
+    local:in_string($result, string(head($terms))),
     function($running_boost, $term) { 
-      let $term_boost := local:calculate_boost($term, $result, $title)
+      let $term_boost := local:in_string($result, $term)
       return $running_boost + $term_boost
     }
   )
   let $phrase_boost := local:in_string($result, string-join($terms, ' '))
-  let $score := $basex_score + $boost + $phrase_boost
+  let $score := $basex_score + $in_title + $exact + $phrase_boost
   return $score
-};
-
-declare function local:calculate_boost($term as xs:string, $result as node()*, $title as xs:string) as xs:double {
-  let $in_title := local:in_string($title, $term)
-  let $exact := local:in_string($result, $term)
-  let $boost := $in_title + $exact
-  return $boost
 };
 
 declare function local:in_string($string as xs:string, $term as xs:string) as xs:integer {

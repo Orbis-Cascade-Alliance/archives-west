@@ -115,6 +115,7 @@ class AW_Job {
     else {
       throw new Exception('MySQL connection error.');
     }
+    $this->replace = $bool;
   }
   
   function get_complete() {

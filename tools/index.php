@@ -7,6 +7,11 @@ require_once(getenv('AW_HOME') . '/defs.php');
 include(AW_INCLUDES . '/server-header.php');
 include(AW_TOOL_INCLUDES . '/tools-header.php');
 
+// Double check for user object
+if (!is_object($user)) {
+  die('User not found.');
+}
+
 // Get maintenance mode status
 $maintenance_mode = check_maintenance_mode();
 
@@ -33,6 +38,9 @@ include(AW_TOOL_INCLUDES . '/tools-header-end.php');
 
 if ($maintenance_mode) {
   echo '<div class="alert">Maintenance mode is on.</div>';
+}
+else if ($alert_message = get_alert('tools')) {
+  echo '<div class="alert">' . $alert_message . '</div>';
 }
 ?>
 
@@ -65,6 +73,7 @@ if ($maintenance_mode) {
     <ul>
       <li><a href="analytics/report.php">Finding Aid Views</a></li>
       <?php if ($repo_id != 0) {?><li><a href="export.php">Export List of Finding Aids</a></li><?php } ?>
+      <?php if ($user->is_admin()) {?><li><a href="admin-reports.php">Administrator Reports</a></li><?php } ?>
     </ul>
     
     <h2>Get Help</h2>

@@ -4,6 +4,8 @@ include(AW_TOOL_INCLUDES . '/tools-functions.php');
 $current_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $exploded_path = explode('/', $current_path);
 $current_page = end($exploded_path);
+$user = null;
+$repo_id = null;
 if ($current_page == '') {
   $current_page = 'index.php';
 }
@@ -25,18 +27,23 @@ else {
   $user = $_SESSION['user'];
 
   // Get repository
-  $repo_id = 0;
-  if ($user->is_admin()) {
-    if (isset($_GET['r']) && !empty($_GET['r'])) {
-      $repo_id = filter_var($_GET['r'], FILTER_SANITIZE_NUMBER_INT);
-      $_SESSION['repo_id'] = $repo_id;
+  if ($user) {
+    $repo_id = 0;
+    if ($user->is_admin()) {
+      if (isset($_GET['r']) && !empty($_GET['r'])) {
+        $repo_id = filter_var($_GET['r'], FILTER_SANITIZE_NUMBER_INT);
+        $_SESSION['repo_id'] = $repo_id;
+      }
+      else if (isset($_SESSION['repo_id'])) {
+        $repo_id = $_SESSION['repo_id'];
+      }
     }
-    else if (isset($_SESSION['repo_id'])) {
-      $repo_id = $_SESSION['repo_id'];
+    else {
+      $repo_id = $user->get_repo_id();
     }
   }
   else {
-    $repo_id = $user->get_repo_id();
+    die('User not found.');
   }
 }
 ?>

@@ -45,6 +45,12 @@ $(document).ready(function(){
       $('#report').html('Processing...');
       $('.loading').show();
       $('#form-files').hide();
+      if ($('#replace_files').is(":checked")) {
+        formData.set('replace_files', 1);
+      }
+      else {
+        formData.set('replace_files', 0);
+      }
       $.ajax({
         url: 'batch-process.php',
         type: 'post',

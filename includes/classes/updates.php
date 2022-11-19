@@ -4,6 +4,7 @@
 class AW_Updates {
   
   public $updates;
+  public $repos;
   
   function __construct() {
     if ($mysqli = connect()) {
@@ -77,6 +78,25 @@ class AW_Updates {
     return implode('|', $arks);
   }
   
+  // Get repositories affected by this update
+  // Returns array of IDs
+  function get_repos() {
+    if (!isset($this->repos)) {
+      $repos = array();
+      if ($updates = $this->get_updates()) {
+        foreach ($updates as $action => $action_updates) {
+          foreach ($action_updates as $update) {
+            if (!in_array($update['repo_id'], $repos)) {
+              $repos[] = $update['repo_id'];
+            }
+          }
+        }
+      }
+      $this->repos = $repos;
+    }
+    return $this->repos;
+  }
+  
   // Perform index updates
   function update_indexes() {
     if ($updates = $this->get_updates()) {
@@ -95,7 +115,11 @@ class AW_Updates {
           $session->add_to_facets($files);
         }
       }
-      $session->copy_indexes_to_prod();
+      foreach ($this->get_repos() as $repo_id) {
+        $session->copy_text_to_prod($repo_id);
+      }
+      $session->copy_brief_to_prod();
+      $session->copy_facets_to_prod();
       $session->close();
       $this->mark_complete();
     }
