@@ -106,7 +106,8 @@ class AW_Search {
         // If whole term is a stopword, exclude
         if (!stristr($term, ' ')) {
           $lowercase_term = strtolower($term);
-          if ($lowercase_term && isset($stopwords[$lowercase_term])) {
+          $stripped_term = $this->strip_chars($lowercase_term);
+          if ($lowercase_term && isset($stopwords[$stripped_term])) {
             unset($exploded_query[$key]);
             $excluded_words[] = $term;
           }
