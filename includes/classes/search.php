@@ -76,7 +76,7 @@ class AW_Search {
   
   // Remove punctuation from a string
   function strip_chars($string) {
-    $stripped = preg_replace('/[^a-z0-9\-\s]+/i', '', $string);
+    $stripped = preg_replace('/[^a-z0-9\-\s]+/i', ' ', $string);
     return preg_replace('/\s+/', ' ', $stripped);
   }
   
@@ -111,16 +111,13 @@ class AW_Search {
             unset($exploded_query[$key]);
             $excluded_words[] = $term;
           }
-          else if (stristr($term, '\'')) {
-            $exploded_query[$key] = str_replace('\'', ' ', $term);
-          }
           else {
-            $exploded_query[$key] = $this->strip_chars($term);
+            $exploded_query[$key] = $stripped_term;
           }
         }
         // If term is a phrase and contains a stopword, remove it
         else {
-          $exploded_term = $this->strip_chars(explode(' ', $term));
+          $exploded_term = explode(' ', $this->strip_chars($term));
           $replaced_term = $term;
           foreach ($exploded_term as $word_key => $word) {
             $lowercase_word = strtolower($word);
