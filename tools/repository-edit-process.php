@@ -8,6 +8,12 @@ if (session_status() === PHP_SESSION_NONE) {
 
 $errors = array();
 
+function preserve_quotes($string) {
+  $to_replace = array('&amp;#34;', '&amp;#39;');
+  $replacements = array('"', '\'');
+  return str_replace($to_replace, $replacements, $string);
+}
+
 // Get user from session
 $user = get_session_user();
 
@@ -29,7 +35,7 @@ $rights = $repo->get_rights();
 $as_host = $repo->get_as_host();
 if (isset($_POST['name']) && !empty($_POST['name'])) {
   $name = htmlspecialchars(filter_var($_POST['name'], FILTER_SANITIZE_STRING));
-  $name = str_replace('&amp;#39;', '\'', $name);
+  $name = preserve_quotes($name);
 }
 if (isset($_POST['email'])) {
   $email = filter_var($_POST['email'], FILTER_SANITIZE_STRING);
@@ -48,13 +54,13 @@ if (isset($_POST['address'])) {
   $address_array = preg_split("/\r\n|\n|\r/", $raw_address);
 }
 if (isset($_POST['collection'])) {
-  $collection = htmlspecialchars(filter_var($_POST['collection'], FILTER_SANITIZE_STRING));
+  $collection = preserve_quotes(htmlspecialchars(filter_var($_POST['collection'], FILTER_SANITIZE_STRING)));
 }
 if (isset($_POST['copy'])) {
-  $copy = htmlspecialchars(filter_var($_POST['copy'], FILTER_SANITIZE_STRING));
+  $copy = preserve_quotes(htmlspecialchars(filter_var($_POST['copy'], FILTER_SANITIZE_STRING)));
 }
 if (isset($_POST['visit'])) {
-  $visit = htmlspecialchars(filter_var($_POST['visit'], FILTER_SANITIZE_STRING));
+  $visit = preserve_quotes(htmlspecialchars(filter_var($_POST['visit'], FILTER_SANITIZE_STRING)));
 }
 if (isset($_POST['rights']) && !empty($_POST['rights'])) {
   if ($_POST['rights'] == 'CC Zero' || $_POST['rights'] == 'CC Attribution') {
