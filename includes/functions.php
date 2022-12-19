@@ -13,7 +13,7 @@ function log_error($message) {
 
 // Link URLs starting with http/s in a string
 function add_links($string) {
-  $url_regex = '~(http)s?://[a-z0-9.-]+\.[a-z]{2,3}(/\S*)?(?<!\.)~i';
+  $url_regex = '~(http)s?://[a-z0-9.-]+\.[a-z]{2,3}(/[^\s\)]*)?(?<!\.)~i';
   return preg_replace($url_regex, '<a href="$0" target="_blank">$0</a>', $string);
 }
 
