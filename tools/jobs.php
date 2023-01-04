@@ -56,7 +56,12 @@ if ($repo_id != 0) {
     $types = get_job_types();
     echo '<table id="jobs"><thead><tr><th>Job ID</th><th>Date</th><th>Type</th><th>Status</th><th>Report</th></tr></thead><tbody>';
     foreach ($jobs as $job_id => $job_info) {
-      $status = $job_info['complete'] == 0 ? 'In Progress' : 'Complete';
+      $statuses = array(
+        0 => 'In Progress',
+        1 => 'Complete',
+        2 => 'Failed'
+      );
+      $status = $statuses[$job_info['complete']];
       echo '<tr>
         <td>' . $job_id . '</td>
         <td class="no-break">' . date('Y-m-d h:i a', strtotime($job_info['date'])) . '</td>
