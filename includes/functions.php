@@ -218,10 +218,11 @@ function get_alert($type, $repo_id = 0) {
       AND repo_id=' . $repo_id . '
       AND start <= "' . $today . '"
       AND end >= "' . $today . '"';
-    $result = $mysqli->query($alert_query);
-    if ($result->num_rows == 1) {
-      while ($row = $result->fetch_row()) {
-        $alert = $row[0];
+    if ($result = $mysqli->query($alert_query)) {
+      if ($result->num_rows == 1) {
+        while ($row = $result->fetch_row()) {
+          $alert = $row[0];
+        }
       }
     }
     $mysqli->close();
