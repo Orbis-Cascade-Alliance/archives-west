@@ -4,6 +4,7 @@
 // Strip namespaces from root
 function strip_namespaces($xml_string) {
   $new_string = preg_replace('/<ead [^>]+>/', '<ead>', $xml_string);
+  $new_string = preg_replace('/xlink:type/', 'linktype', $new_string);
   $new_string = preg_replace('/xlink:/', '', $new_string);
   $new_string = preg_replace('/\sxsi:[^"]+"[^"]+"/', '', $new_string);
   return $new_string;
