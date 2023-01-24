@@ -42,7 +42,8 @@ if (!empty($arks)) {
         $item = $rss->channel->addChild('item');
         $item->addChild('title', $result['title']);
         $item->addChild('link', $link);
-        $item->addChild('description', '&lt;i&gt;' . $result['repo_info']['name'] . '&lt;/i&gt;' . $result['abstract']);
+        $item->addChild('author', $result['repo_info']['name']);
+        $item->addChild('description', $result['abstract']);
         $item->addChild('guid', $link);
         $item->addChild('pubDate', date('r', strtotime($date)));
       }

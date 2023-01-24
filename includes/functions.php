@@ -202,7 +202,7 @@ function print_rss() {
       echo '<div class="rss-item">';
       echo '<p class="rss-date">' . $date . '</p>';
       echo '<p class="rss-title"><a href="' . (string) $item->link . '">' . (string) $item->title . '</a></p>';
-      echo '<p class="rss-desc">' . (string) $item->description . '</p>';
+      echo '<p class="rss-desc"><i>' . (string) $item->author . '</i>' . (string) $item->description . '</p>';
       echo '</div>';
     }
     $rss_html = ob_get_contents();
