@@ -100,28 +100,33 @@ class AW_Updates {
   // Perform index updates
   function update_indexes() {
     if ($updates = $this->get_updates()) {
-      $session = new AW_Session();
-      foreach ($updates as $action => $info) {
-        if ($action == 'delete' || $action == 'replace') {
-          $arks = $this->get_arks($action);
-          $session->delete_from_text($arks);
-          $session->delete_from_brief($arks);
-          $session->delete_from_facets($arks);
+      try {
+        $session = new AW_Session();
+        foreach ($updates as $action => $info) {
+          if ($action == 'delete' || $action == 'replace') {
+            $arks = $this->get_arks($action);
+            $session->delete_from_text($arks);
+            $session->delete_from_brief($arks);
+            $session->delete_from_facets($arks);
+          }
+          if ($action == 'add' || $action == 'replace') {
+            $files = $this->get_files($action);
+            $session->add_to_text($files);
+            $session->add_to_brief($files);
+            $session->add_to_facets($files);
+          }
         }
-        if ($action == 'add' || $action == 'replace') {
-          $files = $this->get_files($action);
-          $session->add_to_text($files);
-          $session->add_to_brief($files);
-          $session->add_to_facets($files);
+        foreach ($this->get_repos() as $repo_id) {
+          $session->copy_text_to_prod($repo_id);
         }
+        $session->copy_brief_to_prod();
+        $session->copy_facets_to_prod();
+        $session->close();
+        $this->mark_complete();
       }
-      foreach ($this->get_repos() as $repo_id) {
-        $session->copy_text_to_prod($repo_id);
+      catch (Exception $e) {
+        throw new Exception('Error communicating with BaseX to update indexes.');
       }
-      $session->copy_brief_to_prod();
-      $session->copy_facets_to_prod();
-      $session->close();
-      $this->mark_complete();
     }
   }
   

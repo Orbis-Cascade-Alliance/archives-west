@@ -7,6 +7,21 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 $errors = array();
 
+// Table deletions
+function delete_table($mysqli, $repo_id, $query) {
+  $delete_stmt = $mysqli->prepare($query);
+  $delete_stmt->bind_param('i', $repo_id);
+  $delete_stmt->execute();
+  $delete_error = $mysqli->error;
+  $delete_stmt->close();
+  if ($delete_error) {
+    return $delete_error;
+  }
+  else {
+    return true;
+  }
+}
+
 // Get user from session
 $user = get_session_user(true);
 
@@ -24,14 +39,16 @@ if ($repo) {
   $path = AW_REPOS . '/' . $repo->get_folder();
   if (is_dir($path)) {
     foreach (array('eads', 'cache', 'qr', 'trash', 'jobs', 'temp') as $child) {
-      $dir = opendir($path . '/' . $child);
-      while (($file = readdir($dir)) !== false) {
-        if ($file != '.' && $file != '..') {
-          unlink($path . '/' . $child . '/' . $file);
+      if (is_dir($path . '/' . $child)) {
+        $dir = opendir($path . '/' . $child);
+        while (($file = readdir($dir)) !== false) {
+          if ($file != '.' && $file != '..') {
+            unlink($path . '/' . $child . '/' . $file);
+          }
         }
-      }
-      if (rmdir($path . '/' . $child) == false) {
-        $errors[] = 'Subfolder ' . $child . ' was not deleted.';
+        if (rmdir($path . '/' . $child) == false) {
+          $errors[] = 'Subfolder ' . $child . ' was not deleted.';
+        }
       }
     }
     if (rmdir($path) == false) {
@@ -41,42 +58,19 @@ if ($repo) {
 
   // Delete ARKs, jobs, and repository row from MySQL
   if ($mysqli = connect()) {
-    $ark_delete_stmt = $mysqli->prepare('DELETE FROM arks WHERE repo_id=?');
-    $ark_delete_stmt->bind_param('i', $repo_id);
-    $ark_delete_stmt->execute();
-    $ark_delete_error = $mysqli->error;
-    $ark_delete_stmt->close();
-    if ($ark_delete_error) {
-      $errors[] = $ark_delete_error;
-    }
-    else {
-      $jobs_delete_stmt = $mysqli->prepare('DELETE FROM jobs WHERE repo_id=?');
-      $jobs_delete_stmt->bind_param('i', $repo_id);
-      $jobs_delete_stmt->execute();
-      $jobs_delete_error = $mysqli->error;
-      $jobs_delete_stmt->close();
-      if ($jobs_delete_error) {
-        $errors[] = $jobs_delete_error;
-      }
-      else {
-        $users_delete_stmt = $mysqli->prepare('DELETE FROM users WHERE repo_id=?');
-        $users_delete_stmt->bind_param('i', $repo_id);
-        $users_delete_stmt->execute();
-        $users_delete_error = $mysqli->error;
-        $users_delete_stmt->close();
-        if ($users_delete_error) {
-          $errors[] = $users_delete_error;
-        }
-        else {
-          $repo_delete_stmt = $mysqli->prepare('DELETE FROM repos WHERE id=?');
-          $repo_delete_stmt->bind_param('i', $repo_id);
-          $repo_delete_stmt->execute();
-          $repo_delete_error = $mysqli->error;
-          $repo_delete_stmt->close();
-          if ($repo_delete_error) {
-            $errors[] = $repo_delete_error;
-          }
-        }
+    $queries = array(
+      'DELETE FROM arks WHERE repo_id=?',
+      'DELETE FROM harvests WHERE job_id IN (SELECT job_id FROM jobs WHERE repo_id=?)',
+      'DELETE FROM alerts WHERE repo_id=?',
+      'DELETE FROM jobs WHERE repo_id=?',
+      'DELETE FROM users WHERE repo_id=?',
+      'DELETE FROM repos WHERE id=?'
+    );
+    foreach ($queries as $query) {
+      $deletion_result = delete_table($mysqli, $repo_id, $query);
+      if ($deletion_result !== true) {
+        $errors[] = $deletion_result;
+        break;
       }
     }
     $mysqli->close();
@@ -86,14 +80,19 @@ if ($repo) {
   }
   
   // Remove finding aids from BaseX indexes and drop database
-  $session = new AW_Session();
-  $session->drop_text($repo_id);
-  $session->drop_text_prod($repo_id);
-  $session->delete_repo_from_brief($repo_id);
-  $session->delete_repo_from_facets($repo_id);
-  $session->drop_db($repo_id); 
-  $session->copy_indexes_to_prod();
-  $session->close();
+  try {
+    $session = new AW_Session();
+    $session->drop_text($repo_id);
+    $session->drop_text_prod($repo_id);
+    $session->delete_repo_from_brief($repo_id);
+    $session->delete_repo_from_facets($repo_id);
+    $session->drop_db($repo_id); 
+    $session->copy_indexes_to_prod();
+    $session->close();
+  }
+  catch (Exception $e) {
+    $errors[] = 'BaseX Exception: ' . $e->getMessage();
+  }
 }
 
 $_SESSION['repo_deletion_id'] = $repo_id;

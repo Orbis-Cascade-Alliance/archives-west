@@ -688,14 +688,19 @@ function upload_file($file_contents, $file_name, $ark, $replace, $user_id) {
             }
             
             // Update BaseX document database
-            $session = new AW_Session();
-            if ($replace) {
-              $session->replace_document($repo_id, $current_file_name, $file_name);
+            try {
+              $session = new AW_Session();
+              if ($replace) {
+                $session->replace_document($repo_id, $current_file_name, $file_name);
+              }
+              else {
+                $session->add_document($repo_id, $file_name);
+              }
+              $session->close();
             }
-            else {
-              $session->add_document($repo_id, $file_name);
+            catch (Exception $e) {
+              $errors[] = 'Error communicating with BaseX to upate document.';
             }
-            $session->close();
             
             // Start caching process
             $finding_aid = new AW_Finding_Aid($ark);

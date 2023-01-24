@@ -200,35 +200,40 @@ class AW_Search {
       $time_start = time();
       $results = array();
       $query = null;
-      $session = new AW_Session();
-      if ($this->get_query()) {
-        if ($filtered_query) {
-          $query = $session->get_query('search-fulltext.xq');
-          $query->bind('q', $filtered_query);
+      try {
+        $session = new AW_Session();
+        if ($this->get_query()) {
+          if ($filtered_query) {
+            $query = $session->get_query('search-fulltext.xq');
+            $query->bind('q', $filtered_query);
+            $query->bind('d', $repo_string);
+            $query->bind('a', $ark_string);
+            $query->bind('s', $this->get_sort());
+            $query->bind('f', $fuzzy);
+          }
+        }
+        else {
+          $query = $session->get_query('search-repo.xq');
           $query->bind('d', $repo_string);
           $query->bind('a', $ark_string);
           $query->bind('s', $this->get_sort());
-          $query->bind('f', $fuzzy);
+        }
+        if ($query) {
+          $result_string = $query->execute();
+          $query->close();
+          $session->close();
+          if ($result_string) {
+            $time_stop = time();
+            $this->time = $time_stop - $time_start;
+            $results = $this->regex_arks($result_string);
+          }
+          else {
+            throw new Exception('An error occurred in full-text searching.');
+          }
         }
       }
-      else {
-        $query = $session->get_query('search-repo.xq');
-        $query->bind('d', $repo_string);
-        $query->bind('a', $ark_string);
-        $query->bind('s', $this->get_sort());
-      }
-      if ($query) {
-        $result_string = $query->execute();
-        $query->close();
-        $session->close();
-        if ($result_string) {
-          $time_stop = time();
-          $this->time = $time_stop - $time_start;
-          $results = $this->regex_arks($result_string);
-        }
-        else {
-          throw new Exception('An error occurred in full-text searching.');
-        }
+      catch (Exception $e) {
+        throw new Exception('Error communicating with BaseX for full-text searching.');
       }
       $this->results = $results;
     }
@@ -248,23 +253,28 @@ class AW_Search {
         foreach ($facets as $facet_type => $facet_term) {
           $facet_strings[] = $facet_type . ':' . str_replace($to_replace, $replacements, $facet_term);
         }
-        $session = new AW_Session();
-        $query = $session->get_query('get-facet-arks.xq');
-        $query->bind('d', $repo_ids);
-        $query->bind('f', implode('|', $facet_strings));
-        $facet_string = $query->execute();
-        $query->close();
-        $session->close();
-        if ($facet_string) {
-          if (stristr($facet_string, '<ark>')) {
-            $results = $this->regex_arks($facet_string);
+        try {
+          $session = new AW_Session();
+          $query = $session->get_query('get-facet-arks.xq');
+          $query->bind('d', $repo_ids);
+          $query->bind('f', implode('|', $facet_strings));
+          $facet_string = $query->execute();
+          $query->close();
+          $session->close();
+          if ($facet_string) {
+            if (stristr($facet_string, '<ark>')) {
+              $results = $this->regex_arks($facet_string);
+            }
+            else {
+              $results = false;
+            }
           }
           else {
-            $results = false;
+            throw new Exception('An error occurred getting facet results.');
           }
         }
-        else {
-          throw new Exception('An error occurred getting facet results.');
+        catch (Exception $e) {
+          throw new Exception('Error communicating with BaseX to get facet results.');
         }
       }
       $this->facet_results = $results;
@@ -317,51 +327,56 @@ class AW_Search {
     // POST ARKs to facet_terms.xq
     $types = get_facet_types();
     $max_shown = 20;
-    $session = new AW_Session();
-    $query = $session->get_query('get-facets.xq');
-    $query->bind('n', implode('|', array_keys($types)));
-    $query->bind('a', implode('|', $results));
-    $query->bind('m', $max_shown);
-    $facet_result_string = $query->execute();
-    $query->close();
-    $session->close();
-    if ($facet_result_string) {
-      $facet_xml = simplexml_load_string($facet_result_string);
-      
-      // Start output buffer
-      ob_start();
-      
-      // Repository facet
-      if (count($this->get_repos()) > 1) {
-        $repos = array();
+    try {
+      $session = new AW_Session();
+      $query = $session->get_query('get-facets.xq');
+      $query->bind('n', implode('|', array_keys($types)));
+      $query->bind('a', implode('|', $results));
+      $query->bind('m', $max_shown);
+      $facet_result_string = $query->execute();
+      $query->close();
+      $session->close();
+      if ($facet_result_string) {
+        $facet_xml = simplexml_load_string($facet_result_string);
         
-        // Get repository information for the ARKs
-        if ($mysqli = connect()) {
-          $ark_result = $mysqli->query('SELECT repo_id, count(ark) as count
-            FROM arks
-            WHERE ark IN("' . implode('","', $results) . '")
-            GROUP BY repo_id
-            ORDER BY count DESC'
-          );
+        // Start output buffer
+        ob_start();
+        
+        // Repository facet
+        if (count($this->get_repos()) > 1) {
           $repos = array();
-          while ($ark_row = $ark_result->fetch_assoc()) {
-            $repos[$ark_row['repo_id']] = $ark_row['count'];
-          }
           
-          // Print repository facet
-          echo '<h3>Repository</h3>';
-          echo '<ul>';
-          foreach ($repos as $repo_id => $repo_count) {
-            $repo = new AW_Repo($repo_id);
-            echo '<li><a href="' . $this->get_link('r=' . $repo->get_mainagencycode()) . '">' . $repo->get_name() . '</a> (' . $repo_count . ')</li>';
+          // Get repository information for the ARKs
+          if ($mysqli = connect()) {
+            $ark_result = $mysqli->query('SELECT repo_id, count(ark) as count
+              FROM arks
+              WHERE ark IN("' . implode('","', $results) . '")
+              GROUP BY repo_id
+              ORDER BY count DESC'
+            );
+            $repos = array();
+            while ($ark_row = $ark_result->fetch_assoc()) {
+              $repos[$ark_row['repo_id']] = $ark_row['count'];
+            }
+            
+            // Print repository facet
+            echo '<h3>Repository</h3>';
+            echo '<ul>';
+            foreach ($repos as $repo_id => $repo_count) {
+              $repo = new AW_Repo($repo_id);
+              echo '<li><a href="' . $this->get_link('r=' . $repo->get_mainagencycode()) . '">' . $repo->get_name() . '</a> (' . $repo_count . ')</li>';
+            }
+            echo '</ul>';
+            $mysqli->close();
           }
-          echo '</ul>';
-          $mysqli->close();
         }
       }
+      else {
+        throw new Exception('An error occurred printing facets.');
+      }
     }
-    else {
-      throw new Exception('An error occurred printing facets.');
+    catch (Exception $e) {
+      throw new Exception('Error communicating with BaseX to print facets.');
     }
     
     // Place, Name, Subject, Occupation, and Material Type
