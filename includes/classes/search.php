@@ -103,33 +103,39 @@ class AW_Search {
       
       // For each term, remove if stopword
       foreach ($exploded_query as $key => $term) {
-        // If whole term is a stopword, exclude
-        if (!stristr($term, ' ')) {
-          $lowercase_term = strtolower($term);
-          $stripped_term = $this->strip_chars($lowercase_term);
-          if ($lowercase_term && isset($stopwords[$stripped_term])) {
-            unset($exploded_query[$key]);
-            $excluded_words[] = $term;
-          }
-          else {
-            $exploded_query[$key] = $stripped_term;
-          }
+        // If whole term is punctuation, remove it
+        if (trim($this->strip_chars($term)) == '') {
+          unset($exploded_query[$key]);
         }
-        // If term is a phrase and contains a stopword, remove it
         else {
-          $exploded_term = explode(' ', $this->strip_chars($term));
-          $replaced_term = $term;
-          foreach ($exploded_term as $word_key => $word) {
-            $lowercase_word = strtolower($word);
-            if ($lowercase_word && isset($stopwords[$lowercase_word])) {
-              $replaced_term = str_replace($word, '', $replaced_term);
-              $excluded_words[] = $word;
+          // If whole term is a stopword, exclude it
+          if (!stristr($term, ' ')) {
+            $lowercase_term = strtolower($term);
+            $stripped_term = $this->strip_chars($lowercase_term);
+            if ($lowercase_term && isset($stopwords[$stripped_term])) {
+              unset($exploded_query[$key]);
+              $excluded_words[] = $term;
             }
-            else if (stristr($replaced_term, '\'')) {
-              $replaced_term= str_replace('\'', ' ', $replaced_term);
+            else {
+              $exploded_query[$key] = $stripped_term;
             }
           }
-          $exploded_query[$key] = $this->strip_chars($replaced_term);
+          // If term is a phrase and contains a stopword, exclude it
+          else {
+            $exploded_term = explode(' ', $this->strip_chars($term));
+            $replaced_term = $term;
+            foreach ($exploded_term as $word_key => $word) {
+              $lowercase_word = strtolower($word);
+              if ($lowercase_word && isset($stopwords[$lowercase_word])) {
+                $replaced_term = str_replace($word, '', $replaced_term);
+                $excluded_words[] = $word;
+              }
+              else if (stristr($replaced_term, '\'')) {
+                $replaced_term= str_replace('\'', ' ', $replaced_term);
+              }
+            }
+            $exploded_query[$key] = $this->strip_chars($replaced_term);
+          }
         }
       }
       
