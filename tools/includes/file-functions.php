@@ -646,10 +646,16 @@ function upload_file($file_contents, $file_name, $ark, $replace, $user_id) {
           $errors[] = 'The ARK in the submitted file, <strong>' . $trimmed_ark_in_file . '</strong>, doesn\'t match the ARK selected.';
         }
         else {
-          // If replacing and new file name is different, remove old file
+          // If replacing...
           if ($replace) {
             $current_file_name = $current_finding_aid->get_file();
-            if ($file_name != $current_file_name) {
+            // If file name is currently blank, set $replace to 0
+            // Replace could be 1 in a batch job where uploaded files are new
+            if ($current_file_name == '') {
+              $replace = 0;
+            }
+            // If new file name is different, remove old file
+            else if ($file_name != $current_file_name) {
               $current_file_path = $repo_path . '/' . $current_file_name;
               if (file_exists($current_file_path)) {
                 unlink($current_file_path);
