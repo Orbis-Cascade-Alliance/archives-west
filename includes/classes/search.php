@@ -77,7 +77,7 @@ class AW_Search {
   // Remove punctuation from a string
   function strip_chars($string) {
     $stripped = preg_replace('/[^a-z0-9\-\s]+/i', ' ', $string);
-    return preg_replace('/\s+/', ' ', $stripped);
+    return trim(preg_replace('/\s+/', ' ', $stripped));
   }
   
   // Filter the query passed to BaseX using the stopwords file
@@ -104,7 +104,7 @@ class AW_Search {
       // For each term, remove if stopword
       foreach ($exploded_query as $key => $term) {
         // If whole term is punctuation, remove it
-        if (trim($this->strip_chars($term)) == '') {
+        if ($this->strip_chars($term) == '') {
           unset($exploded_query[$key]);
         }
         else {
