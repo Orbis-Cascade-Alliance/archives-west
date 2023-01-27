@@ -125,6 +125,14 @@ class AW_Updates {
         $this->mark_complete();
       }
       catch (Exception $e) {
+        $this->mark_failed();
+        $message = "Index updates failed for:<br />\r\n";
+        ob_start();
+        var_dump($updates);
+        $message .= ob_get_contents();
+        ob_end_clean();
+        $mail = new AW_Mail('webmaster@orbiscascade.org', 'BaseX Updates Failed', $message);
+        $mail->send();
         throw new Exception('Error communicating with BaseX to update indexes.');
       }
     }
@@ -137,6 +145,16 @@ class AW_Updates {
     $ids = $this->get_ids();
     if ($mysqli = connect()) {
       $mysqli->query('UPDATE updates SET complete=1 WHERE id in (' . $ids . ')');
+      $mysqli->close();
+    }
+  }
+  
+  // Mark updates as failed
+  // Do this to prevent jobs from failing repeatedly until the cause is addressed
+  function mark_failed() {
+    $ids = $this->get_ids();
+    if ($mysqli = connect()) {
+      $mysqli->query('UPDATE updates SET complete=2 WHERE id in (' . $ids . ')');
       $mysqli->close();
     }
   }
