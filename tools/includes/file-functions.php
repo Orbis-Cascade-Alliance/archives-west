@@ -705,7 +705,21 @@ function upload_file($file_contents, $file_name, $ark, $replace, $user_id) {
               $session->close();
             }
             catch (Exception $e) {
+              log_error($e->getMessage());
               $errors[] = 'Error communicating with BaseX to upate document.';
+            }
+            
+            // Save file in AWS S3
+            include(AW_INCLUDES . '/classes/s3.php');
+            foreach (S3_BUCKETS as $bucket) {
+              try {
+                $s3 = new AW_S3($bucket['name'], $bucket['region'], $bucket['class'], $bucket['path']);
+                $s3->put_file($repo->get_folder() . '/' . $file_name, $file_contents);
+              }
+              catch (Exception $e) {
+                log_error($e->getMessage());
+                $errors[] = 'Error archiving file in AWS.';
+              }
             }
             
             // Start caching process
