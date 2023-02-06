@@ -710,7 +710,7 @@ function upload_file($file_contents, $file_name, $ark, $replace, $user_id) {
             }
             
             // Save file in AWS S3
-            include(AW_INCLUDES . '/classes/s3.php');
+            require_once(AW_INCLUDES . '/classes/s3.php');
             foreach (S3_BUCKETS as $bucket) {
               try {
                 $s3 = new AW_S3($bucket['name'], $bucket['region'], $bucket['class'], $bucket['path']);
