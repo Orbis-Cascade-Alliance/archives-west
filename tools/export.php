@@ -31,43 +31,48 @@ if ($repo_id != 0) {
   $repo = new AW_Repo($repo_id);
   
   // Get export information from BaseX
-  $session = new AW_Session();
-  $query = $session->get_query('get-export.xq');
-  $query->bind('d', $repo_id);
-  $query->bind('a', '');
-  $result_string = $query->execute();
-  $query->close();
-  $session->close();
-  if ($result_string) {
-    
-    // Place EADs in array for rows
-    $eads = array();
-    $result_xml = simplexml_load_string($result_string);
-    foreach ($result_xml->ead as $ead) {
-      $ark = (string) $ead->ark;
-      $title = (string) $ead->title;
-      $date = (string) $ead->date;
-      $modified = (string) $ead->modified;
-      $modified = date('Y-m-d', strtotime($modified));
-      $collection = (string) $ead->collection;
-      $file = (string) $ead->file;
-      $eads[] = array($ark, $title, $date, $collection, $file, $modified);
+  try {
+    $session = new AW_Session();
+    $query = $session->get_query('get-export.xq');
+    $query->bind('d', $repo_id);
+    $query->bind('a', '');
+    $result_string = $query->execute();
+    $query->close();
+    $session->close();
+    if ($result_string) {
+      
+      // Place EADs in array for rows
+      $eads = array();
+      $result_xml = simplexml_load_string($result_string);
+      foreach ($result_xml->ead as $ead) {
+        $ark = (string) $ead->ark;
+        $title = (string) $ead->title;
+        $date = (string) $ead->date;
+        $modified = (string) $ead->modified;
+        $modified = date('Y-m-d', strtotime($modified));
+        $collection = (string) $ead->collection;
+        $file = (string) $ead->file;
+        $eads[] = array($ark, $title, $date, $collection, $file, $modified);
+      }
+      
+      // Return CSV file
+      ob_start();
+      $file = fopen("php://output", 'w');
+      fputcsv($file, array('ARK', 'Title', 'Coverage Dates', 'Collection', 'File', 'Last Modified'));
+      foreach ($eads as $row) {
+        fputcsv($file, $row);
+      }
+      fclose($file);
+      header('Content-Type: text/csv; charset=utf-8');
+      header('Content-Disposition: attachment; filename=' . $repo->get_mainagencycode() . '-' . date('Y-m-d') . '.csv');
+      ob_get_flush();
     }
-    
-    // Return CSV file
-    ob_start();
-    $file = fopen("php://output", 'w');
-    fputcsv($file, array('ARK', 'Title', 'Coverage Dates', 'Collection', 'File', 'Last Modified'));
-    foreach ($eads as $row) {
-      fputcsv($file, $row);
+    else {
+      throw new Exception('REST response failed.');
     }
-    fclose($file);
-    header('Content-Type: text/csv; charset=utf-8');
-    header('Content-Disposition: attachment; filename=' . $repo->get_mainagencycode() . '-' . date('Y-m-d') . '.csv');
-    ob_get_flush();
   }
-  else {
-    throw new Exception('REST response failed.');
+  catch (Exception $e) {
+    throw new Exception('Error communicating with BaseX to export finding aid information.');
   }
 }
 else {

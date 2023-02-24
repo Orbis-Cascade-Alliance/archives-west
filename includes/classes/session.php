@@ -15,7 +15,12 @@ class AW_Session {
   private $repos;
   
   function __construct() {
-    $this->session = new Session("localhost", 1984, BASEX_USER, BASEX_PASS);
+    try {
+      $this->session = new Session("localhost", 1984, BASEX_USER, BASEX_PASS);
+    }
+    catch (BaseXException $e) {
+      throw new Exception($e->getMessage());
+    }
   }
   
   // Return a query object
@@ -165,7 +170,7 @@ class AW_Session {
       $query->close();
     }
     catch (BaseXException $e) {
-      print $e->getMessage();
+      throw new Exception($e->getMessage());
     }
   }
   
@@ -180,7 +185,7 @@ class AW_Session {
       $query->close();
     }
     catch (BaseXException $e) {
-      print $e->getMessage();
+      throw new Exception($e->getMessage());
     }
   }
   
@@ -194,7 +199,7 @@ class AW_Session {
       $query->close();
     }
     catch (BaseXException $e) {
-      print $e->getMessage();
+      throw new Exception($e->getMessage());
     }
   }
   
@@ -241,7 +246,7 @@ class AW_Session {
       $query->execute();
       $query->close();
     } catch (BaseXException $e) {
-      print $e->getMessage();
+      throw new Exception($e->getMessage());
     }
   }
   
@@ -255,7 +260,7 @@ class AW_Session {
       $query->close();
     }
     catch (BaseXException $e) {
-      print $e->getMessage();
+      throw new Exception($e->getMessage());
     }
   }
   
@@ -269,7 +274,7 @@ class AW_Session {
       $query->close();
     }
     catch (BaseXException $e) {
-      print $e->getMessage();
+      throw new Exception($e->getMessage());
     }
   }
   
@@ -327,7 +332,7 @@ class AW_Session {
       $query->execute();
       $query->close();
     } catch (BaseXException $e) {
-      print $e->getMessage();
+      throw new Exception($e->getMessage());
     }
   }
   
@@ -353,7 +358,7 @@ class AW_Session {
       $query->close();
     }
     catch (BaseXException $e) {
-      print $e->getMessage();
+      throw new Exception($e->getMessage());
     }
   }
   

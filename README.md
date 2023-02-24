@@ -5,7 +5,8 @@ This is the code of the 2022 Archives West server, which uses BaseX for indexing
 This repository does not included all of the files needed by the website.
 - The defs.php file above the public directory, which contains definitions of paths and connection credentials
 - The .htaccess file, which handles redirection of ARK links and differs by server
-- The google directory, which contains the [Google API PHP Client](https://github.com/googleapis/google-api-php-client)
+The aws directory, which contains the [AWS SDK for PHP](https://docs.aws.amazon.com/sdk-for-php/index.html) used to store backups of uploaded EADs in S3 buckets
+- The google directory, which contains the [Google API PHP Client](https://github.com/googleapis/google-api-php-client) used for Analytics reports
 - The repos directory, which contains the files of all repositories participating in Archives West
 
 ## Set Up

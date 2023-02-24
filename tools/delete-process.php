@@ -39,9 +39,14 @@ if (isset($_POST['ark']) && !empty($_POST['ark'])) {
         if (file_exists($file_path)) {
           rename($file_path, $trash_path);
         }
-        $session = new AW_Session();
-        $session->delete_document($repo_id, $file_name);
-        $session->close();
+        try {
+          $session = new AW_Session();
+          $session->delete_document($repo_id, $file_name);
+          $session->close();
+        }
+        catch (Exception $e) {
+          die('Error communicating with BaseX to delete document. Submit a ULC Help Request.');
+        }
       }
       
       // Delete cache

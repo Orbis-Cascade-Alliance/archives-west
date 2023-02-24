@@ -1,5 +1,6 @@
 .htaccess
 log.txt
+aws/
 dev/
 google/
 repos/

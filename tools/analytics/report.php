@@ -15,6 +15,8 @@ if ($user->is_admin()) {
   include('../repo-form.php'); 
 }
 if ($repo_id != 0) {
+  
+  // Set date range
   $start_date = date('Y-m-d', strtotime('first day of this month'));
   $end_date = date('Y-m-d', time());
   if (isset($_SESSION['report_start']) && !empty($_SESSION['report_start'])) {
@@ -23,9 +25,20 @@ if ($repo_id != 0) {
   if (isset($_SESSION['report_end']) && !empty($_SESSION['report_end'])) {
     $end_date = $_SESSION['report_end'];
   }
+  
+  // Set maximum date
+  $max_date = date('F j, Y', strtotime('-3 days'));
+  if ($mysqli = connect()) {
+    $max_date_result = $mysqli->query('SELECT max(date) FROM views');
+    if ($max_date_result->num_rows == 1) {
+      while ($row = $max_date_result->fetch_row()) {
+        $max_date = date('F j, Y', strtotime($row[0]));
+      }
+    }
+  }
 ?>
-<p>Select a date range below to generate a report of finding aid views from Google Analytics. Usage was recorded starting August 15, 2016.</p>
-<p>For large repositories with thousands of finding aids, requests can take a long time and might fail after 60 seconds. Requests are most likely to be successful with date ranges of <strong>90 days</strong> or less.</p>
+<p>Select a date range below to generate a report of finding aid views from Google Analytics.</p>
+<p>Usage was recorded starting August 15, 2016, and data is current up to <strong><?php echo $max_date;?></strong>. For institutions that participated in the digital objects harvesting pilot, analytics include clicks on digital objects through February 2022.</p>
 <form id="form-report" method="post" action="report.php">
   <p>
     <label for="start">Start</label> <input type="text" name="start" id="start" class="date" value="<?php echo $start_date; ?>" />

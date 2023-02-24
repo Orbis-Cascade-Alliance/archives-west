@@ -647,10 +647,16 @@ function upload_file($file_contents, $file_name, $ark, $replace, $user_id) {
           $errors[] = 'The ARK in the submitted file, <strong>' . $trimmed_ark_in_file . '</strong>, doesn\'t match the ARK selected.';
         }
         else {
-          // If replacing and new file name is different, remove old file
+          // If replacing...
           if ($replace) {
             $current_file_name = $current_finding_aid->get_file();
-            if ($file_name != $current_file_name) {
+            // If file name is currently blank, set $replace to 0
+            // Replace could be 1 in a batch job where uploaded files are new
+            if ($current_file_name == '') {
+              $replace = 0;
+            }
+            // If new file name is different, remove old file
+            else if ($file_name != $current_file_name) {
               $current_file_path = $repo_path . '/' . $current_file_name;
               if (file_exists($current_file_path)) {
                 unlink($current_file_path);
@@ -689,14 +695,33 @@ function upload_file($file_contents, $file_name, $ark, $replace, $user_id) {
             }
             
             // Update BaseX document database
-            $session = new AW_Session();
-            if ($replace) {
-              $session->replace_document($repo_id, $current_file_name, $file_name);
+            try {
+              $session = new AW_Session();
+              if ($replace) {
+                $session->replace_document($repo_id, $current_file_name, $file_name);
+              }
+              else {
+                $session->add_document($repo_id, $file_name);
+              }
+              $session->close();
             }
-            else {
-              $session->add_document($repo_id, $file_name);
+            catch (Exception $e) {
+              log_error($e->getMessage());
+              $errors[] = 'Error communicating with BaseX to upate document.';
             }
-            $session->close();
+            
+            // Save file in AWS S3
+            require_once(AW_INCLUDES . '/classes/s3.php');
+            foreach (S3_BUCKETS as $bucket) {
+              try {
+                $s3 = new AW_S3($bucket['name'], $bucket['region'], $bucket['class'], $bucket['path']);
+                $s3->put_file($repo->get_folder() . '/' . $file_name, $file_contents);
+              }
+              catch (Exception $e) {
+                log_error($e->getMessage());
+                $errors[] = 'Error archiving file in AWS.';
+              }
+            }
             
             // Start caching process
             $finding_aid = new AW_Finding_Aid($ark);

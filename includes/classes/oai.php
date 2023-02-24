@@ -537,44 +537,49 @@ class AW_OAI {
       else {
         $repo_ids = array_keys(get_all_repos());
       }
-      $session = new AW_Session();
-      $query = $session->get_query('dublin-core.xq');
-      $query->bind('d', implode('|', $repo_ids));
-      $query->bind('a', implode('|', $this->get_arks()));
-      $result_string = $query->execute();
-      $query->close();
-      $session->close();
-      if ($result_string) {
-        $result_xml = simplexml_load_string($result_string);
-        foreach ($result_xml->children() as $record) {
-          $ark = (string) $record->ark;
-          $creators = array();
-          foreach($record->creators->creator as $creator) {
-            $creators[] = $creator;
+      try {
+        $session = new AW_Session();
+        $query = $session->get_query('dublin-core.xq');
+        $query->bind('d', implode('|', $repo_ids));
+        $query->bind('a', implode('|', $this->get_arks()));
+        $result_string = $query->execute();
+        $query->close();
+        $session->close();
+        if ($result_string) {
+          $result_xml = simplexml_load_string($result_string);
+          foreach ($result_xml->children() as $record) {
+            $ark = (string) $record->ark;
+            $creators = array();
+            foreach($record->creators->creator as $creator) {
+              $creators[] = $creator;
+            }
+            $languages = array();
+            foreach ($record->languages->language as $language) {
+              $languages[] = $language;
+            }
+            $subjects = array();
+            foreach ($record->subjects->subject as $subject) {
+              $subjects[] = $subject;
+            }
+            $records[$ark] = array(
+              'repo_id' => (string) $record->db,
+              'title' => (string) $record->title,
+              'date' => (string) $record->date,
+              'creators' => $creators,
+              'subjects' => $subjects,
+              'languages' => $languages,
+              'abstract' => (string) $record->abstract,
+              'extent' => (string) $record->extent,
+              'rights' => (string) $record->rights
+            );
           }
-          $languages = array();
-          foreach ($record->languages->language as $language) {
-            $languages[] = $language;
-          }
-          $subjects = array();
-          foreach ($record->subjects->subject as $subject) {
-            $subjects[] = $subject;
-          }
-          $records[$ark] = array(
-            'repo_id' => (string) $record->db,
-            'title' => (string) $record->title,
-            'date' => (string) $record->date,
-            'creators' => $creators,
-            'subjects' => $subjects,
-            'languages' => $languages,
-            'abstract' => (string) $record->abstract,
-            'extent' => (string) $record->extent,
-            'rights' => (string) $record->rights
-          );
+        }
+        else {
+          throw new Exception('REST response failed.');
         }
       }
-      else {
-        throw new Exception('REST response failed.');
+      catch (Exception $e) {
+        throw new Exception('Error communicating with BaseX.');
       }
       $this->dc_records = $records;
     }

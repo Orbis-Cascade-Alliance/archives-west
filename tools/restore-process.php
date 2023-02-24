@@ -28,9 +28,14 @@ if (isset($_POST['ark']) && !empty($_POST['ark'])) {
           rename($trash_path, $file_path);
           
           // Add to BaseX
-          $session = new AW_Session();
-          $session->add_document($repo_id, $file_name);
-          $session->close();
+          try {
+            $session = new AW_Session();
+            $session->add_document($repo_id, $file_name);
+            $session->close();
+          }
+          catch (Exception $e) {
+            $errors[] = 'Error communicating with BaseX to add document.';
+          }
           
           if ($mysqli = connect()) {
             // Update arks table
