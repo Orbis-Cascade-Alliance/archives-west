@@ -36,9 +36,14 @@ function validate_date(start_date) {
 }
 
 function submit_form(type, data) {
-  $('#form-harvest-' + type + ' input[type="submit"]').hide();
   $('#results').html('<div class="loading"></div>');
   $.post('harvest-process-' + type + '.php', data, function(result) {
-    $('#results').html(result);
+    if (result.substr(0, 16) == '<p>Harvest job #') {
+      var job_page = $(result).find('a').eq(0).attr('href');
+      window.location.assign(job_page);
+    }
+    else {
+      $('#results').html(result);
+    }
   });
 }
