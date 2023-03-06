@@ -638,108 +638,121 @@ function upload_file($file_contents, $file_name, $ark, $replace, $user_id) {
 
     if ($upload) {
       // Check ARK in file against the ARK submitted
+      libxml_use_internal_errors(true);
       $xml = simplexml_load_string($file_contents);
-      $current_file_name = '';
-      if ($ark_in_file = (string) $xml->eadheader->eadid['identifier']) {
-        $trimmed_ark_in_file = trim($ark_in_file);
-        if ($trimmed_ark_in_file != $ark) {
-          $errors[] = 'The ARK in the submitted file, <strong>' . $trimmed_ark_in_file . '</strong>, doesn\'t match the ARK selected.';
-        }
-        else {
-          // If replacing...
-          if ($replace) {
-            $current_file_name = $current_finding_aid->get_file();
-            // If file name is currently blank, set $replace to 0
-            // Replace could be 1 in a batch job where uploaded files are new
-            if ($current_file_name == '') {
-              $replace = 0;
-            }
-            // If new file name is different, remove old file
-            else if ($file_name != $current_file_name) {
-              $current_file_path = $repo_path . '/' . $current_file_name;
-              if (file_exists($current_file_path)) {
-                unlink($current_file_path);
-              }
-            }
+      if ($xml !== FALSE) {
+        $current_file_name = '';
+        if ($ark_in_file = (string) $xml->eadheader->eadid['identifier']) {
+          $trimmed_ark_in_file = trim($ark_in_file);
+          if ($trimmed_ark_in_file != $ark) {
+            $errors[] = 'The ARK in the submitted file, <strong>' . $trimmed_ark_in_file . '</strong>, doesn\'t match the ARK selected.';
           }
-          
-          // Strip namespaces and add submission date
-          $stripped_string = strip_namespaces($file_contents);
-          $new_string = add_submission_date($stripped_string, time());
-          
-          // Save the new file
-          $fh = fopen($file_path, 'w');
-          fwrite($fh, $new_string);
-          fclose($fh);
-          chmod($file_path, 0644);
-          
-          if (file_exists($file_path)) {
-            if ($mysqli = connect()) {
-              // Update arks table
-              $update_stmt = $mysqli->prepare('UPDATE arks SET file=? WHERE ark=?');
-              $update_stmt->bind_param('ss', $file_name, $ark);
-              $update_stmt->execute();
-              $update_stmt->close();
+          else {
+            // If replacing...
+            if ($replace) {
+              $current_file_name = $current_finding_aid->get_file();
+              // If file name is currently blank, set $replace to 0
+              // Replace could be 1 in a batch job where uploaded files are new
+              if ($current_file_name == '') {
+                $replace = 0;
+              }
+              // If new file name is different, remove old file
+              else if ($file_name != $current_file_name) {
+                $current_file_path = $repo_path . '/' . $current_file_name;
+                if (file_exists($current_file_path)) {
+                  unlink($current_file_path);
+                }
+              }
+            }
+            
+            // Strip namespaces and add submission date
+            $stripped_string = strip_namespaces($file_contents);
+            $new_string = add_submission_date($stripped_string, time());
+            
+            // Save the new file
+            $fh = fopen($file_path, 'w');
+            fwrite($fh, $new_string);
+            fclose($fh);
+            chmod($file_path, 0644);
+            
+            if (file_exists($file_path)) {
+              if ($mysqli = connect()) {
+                // Update arks table
+                $update_stmt = $mysqli->prepare('UPDATE arks SET file=? WHERE ark=?');
+                $update_stmt->bind_param('ss', $file_name, $ark);
+                $update_stmt->execute();
+                $update_stmt->close();
+                
+                // Insert into updates table
+                $action = $replace ? 'replace' : 'add';
+                $existing_result = $mysqli->query('SELECT id FROM updates WHERE ark="' . $ark . '" AND action="' . $action . '" AND complete=0');
+                if ($existing_result->num_rows == 0) {
+                  $insert_stmt = $mysqli->prepare('INSERT INTO updates (user, action, ark) VALUES (?, ?, ?)');
+                  $insert_stmt->bind_param('iss', $user_id, $action, $ark);
+                  $insert_stmt->execute();
+                  $insert_stmt->close();
+                }
+                $mysqli->close();
+              }
               
-              // Insert into updates table
-              $action = $replace ? 'replace' : 'add';
-              $existing_result = $mysqli->query('SELECT id FROM updates WHERE ark="' . $ark . '" AND action="' . $action . '" AND complete=0');
-              if ($existing_result->num_rows == 0) {
-                $insert_stmt = $mysqli->prepare('INSERT INTO updates (user, action, ark) VALUES (?, ?, ?)');
-                $insert_stmt->bind_param('iss', $user_id, $action, $ark);
-                $insert_stmt->execute();
-                $insert_stmt->close();
-              }
-              $mysqli->close();
-            }
-            
-            // Update BaseX document database
-            try {
-              $session = new AW_Session();
-              if ($replace) {
-                $session->replace_document($repo_id, $current_file_name, $file_name);
-              }
-              else {
-                $session->add_document($repo_id, $file_name);
-              }
-              $session->close();
-            }
-            catch (Exception $e) {
-              log_error($e->getMessage());
-              $errors[] = 'Error communicating with BaseX to upate document.';
-            }
-            
-            // Save file in AWS S3
-            require_once(AW_INCLUDES . '/classes/s3.php');
-            foreach (S3_BUCKETS as $bucket) {
+              // Update BaseX document database
               try {
-                $s3 = new AW_S3($bucket['name'], $bucket['region'], $bucket['class'], $bucket['path']);
-                $s3->put_file($repo->get_folder() . '/' . $file_name, $file_contents);
+                $session = new AW_Session();
+                if ($replace) {
+                  $session->replace_document($repo_id, $current_file_name, $file_name);
+                }
+                else {
+                  $session->add_document($repo_id, $file_name);
+                }
+                $session->close();
               }
               catch (Exception $e) {
                 log_error($e->getMessage());
-                $errors[] = 'Error archiving file in AWS.';
+                $errors[] = 'Error communicating with BaseX to upate document.';
               }
+              
+              // Save file in AWS S3
+              require_once(AW_INCLUDES . '/classes/s3.php');
+              foreach (S3_BUCKETS as $bucket) {
+                try {
+                  $s3 = new AW_S3($bucket['name'], $bucket['region'], $bucket['class'], $bucket['path']);
+                  $s3->put_file($repo->get_folder() . '/' . $file_name, $file_contents);
+                }
+                catch (Exception $e) {
+                  log_error($e->getMessage());
+                  $errors[] = 'Error archiving file in AWS.';
+                }
+              }
+              
+              // Start caching process
+              $finding_aid = new AW_Finding_Aid($ark);
+              if ($replace) {
+                $finding_aid->delete_cache();
+              }
+              $finding_aid->build_cache();
+              
+              // Generate QR code
+              $finding_aid->get_qr_code();
+              
             }
-            
-            // Start caching process
-            $finding_aid = new AW_Finding_Aid($ark);
-            if ($replace) {
-              $finding_aid->delete_cache();
+            else {
+              $errors[] = 'File could not be saved to repository.';
             }
-            $finding_aid->build_cache();
-            
-            // Generate QR code
-            $finding_aid->get_qr_code();
-            
           }
-          else {
-            $errors[] = 'File could not be saved to repository.';
-          }
+        }
+        else {
+          $errors[] = 'ARK not found in identifier attribute of eadheader/eadid.';
         }
       }
       else {
-        $errors[] = 'ARK not found in identifier attribute of eadheader/eadid.';
+        $xml_errors = 'XML is invalid. See details below.<ul>';
+        foreach (libxml_get_errors() as $xml_error) {
+          $xml_error_message = (string) $xml_error->message;
+          $xml_errors .= '<li>' . $xml_error_message . '</li>';
+        }
+        $xml_errors .= '</ul>';
+        $errors[] = $xml_errors;
+        libxml_clear_errors();
       }
     }
   }
