@@ -6,10 +6,14 @@ $page_title = 'Edit Repository';
 require_once(getenv('AW_HOME') . '/defs.php');
 include(AW_INCLUDES . '/server-header.php');
 include(AW_TOOL_INCLUDES . '/tools-header.php');
+?>
+<link rel="stylesheet" href="<?php echo AW_DOMAIN; ?>/tools/layout/repository-edit.css" />
+<script src="<?php echo AW_DOMAIN; ?>/tools/scripts/repository-edit.js"></script>
+<?php
 include(AW_TOOL_INCLUDES . '/tools-header-end.php');
 
 function print_field($type, $name, $label, $value) {
-  $field = '<p><label for="' . $name . '">' . $label . '</label> ';
+  $field = '<label for="' . $name . '">' . $label . '</label> ';
   switch ($type) {
     case 'text':
       $field .= '<input type="text" name="' . $name . '" id="' . $name . '" value="' . $value . '" />';
@@ -37,7 +41,6 @@ function print_field($type, $name, $label, $value) {
       break;
     default:
   }
-  $field .= '</p>';
   return $field; 
 }
 ?>
@@ -68,20 +71,24 @@ if ($repo_id != 0) {
 
 <form id="form-repo-edit" class="table-layout" method="post" action="<?php echo AW_DOMAIN; ?>/tools/repository-edit-process.php">
   <?php
-  echo print_field('text', 'name', 'Repository Name', $repo->get_name());
-  echo print_field('text', 'email', 'Email Address', $repo->get_email());
-  echo print_field('text', 'url', 'Website URL', $repo->get_url());
-  echo print_field('text', 'phone', 'Phone Number', $repo->get_phone());
-  echo print_field('text', 'fax', 'Fax Number', $repo->get_fax());
-  echo print_field('address', 'address', 'Address', $repo->get_address());
-  echo print_field('textarea', 'collection', 'Collection Information', $repo->get_collection_info());
-  echo print_field('textarea', 'copy', 'Copy Information', $repo->get_copy_info());
-  echo print_field('textarea', 'visit', 'Visitation Information', $repo->get_visit_info());
-  echo print_field('rights', 'rights', 'Rights Statement', $repo->get_rights());
-  echo print_field('text', 'as_host', 'ArchivesSpace Host for OAI-PMH', $repo->get_as_host());
+  echo '<p>' . print_field('text', 'name', 'Repository Name', $repo->get_name()) . '</p>';
+  echo '<p>' . print_field('text', 'email', 'Email Address', $repo->get_email()) . '</p>';
+  echo '<p>' . print_field('text', 'url', 'Website URL', $repo->get_url()) . '</p>';
+  echo '<p>' . print_field('text', 'phone', 'Phone Number', $repo->get_phone()) . '</p>';
+  echo '<p>' . print_field('text', 'fax', 'Fax Number', $repo->get_fax()) . '</p>';
+  echo '<p>' . print_field('address', 'address', 'Address', $repo->get_address()) . '</p>';
+  echo '<p>' . print_field('textarea', 'collection', 'Collection Information', $repo->get_collection_info()) . '</p>';
+  echo '<p>' . print_field('textarea', 'copy', 'Copy Information', $repo->get_copy_info()) . '</p>';
+  echo '<p>' . print_field('textarea', 'visit', 'Visitation Information', $repo->get_visit_info()) . '</p>';
+  echo '<p>' . print_field('rights', 'rights', 'Rights Statement', $repo->get_rights()) . '</p>';
+  echo '<p>' . print_field('text', 'as_host', 'ArchivesSpace Host for OAI-PMH', $repo->get_as_host()) . '<button id="as-test">Test Connection</button></p>';
   ?>
   <p><input type="submit" value="Save Changes" /></p>
 </form>
+
+<div id="dialog-test" title="Test Connection">
+  <div class="loading"></div>
+</div>
 
 <?php
 }

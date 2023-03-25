@@ -1,6 +1,6 @@
 <?php
 // Include definitions
-$page_title = 'ArchivesSpace Harvester (OAI-PMH)';
+$page_title = 'ArchivesSpace Harvester';
 require_once(getenv('AW_HOME') . '/defs.php');
 include(AW_INCLUDES . '/server-header.php');
 include(AW_TOOL_INCLUDES . '/tools-header.php');
@@ -41,17 +41,17 @@ if ($repo_id != 0) {
   else {
     // Get tab
     $tab = 'single';
-    if (isset($_GET['tab']) && $_GET['tab'] == 'set') {
+    /*if (isset($_GET['tab']) && $_GET['tab'] == 'set') {
       $tab = 'set';
-    }
+    }*/
     ?>
     <p>This tool harvests resources from an ArchivesSpace repository and uploads them to Archives West using the <a href="https://archivesspace.github.io/tech-docs/architecture/oai-pmh/" target="_blank">OAI-PMH interface</a>.</p>
     <p>Each resource must contain an XML file name in the <strong>EAD ID</strong> field and a URL with a valid ARK in the <strong>EAD Location</strong> field. See <a href="https://www.orbiscascade.org/programs/ulc/archives-and-manuscripts-collections/archivesspace/as-resource-records/">ArchivesSpace Resource Records</a> for instructions and a list of all fields required to comply with the Alliance's EAD Best Practices.</p>
     <p>Unpublished and suppressed ArchivesSpace resources cannot be harvested through this tool.</p>
-    <ul id="form-tabs" class="tabs">
+    <!--<ul id="form-tabs" class="tabs">
       <li<?php if ($tab == 'single') {echo ' class="active"';}?>><a href="?tab=single">Single Resource by URL</a></li>
       <li<?php if ($tab == 'set') {echo ' class="active"';}?>><a href="?tab=set">Set of Resources</a></li>
-    </ul>
+    </ul>-->
     <?php
     if ($tab == 'single') {
     ?>

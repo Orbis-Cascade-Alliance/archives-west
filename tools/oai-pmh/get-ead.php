@@ -13,6 +13,7 @@ $job = null;
 $resource_id = 0;
 $repo_id = 0;
 $ead_errors = array();
+$temp_file = null;
 if (isset($argv[1]) && !empty($argv[1])) {
   $harvest_id = filter_var($argv[1], FILTER_SANITIZE_NUMBER_INT);
   if ($mysqli = connect()) {
@@ -33,20 +34,26 @@ if (isset($argv[1]) && !empty($argv[1])) {
     $host = $repo->get_as_host();
     $url = $host . '/oai?verb=GetRecord&metadataPrefix=oai_ead&identifier=' . $resource_id;
     try {
+      $job = new AW_Job($job_id);
       $record_xml = get_as_oaipmh($url);
-      if ($ead = $record_xml->GetRecord->record->metadata->ead) {
-        // Save to file
-        $temp_dir = AW_REPOS . '/' . $repo->get_folder() . '/temp';
-        if (!is_dir($temp_dir)) {
-          mkdir($temp_dir, 0755);
+      if (!isset($record_xml->error)) {
+        if ($ead = $record_xml->GetRecord->record->metadata->ead) {
+          // Save to file
+          $temp_dir = AW_REPOS . '/' . $repo->get_folder() . '/temp';
+          if (!is_dir($temp_dir)) {
+            mkdir($temp_dir, 0755);
+          }
+          $temp_file = $temp_dir . '/' . $harvest_id . '.xml';
+          $fh = fopen($temp_file, 'w');
+          fwrite($fh, $ead->asXML());
+          fclose($fh);
         }
-        $temp_file = $temp_dir . '/' . $harvest_id . '.xml';
-        $fh = fopen($temp_file, 'w');
-        fwrite($fh, $ead->asXML());
-        fclose($fh);
+        else {
+          $ead_errors[] = 'No ead found for '. $resource_id;
+        }
       }
       else {
-        $ead_errors[] = 'No ead found for '. $resource_id;
+        $ead_errors[] = (string) $record_xml->error;
       }
     }
     catch (Exception $e) {

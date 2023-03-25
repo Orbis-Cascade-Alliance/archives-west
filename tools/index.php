@@ -47,16 +47,24 @@ else if ($alert_message = get_alert('tools')) {
 <div id="home-columns">
 
   <div id="submission">
-    <h2>Document Submission Tools</h2>
+    <h2>Repository Data</h2>
+    <ul>
+      <li><a href="ark-request.php">ARK Request</a></li>
+      <li><a href="repository-edit.php">Repository Registry Editor</a></li>
+    </ul>
+    <button onclick="remove_files()">Remove Files for ARKs</button>
+    <h2>Document Submission</h2>
     <ul>
       <li><a href="as2aw.php">ArchivesSpace EAD Converter</a></li>
-      <li><a href="ark-request.php">ARK Request</a></li>
-      <li><a href="batch.php">Batch Uploader for Document Submission</a></li>
+      <li><a href="validation.php">Document Validation</a></li>
       <li><a href="compliance.php">Compliance Checker</a></li>
       <li><a href="preview.php">Document Preview</a></li>
       <li><a href="upload.php">Document Submission</a></li>
-      <li><a href="validation.php">Document Validation</a></li>
-      <li><a href="repository-edit.php">Repository Registry Editor</a></li>
+    </ul>
+    <h2>Batch Jobs</h2>
+    <ul>
+      <li><a href="oai-pmh/harvest.php">ArchivesSpace Harvester</a></li>
+      <li><a href="batch.php">Batch Uploader for Document Submission</a></li>
     </ul>
   </div>
 

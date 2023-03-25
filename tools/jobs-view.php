@@ -26,6 +26,14 @@ if ($job_id != 0) {
   try {
     $job = new AW_Job($job_id);
     if ($job->get_complete()) {
+      switch ($job->get_type()) {
+        case 'as':
+          echo '<a href="' . AW_DOMAIN . '/tools/oai-pmh/harvest.php">Harvest New AS Resource</a>';
+        break;
+        case 'batch':
+          echo '<a href="' . AW_DOMAIN . '/tools/batch.php">Submit New Batch Upload</a>';
+        break;
+      }
       if ($report = $job->get_report()) {
         $job_types = get_job_types();
         echo '<div id="report">';
