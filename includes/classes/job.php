@@ -9,7 +9,6 @@ class AW_Job {
   public $user_id;
   public $arks;
   public $date;
-  public $set;
   public $start;
   public $replace;
   public $complete;
@@ -19,7 +18,7 @@ class AW_Job {
   function __construct($job_id) {
     $this->job_id = $job_id;
     if ($mysqli = connect()) {
-      $job_query = 'SELECT type, repo_id, user, date, as_set, start, replace_file, complete FROM jobs WHERE id=' . $job_id;
+      $job_query = 'SELECT type, repo_id, user, date, start, replace_file, complete FROM jobs WHERE id=' . $job_id;
       $job_result = $mysqli->query($job_query);
       if ($job_result->num_rows == 1) {
         while ($job_row = $job_result->fetch_assoc()) {
@@ -27,7 +26,6 @@ class AW_Job {
           $this->repo_id = $job_row['repo_id'];
           $this->user_id = $job_row['user'];
           $this->date = $job_row['date'];
-          $this->set = $job_row['as_set'];
           $this->start = $job_row['start'];
           $this->replace = $job_row['replace_file'];
           $this->complete = $job_row['complete'];
@@ -68,21 +66,6 @@ class AW_Job {
   
   function get_date() {
     return $this->date;
-  }
-  
-  function get_set() {
-    return $this->set;
-  }
-  
-  function add_set($as_set) {
-    if ($mysqli = connect()) {
-      $mysqli->query('UPDATE jobs SET as_set="' . $as_set . '" WHERE id=' . $this->get_id());
-      $mysqli->close();
-    }
-    else {
-      throw new Exception('MySQL connection error.');
-    }
-    $this->set = $as_set;
   }
   
   function get_start() {
