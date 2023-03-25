@@ -52,7 +52,6 @@ else if ($alert_message = get_alert('tools')) {
       <li><a href="ark-request.php">ARK Request</a></li>
       <li><a href="repository-edit.php">Repository Registry Editor</a></li>
     </ul>
-    <button onclick="remove_files()">Remove Files for ARKs</button>
     <h2>Document Submission</h2>
     <ul>
       <li><a href="as2aw.php">ArchivesSpace EAD Converter</a></li>
