@@ -41,6 +41,12 @@ if ($job_id != 0) {
         echo '<p>Type: ' . $job_types[$job->get_type()] . '</p>'; 
         echo $report;
         echo '</div>';
+        // Print troubleshooting link for AS Harvests with errors
+        if ($job->get_type() == 'as') {
+          if (stristr($report, '<ul class="errors">')) {
+            echo '<p>For more information, see the <strong>Troubleshooting Errors</strong> section at the end of the <a href="https://drive.google.com/file/d/11D1gfxbGhv7h6LbxHzUrcxnEsgw93e9-/view?usp=sharing" target="_blank">Harvest Documentation</a>.</p>';
+          }
+        }
       }
     }
     else {
