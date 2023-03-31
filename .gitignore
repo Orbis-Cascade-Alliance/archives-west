@@ -6,4 +6,5 @@ google/
 repos/
 tools/analytics/oauth2/credentials.json
 tools/analytics/oauth2/token.json
+tools/root-only/
 sitemap.xml
