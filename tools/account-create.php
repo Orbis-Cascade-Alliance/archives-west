@@ -3,6 +3,9 @@
 require_once(getenv('AW_HOME') . '/defs.php');
 include(AW_INCLUDES . '/server-header.php');
 
+// Get user from session and limit to admins only
+$user = get_session_user(true);
+
 $users = simplexml_load_file('users.xml');
 if ($mysqli = connect()) {
   foreach ($users->user as $user) {

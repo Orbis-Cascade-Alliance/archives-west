@@ -6,8 +6,8 @@ if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }
 
-// Get user from session
-$user = get_session_user();
+// Get user from session and limit to admins only
+$user = get_session_user(true);
 
 if (isset($_POST['ark']) && !empty($_POST['ark'])) {
   $ark = filter_var($_POST['ark'], FILTER_SANITIZE_STRING);

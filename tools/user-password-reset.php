@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
   session_start();
 }
 
-// Get user from session
+// Get user from session and limit to admins only
 $user = get_session_user(true);
 
 $username = '';
