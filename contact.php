@@ -17,7 +17,7 @@ include(AW_INCLUDES . '/header.php');
 
 <?php
 if ($mysqli = connect()) {
-  if ($repos = $mysqli->query('SELECT id, name, mainagencycode, url, collection, copy, visit FROM repos WHERE id > 0 ORDER BY name ASC')) {
+  if ($repos = $mysqli->query('SELECT id, name, mainagencycode, url, email, phone, fax, address, collection, copy, visit FROM repos WHERE id > 0 ORDER BY name ASC')) {
     ob_start();
     $repo_options = array();
     while ($repo = $repos->fetch_assoc()) {
@@ -43,6 +43,28 @@ if ($mysqli = connect()) {
       if ($repo['visit']) {
         echo '<h3>Visitation Information</h3>';
         echo '<div class="pre">' . add_links($repo['visit']) . '</div>';
+      }
+      if (!empty($repo['address']) || !empty($repo['phone']) || !empty($repo['fax']) || !empty($repo['email'])) {
+        echo '<div class="contact">';
+        echo '<h3>Contact Information</h3>';
+        if (!empty($repo['address'])) {
+          echo '<h4>Address</h4>';
+          $address = unserialize(stripslashes($repo['address']));
+          echo implode('<br />', $address);
+        }
+        if (!empty($repo['phone'])) {
+          echo '<h4>Phone</h4>';
+          echo '<p>' . $repo['phone'] . '</p>';
+        }
+        if (!empty($repo['fax'])) {
+          echo '<h4>Fax</h4>';
+          echo '<p>' . $repo['fax'] . '</p>';
+        }
+        if (!empty($repo['email'])) {
+          echo '<h4>Email</h4>';
+          echo '<p><a href="mailto:' . $repo['email'] . '">' . $repo['email'] . '</a></p>';
+        }
+        echo '</div>';
       }
       echo '</div><!-- end ' . $repo['mainagencycode'] . '-->';
     }

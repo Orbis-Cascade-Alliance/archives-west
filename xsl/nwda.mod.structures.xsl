@@ -891,30 +891,8 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
       <xsl:attribute name="href">
         <xsl:value-of select="url" />
       </xsl:attribute>
-      <xsl:attribute name="target">_blank</xsl:attribute>
       <xsl:value-of select="name" />
     </xsl:element>
-    <br />
-    <xsl:for-each select="address/*">
-      <xsl:value-of select="text()" />
-      <br />
-    </xsl:for-each>
-    <xsl:if test="phone != ''">
-      Telephone: <xsl:value-of select="phone" />
-      <br />
-    </xsl:if>
-    <xsl:if test="fax != ''">
-      Fax: <xsl:value-of select="fax" />
-      <br />
-    </xsl:if>
-    <xsl:if test="email != ''">
-      <xsl:element name="a">
-        <xsl:attribute name="href">
-          mailto:<xsl:value-of select="email" />
-        </xsl:attribute>
-        <xsl:value-of select="email" />
-      </xsl:element>
-    </xsl:if>
   </xsl:template>
   
   <xsl:template name="aw_rights" match="aw-additions/rights">

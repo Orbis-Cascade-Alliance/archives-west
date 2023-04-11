@@ -175,16 +175,7 @@ class AW_Finding_Aid {
           $additions_xml->addChild('rights', $repo->get_rights());
           $repo_xml = $additions_xml->addChild('repository');
           $repo_xml->addchild('name', $repo->get_name());
-          $repo_xml->addChild('url', $repo->get_url());
-          $address_xml = $repo_xml->addChild('address');
-          $l = 1;
-          foreach ($repo->get_address() as $line) {
-            $address_xml->addChild('line' . $l, $line);
-            $l++;
-          }
-          $repo_xml->addChild('phone', $repo->get_phone());
-          $repo_xml->addChild('fax', $repo->get_fax());
-          $repo_xml->addChild('email', $repo->get_email());
+          $repo_xml->addChild('url', AW_DOMAIN . '/contact.php#' . $repo->get_mainagencycode());
 
           // Get XSL
           $xsl = new DOMDocument;

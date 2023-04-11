@@ -86,7 +86,7 @@ if ($mysqli = connect()) {
   $update_stmt->close();
   
   // Update cache if the information printed on finding aids has changed
-  if ($repo->get_name() != $name || $repo->get_email() != $email || $repo->get_url() != $url || $repo->get_phone() != $phone || $repo->get_fax() != $fax || $repo->get_address() != $address_array) {
+  if ($repo->get_name() != $name) {
     $arks_stmt = $mysqli->prepare('UPDATE arks SET cached=0 WHERE repo_id=? AND active=1');
     $arks_stmt->bind_param('i', $repo_id);
     $arks_stmt->execute();
