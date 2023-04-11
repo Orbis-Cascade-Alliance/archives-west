@@ -22,7 +22,7 @@ include(AW_INCLUDES . '/header.php');
 
 <h2>I found a problem on this website. Who do I contact?</h2>
 
-<p>If you found a problem with the content of a finding aid, contact the owning repository.</p>
+<p>If you found a problem with the content of a finding aid, contact the owning institution.</p>
 
 <p>For other issues, you can submit the <a href="https://www.orbiscascade.org/about/contact/forms/website-problem-report/">Website Problem Report Form</a> to contact the Orbis Cascade Alliance.</p>
 

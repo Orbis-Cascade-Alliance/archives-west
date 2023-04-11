@@ -24,7 +24,7 @@ include(AW_INCLUDES . '/header.php');
   <div class="row" id="searchby">
     <!-- search by place -->
     <div class="homesearchcategory" id="placesearch">
-      <h2>By Repository</h2>
+      <h2>By Institution</h2>
       <div id="searchbyinstitution">
         <div class="topic">
           <span class="topicIcon">

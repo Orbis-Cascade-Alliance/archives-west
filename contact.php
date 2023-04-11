@@ -13,7 +13,7 @@ include(AW_INCLUDES . '/header.php');
 
 <?php include(AW_INCLUDES . '/header-end.php'); ?>
 
-<h1>Contact Participating Repositories</h1>
+<h1>Contact Participating Institutions</h1>
 
 <?php
 if ($mysqli = connect()) {

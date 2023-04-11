@@ -314,7 +314,7 @@ class AW_Search {
     $repos = $this->get_repos();
     $facets_html = '<div id="applied-facets">';
     if ($repo = $this->get_repo()) {
-      $facets_html .= '<div class="repo" data-type="repo" data-term="' . $repo->get_mainagencycode() . '">Repository: ' . $repo->get_name() . ' <button class="remove" title="Remove" onclick="remove_facet(this)">X</span></div>';
+      $facets_html .= '<div class="repo" data-type="repo" data-term="' . $repo->get_mainagencycode() . '">Institution: ' . $repo->get_name() . ' <button class="remove" title="Remove" onclick="remove_facet(this)">X</span></div>';
     }
     if ($facets = $this->get_facets()) {
       foreach ($facets as $facet_type => $facet_term) {
@@ -366,7 +366,7 @@ class AW_Search {
             }
             
             // Print repository facet
-            echo '<h3>Repository</h3>';
+            echo '<h3>Institution</h3>';
             echo '<ul>';
             foreach ($repos as $repo_id => $repo_count) {
               $repo = new AW_Repo($repo_id);

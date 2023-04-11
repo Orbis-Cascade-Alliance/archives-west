@@ -13,7 +13,7 @@ include(AW_INCLUDES . '/header.php');
 
 <h1>About Us</h1>
 
-<p>Archives West offers descriptions of archival and manuscript materials held by participating institutions in the Pacific Northwest and Mountain West. Researchers and the general public can search over 40,000 finding aids to locate collections, then contact repositories directly to access materials.</p>
+<p>Archives West offers descriptions of archival and manuscript materials held by participating institutions in the Pacific Northwest and Mountain West. Researchers and the general public can search over 40,000 finding aids to locate collections, then contact institutions directly to access materials.</p>
 
 <p>Similar sites with information about archival collections in the West include:</p>
 <ul>

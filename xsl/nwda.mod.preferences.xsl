@@ -79,7 +79,7 @@
 	<xsl:param name="abstract_id">abstractID</xsl:param>
 	<xsl:param name="dates_label">Dates</xsl:param>
 	<xsl:param name="dates_id">datesID</xsl:param>
-	<xsl:param name="contactinformation_label">Repository</xsl:param>
+	<xsl:param name="contactinformation_label">Institution</xsl:param>
 	<xsl:param name="contactinformation_id">contactinformationID</xsl:param>
 	<xsl:param name="collectionNumber_label">Collection Number</xsl:param>
 	<xsl:param name="collectionNumber_id">collectionNumberID</xsl:param>
