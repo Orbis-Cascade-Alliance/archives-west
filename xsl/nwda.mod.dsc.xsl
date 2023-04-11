@@ -82,6 +82,7 @@ Changes:
 	</xsl:template>
 	<!-- ********************* </SERIES> *************************** -->
 	<!-- ********************* In-Depth DSC Type ********************* -->
+	
 	<xsl:template name="indepth">
 		<tbody>
 			<xsl:for-each select="c01">
@@ -90,25 +91,6 @@ Changes:
 				</xsl:if>
 				<xsl:variable name="current_pos" select="position()"/>
 				<tr>
-					<!-- only display table cells for containers when they exist within the c01s -->
-					<xsl:if test="parent::node()/descendant::container">
-						<xsl:choose>
-							<xsl:when test="not(parent::node()/descendant::did/container[2])">
-								<td>
-									<xsl:value-of select="did/container[1]"/>
-								</td>
-							</xsl:when>
-							<xsl:otherwise>
-								<td>
-									<xsl:value-of select="did/container[1]"/>
-								</td>
-								<td>
-									<xsl:value-of select="did/container[2]"/>
-								</td>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:if>
-
 					<td class="c0x_content">
 						<xsl:if test="string(did/unitid)">
 							<xsl:value-of select="did/unitid"/>
@@ -140,6 +122,26 @@ Changes:
 							</xsl:for-each>
 						</td>
 					</xsl:if>
+					
+					<!-- only display table cells for containers when they exist within the c01s -->
+					<xsl:if test="parent::node()/descendant::container">
+						<xsl:choose>
+							<xsl:when test="not(parent::node()/descendant::did/container[2])">
+								<td>
+									<xsl:value-of select="did/container[1]"/>
+								</td>
+							</xsl:when>
+							<xsl:otherwise>
+								<td>
+									<xsl:value-of select="did/container[1]"/>
+								</td>
+								<td>
+									<xsl:value-of select="did/container[2]"/>
+								</td>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:if>
+					
 				</tr>
 			</xsl:for-each>
 		</tbody>
@@ -162,6 +164,7 @@ Changes:
 				<tbody>
 					<xsl:if test="(@level='item' or @level='file') and container">
 						<tr>
+							<td class="c0x_content"/>
 							<td>
 								<span class="containerLabel">
 									<xsl:value-of select="did/container[1]/@type"/>
@@ -174,9 +177,9 @@ Changes:
 									</span>
 								</td>
 							</xsl:if>
-							<td class="c0x_content"/>
 						</tr>
 						<tr>
+							<td class="c0x_content"/>
 							<td>
 								<xsl:value-of select="did/container[1]"/>
 							</td>
@@ -185,7 +188,6 @@ Changes:
 									<xsl:value-of select="did/container[2]"/>
 								</td>
 							</xsl:if>
-							<td class="c0x_content"/>
 						</tr>
 					</xsl:if>
 					<xsl:apply-templates select="c02|c03|c04|c05|c06|c07|c08|c09|c10|c11|c12" />
@@ -200,6 +202,15 @@ Changes:
 	<xsl:template name="table_label">
 		<thead>
 			<tr>
+				<th class="c0x_content">
+					<span class="c0x_header">Description</span>
+				</th>
+				
+				<xsl:if test="string(descendant::did/unitdate)">
+					<th class="c0x_date">
+						<span class="c0x_header">Dates</span>
+					</th>
+				</xsl:if>
 				<xsl:if test="descendant::container">
 					<xsl:choose>
 						<xsl:when test="descendant::did[count(container) = 2]">
@@ -214,16 +225,6 @@ Changes:
 							</th>
 						</xsl:otherwise>
 					</xsl:choose>
-				</xsl:if>
-
-				<th class="c0x_content">
-					<span class="c0x_header">Description</span>
-				</th>
-
-				<xsl:if test="string(descendant::did/unitdate)">
-					<th class="c0x_date">
-						<span class="c0x_header">Dates</span>
-					</th>
 				</xsl:if>
 			</tr>
 		</thead>
@@ -242,38 +243,6 @@ Changes:
 		<!--all c0x level items are their own row; indentation created by css only-->
 
 		<tr>
-			<!-- if there is only one container, the td is 170 pixels wide, otherwise 85 for two containers -->
-
-			<xsl:choose>
-				<xsl:when test="count(did/container) = 1">
-					<td>
-						<xsl:value-of select="did/container[1]"/>
-					</td>
-					<xsl:if test="ancestor-or-self::c01/descendant::did/container[2]">
-						<td/>
-					</xsl:if>
-				</xsl:when>
-				<xsl:when test="count(did/container) = 2">
-					<td>
-						<xsl:value-of select="did/container[1]"/>
-					</td>
-					<td>
-						<xsl:value-of select="did/container[2]"/>
-					</td>
-				</xsl:when>
-				<xsl:when test="ancestor-or-self::c01/descendant::did/container">
-					<xsl:choose>
-						<xsl:when test="ancestor-or-self::c01/descendant::did/container[2]">
-							<td colspan="2"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<td/>
-						</xsl:otherwise>
-					</xsl:choose>
-
-				</xsl:when>
-			</xsl:choose>
-
 			<xsl:variable select="count(../../preceding-sibling::*)+1" name="pppos"/>
 			<xsl:variable select="count(../preceding-sibling::*)+1" name="ppos"/>
 			<xsl:variable select="count(preceding-sibling::*)+1" name="cpos"/>
@@ -337,6 +306,36 @@ Changes:
 					</xsl:for-each>
 				</td>
 			</xsl:if>
+			<!-- if there is only one container, the td is 170 pixels wide, otherwise 85 for two containers -->
+			<xsl:choose>
+				<xsl:when test="count(did/container) = 1">
+					<td>
+						<xsl:value-of select="did/container[1]"/>
+					</td>
+					<xsl:if test="ancestor-or-self::c01/descendant::did/container[2]">
+						<td/>
+					</xsl:if>
+				</xsl:when>
+				<xsl:when test="count(did/container) = 2">
+					<td>
+						<xsl:value-of select="did/container[1]"/>
+					</td>
+					<td>
+						<xsl:value-of select="did/container[2]"/>
+					</td>
+				</xsl:when>
+				<xsl:when test="ancestor-or-self::c01/descendant::did/container">
+					<xsl:choose>
+						<xsl:when test="ancestor-or-self::c01/descendant::did/container[2]">
+							<td colspan="2"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<td/>
+						</xsl:otherwise>
+					</xsl:choose>
+					
+				</xsl:when>
+			</xsl:choose>
 		</tr>
 		<xsl:apply-templates select="c02|c03|c04|c05|c06|c07|c08|c09|c10|c11|c12" />
 	</xsl:template>
@@ -381,16 +380,6 @@ Changes:
 				<xsl:choose>
 					<!-- for two containers -->
 					<xsl:when test="did/container[2]">
-						<td>
-							<span class="containerLabel">
-								<xsl:value-of select="$first_container"/>
-							</span>
-						</td>
-						<td>
-							<span class="containerLabel">
-								<xsl:value-of select="$second_container"/>
-							</span>
-						</td>
 						<td/>
 						<xsl:choose>
 							<xsl:when test="count(//c02) &gt; 0">
@@ -404,10 +393,33 @@ Changes:
 								</xsl:if>
 							</xsl:otherwise>
 						</xsl:choose>
+						<td>
+							<span class="containerLabel">
+								<xsl:value-of select="$first_container"/>
+							</span>
+						</td>
+						<td>
+							<span class="containerLabel">
+								<xsl:value-of select="$second_container"/>
+							</span>
+						</td>
 					</xsl:when>
 
 					<!-- for one container -->
 					<xsl:otherwise>
+						<td/>
+						<xsl:choose>
+							<xsl:when test="count(//c02) &gt; 0">
+								<xsl:if test="ancestor::c01/descendant::did/unitdate">
+									<td class="c0x_date"/>
+								</xsl:if>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:if test="ancestor::dsc/descendant::did/unitdate">
+									<td class="c0x_date"/>
+								</xsl:if>
+							</xsl:otherwise>
+						</xsl:choose>
 						<xsl:variable name="container_colspan">
 							<xsl:choose>
 								<xsl:when test="count(//c02) &gt; 0">
@@ -429,19 +441,6 @@ Changes:
 								<xsl:value-of select="$first_container"/>
 							</span>
 						</td>
-						<td/>
-						<xsl:choose>
-							<xsl:when test="count(//c02) &gt; 0">
-								<xsl:if test="ancestor::c01/descendant::did/unitdate">
-									<td class="c0x_date"/>
-								</xsl:if>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:if test="ancestor::dsc/descendant::did/unitdate">
-									<td class="c0x_date"/>
-								</xsl:if>
-							</xsl:otherwise>
-						</xsl:choose>
 					</xsl:otherwise>
 				</xsl:choose>
 			</tr>
