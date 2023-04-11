@@ -19,13 +19,14 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 	<!-- ********************* <FOOTER> *********************** -->
 
 	<xsl:template match="publicationstmt">
-		<h4>
+		<h3>Finding Aid Publication Information</h3>
+		<p>
 			<xsl:value-of select="//ead/eadheader/filedesc/titlestmt/author"/>
 			<br/>
 			<!-- revision 2017: remove copyright symbol -->
 			<xsl:value-of select="translate(./date,'&#169;','')"/>		
 			<br/><br/>
-		</h4>	
+		</p>	
 			<!-- revisions 2017: display rights statement -->
 			<xsl:choose> <!-- if rights statement or copyright exists in finding aid, override the institution-wide rights statement -->
 				<xsl:when test="//ead/eadheader/filedesc/publicationstmt/p[@id='copyright'] | //ead/eadheader/filedesc/publicationstmt/p[@id='rightsstatement']">
