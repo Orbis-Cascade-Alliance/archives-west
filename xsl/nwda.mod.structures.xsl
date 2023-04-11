@@ -102,6 +102,15 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 		</h3>
 		<div class="overview overview-content">
 			<dl class="dl-horizontal">
+				<!--collection abstract/summary-->
+				<xsl:if test="did/abstract">
+					<dt>
+						<xsl:value-of select="$abstract_label"/>
+					</dt>
+					<dd property="dcterms:abstract">
+						<xsl:apply-templates select="did/abstract"/>
+					</dd>
+				</xsl:if>
 				<!--origination-->
 				<xsl:if test="string(did/origination)">
 					<dt>
@@ -167,15 +176,6 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 					</dt>
 					<dd>
 						<xsl:apply-templates select="did/unitid" mode="archdesc"/>
-					</dd>
-				</xsl:if>
-				<!--collection abstract/summary-->
-				<xsl:if test="did/abstract">
-					<dt>
-						<xsl:value-of select="$abstract_label"/>
-					</dt>
-					<dd property="dcterms:abstract">
-						<xsl:apply-templates select="did/abstract"/>
 					</dd>
 				</xsl:if>
 				
