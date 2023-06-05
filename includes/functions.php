@@ -221,7 +221,7 @@ function print_rss() {
 function get_alert($type, $repo_id = 0) {
   $alert = '';
   if ($mysqli = connect()) {
-    $today = date('Y-m-d');
+    $today = date('Y-m-d H:i:s');
     $alert_query = 'SELECT message FROM alerts
       WHERE type="' . $type . '"
       AND repo_id=' . $repo_id . '

@@ -14,8 +14,8 @@ function preserve_quotes($string) {
   return str_replace($to_replace, $replacements, $string);
 }
 
-// Get user from session and limit to admins only
-$user = get_session_user(true);
+// Get user from session
+$user = get_session_user();
 
 // Get repo data
 $repo_id = get_user_repo_id($user);
