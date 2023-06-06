@@ -863,7 +863,6 @@ Changes:
 					</xsl:when>
 					<xsl:when test="arc[@show='replace' or @xlink:show='replace' or @show='new' or @xlink:show='new'] and
 						arc[@actuate='onrequest' or @actuate='onRequest' or @xlink:actuate='onRequest']">
-						&#160;
             <a>
 							<xsl:if test="daoloc[1]/@title">
 								<xsl:attribute name="title">
