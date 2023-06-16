@@ -25,7 +25,7 @@ function check_completion($process, $start) {
 }
 
 // Get type, process ID, and arguments
-$types = array('cache', 'index', 'harvest', 'upload', 'harvest-api', 'upload-api');
+$types = array('cache', 'index', 'harvest', 'upload');
 $type = '';
 $pid = 0;
 if (isset($argv[1]) && !empty($argv[1]) && in_array($argv[1], $types)) {
@@ -40,14 +40,10 @@ if ($type == 'cache') {
     $ark = filter_var($argv[3], FILTER_SANITIZE_STRING);
   }
 }
-else if ($type == 'harvest' || $type == 'upload' || $type == 'harvest-api' || $type == 'upload-api') {
+else if ($type == 'harvest' || $type == 'upload') {
   $job_id = 0;
   if (isset($argv[3]) && !empty($argv[3])) {
     $job_id = filter_var($argv[3], FILTER_SANITIZE_NUMBER_INT);
-  }
-  if ($type == 'harvest-api' || $type == 'upload-api') {
-    $as_session = $argv[4];
-    $as_expires = $argv[5];
   }
 }
 
@@ -65,6 +61,11 @@ if ($type != '' && $pid != 0) {
     $message = 'Process ' . $pid;
     if ($ark) {
       $message .= ' for ARK ' . $ark;
+      // Set cached to 2
+      if ($mysqli = connect()) {
+        $mysqli->query('UPDATE arks SET cached=2 WHERE ark="' . $ark . '"');
+        $mysqli->close();
+      }
     }
     else if ($job_id) {
       $message .= ' for job ' . $job_id;
@@ -83,10 +84,6 @@ if ($type != '' && $pid != 0) {
       case 'harvest': harvest_next($job_id);
       break;
       case 'upload': upload_next($job_id);
-      break;
-      case 'harvest-api': harvest_next_api($job_id, $as_session, $as_expires);
-      break;
-      case 'upload-api': upload_next_api($job_id, $as_session, $as_expires);
       break;
     }
   }
