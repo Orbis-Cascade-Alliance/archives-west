@@ -58,7 +58,7 @@ if (!empty($_POST)) {
       $search = new AW_Search($query, $facets, $repos, $sort, $type);
     }
     catch (Exception $e) {
-      die($e->getMessage());
+      die('<p>' . $e->getMessage() . '</p>');
     }
     $time_finished = time();
     // Print the #results div contents (facets, brief records, all-arks for JS)
