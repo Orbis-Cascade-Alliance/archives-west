@@ -60,7 +60,7 @@ if (!empty($_POST)) {
     catch (Exception $e) {
       die('<p>Error communicating with the server for full-text searching.</p>');
       // Mail webmaster
-      $mail = new AW_Mail('webmaster@orbiscascade.org', 'Search Exception in Archives West', $e->getMessage());
+      $mail = new AW_Mail(ADMIN_EMAIL, 'Search Exception in Archives West', $e->getMessage());
       $mail->send();
     }
     $time_finished = time();

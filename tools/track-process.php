@@ -71,7 +71,7 @@ if ($type != '' && $pid != 0) {
       $message .= ' for job ' . $job_id;
     }
     $message .= ' failed to complete within 5 minutes.';
-    $mail = new AW_Mail('webmaster@orbiscascade.org', ucwords($type) . ' Failed!', $message);
+    $mail = new AW_Mail(ADMIN_EMAIL, ucwords($type) . ' Failed!', $message);
     $mail->send();
   }
   else {

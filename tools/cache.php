@@ -35,7 +35,7 @@ if (isset($argv[1]) && !empty($argv[1])) {
   catch (Exception $e) {
     log_error($e->getMessage());
     // Mail webmaster
-    $mail = new AW_Mail('webmaster@orbiscascade.org', 'Cache Exception for ' . $ark, $e->getMessage());
+    $mail = new AW_Mail(ADMIN_EMAIL, 'Cache Exception for ' . $ark, $e->getMessage());
     $mail->send();
     // Set cached value to 2 to indicate an error
     if ($mysqli = connect()) {

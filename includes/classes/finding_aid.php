@@ -243,7 +243,7 @@ class AW_Finding_Aid {
       catch (Exception $e) {
         $this->title = 'Unknown';
         // Mail webmaster
-        $mail = new AW_Mail('webmaster@orbiscascade.org', 'Title Exception for ' . $this->get_ark(), $e->getMessage());
+        $mail = new AW_Mail(ADMIN_EMAIL, 'Title Exception for ' . $this->get_ark(), $e->getMessage());
         $mail->send();
       }
     }
