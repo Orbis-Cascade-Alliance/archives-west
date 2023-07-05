@@ -158,8 +158,12 @@ class Session
     private function read()
     {
         if ($this->bpos == $this->bsize) {
-            $this->bsize = socket_recv($this->socket, $this->buffer, 4096, 0);
-            $this->bpos = 0;
+            if ($this->bsize = socket_recv($this->socket, $this->buffer, 4096, 0)) {
+                $this->bpos = 0;
+            }
+            else {
+                throw new BaseXException("Can't read messages from server.");
+            }
         }
         return $this->buffer[$this->bpos++];
     }
