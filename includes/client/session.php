@@ -148,11 +148,16 @@ class Session
      */
     public function readString()
     {
-        $com = "";
-        while (($d = $this->read()) != chr(0)) {
-            $com .= $d;
+        try {
+            $com = "";
+            while (($d = $this->read()) != chr(0)) {
+                $com .= $d;
+            }
+            return $com;
         }
-        return $com;
+        catch (BaseXException $e) {
+            return $e->getMessage();
+        }
     }
 
     private function read()
