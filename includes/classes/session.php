@@ -1,13 +1,13 @@
 <?php
-// AW_Session uses the BaseXClient Session class to run database and index construction commands
+// AW_Session uses the BaseX Session class to run database and index construction commands
 // To get results of commands, add print $this->session->info();
 
 // Include client
 require_once(BASEX_CLIENT . '/exception.php');
 require_once(BASEX_CLIENT . '/session.php');
 require_once(BASEX_CLIENT . '/query.php');
-use BaseXClient\BaseXException;
-use BaseXClient\Session;
+use Caxy\BaseX\BaseXException;
+use Caxy\BaseX\Session;
 
 class AW_Session {
   

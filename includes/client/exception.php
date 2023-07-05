@@ -5,10 +5,10 @@
  *
  * Documentation: https://docs.basex.org/wiki/Clients
  *
- * (C) BaseX Team 2005-15, BSD License
+ * (C) BaseX Team 2005-22, BSD License
  */
 
-namespace BaseXClient;
+namespace Caxy\BaseX;
 
 class BaseXException extends \RuntimeException
 {}
