@@ -6,8 +6,8 @@
 require_once(BASEX_CLIENT . '/exception.php');
 require_once(BASEX_CLIENT . '/session.php');
 require_once(BASEX_CLIENT . '/query.php');
-use Caxy\BaseX\BaseXException;
-use Caxy\BaseX\Session;
+use BaseXClient\BaseXException;
+use BaseXClient\Session;
 
 class AW_Session {
   
