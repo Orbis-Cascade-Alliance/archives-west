@@ -58,7 +58,10 @@ if (!empty($_POST)) {
       $search = new AW_Search($query, $facets, $repos, $sort, $type);
     }
     catch (Exception $e) {
-      die('<p>' . $e->getMessage() . '</p>');
+      die('<p>Error communicating with the server for full-text searching.</p>');
+      // Mail webmaster
+      $mail = new AW_Mail('webmaster@orbiscascade.org', 'Search Exception in Archives West', $e->getMessage());
+      $mail->send();
     }
     $time_finished = time();
     // Print the #results div contents (facets, brief records, all-arks for JS)
