@@ -10,192 +10,107 @@
 
 namespace BaseXClient;
 
-class Session
+class Query implements \Iterator
 {
-    // instance variables.
-    protected $socket;
-    protected $info;
-    protected $buffer;
-    protected $bpos;
-    protected $bsize;
+    protected $session;
+    protected $id;
+    protected $cache;
+    protected $pos;
 
-    public function __construct($hostname, $port, $user, $password)
+    /**
+     * Query constructor.
+     *
+     * @param Session $session
+     * @param string $query
+     */
+    public function __construct($session, $query)
     {
-        // create server connection
-        $this->socket = socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
-        if (!socket_connect($this->socket, $hostname, $port)) {
-            throw new BaseXException("Can't communicate with server.");
+        $this->session = $session;
+        $this->id = $this->exec(chr(0), $query);
+    }
+
+    public function bind($name, $value, $type = "")
+    {
+        $this->exec(chr(3), $this->id.chr(0).$name.chr(0).$value.chr(0).$type);
+    }
+
+    public function context($value, $type = "")
+    {
+        $this->exec(chr(14), $this->id.chr(0).$value.chr(0).$type);
+    }
+
+    public function execute()
+    {
+        return $this->exec(chr(5), $this->id);
+    }
+
+    public function more()
+    {
+        if ($this->cache === null) {
+            $this->pos = 0;
+            $this->session->send(chr(4).$this->id.chr(0));
+            while (!$this->session->ok()) {
+                $this->cache[] = $this->session->readString();
+            }
+            if (!$this->session->ok()) {
+                throw new BaseXException($this->session->readString());
+            }
         }
-
-        // receive timestamp
-        $ts = $this->readString();
-        // Hash container
-        if (false !== strpos($ts, ':')) {
-            // digest-auth
-            $challenge = explode(':', $ts, 2);
-            $md5 = hash("md5", hash("md5", $user . ':' . $challenge[0] . ':' . $password) . $challenge[1]);
-        } else {
-            // Legacy: cram-md5
-            $md5 = hash("md5", hash("md5", $password) . $ts);
+        if ($this->pos < count($this->cache)) {
+            return true;
         }
+        $this->cache = null;
+        return false;
+    }
 
-        // send username and hashed password/timestamp
-        socket_write($this->socket, $user . chr(0) . $md5 . chr(0));
-
-        // receives success flag
-        if (socket_read($this->socket, 1) != chr(0)) {
-            throw new BaseXException("Access denied.");
+    public function next()
+    {
+        if ($this->more()) {
+            return $this->cache[$this->pos++];
         }
     }
 
-    /**
-     * Execute BaseX command.
-     *
-     * @param string $command
-     * @return string
-     */
-    public function execute($command)
-    {
-        // send command to server
-        socket_write($this->socket, $command.chr(0));
-
-        // receive result
-        $result = $this->receive();
-        $this->info = $this->readString();
-        if ($this->ok() != true) {
-            throw new BaseXException($this->info);
-        }
-        return $result;
-    }
-
-    /**
-     * Execute XQuery query.
-     *
-     * @param string $xquery
-     * @return Query
-     */
-    public function query($xquery)
-    {
-        return new Query($this, $xquery);
-    }
-
-    /**
-     * Creates a new database, inserts initial content.
-     *
-     * @param string $name name of the new database
-     * @param string $input XML to insert
-     */
-    public function create($name, $input)
-    {
-        $this->sendCmd(8, $name, $input);
-    }
-
-    /**
-     * Inserts a document in the database at the specified path.
-     *
-     * @param string $path filesystem-like path
-     * @param string $input XML to insert
-     */
-    public function add($path, $input)
-    {
-        $this->sendCmd(9, $path, $input);
-    }
-
-    /**
-     * Replaces content at the specified path by the given document.
-     *
-     * @param string $path filesystem-like path
-     * @param string $input XML to insert
-     */
-    public function replace($path, $input)
-    {
-        $this->sendCmd(12, $path, $input);
-    }
-
-    public function store($path, $input)
-    {
-        $this->sendCmd(13, $path, $input);
-    }
-
-    /**
-     * Status information of the last command/query.
-     *
-     * @return string|null
-     */
     public function info()
     {
-        return $this->info;
+        return $this->exec(chr(6), $this->id);
     }
 
-    /**
-     * Close the connection.
-     */
+    public function options()
+    {
+        return $this->exec(chr(7), $this->id);
+    }
+
     public function close()
     {
-        socket_write($this->socket, "exit".chr(0));
-        socket_close($this->socket);
+        $this->exec(chr(2), $this->id);
     }
 
-    private function init()
+    public function exec($cmd, $arg)
     {
-        $this->bpos = 0;
-        $this->bsize = 0;
-    }
-
-    /**
-     * @internal
-     * @return string
-     */
-    public function readString()
-    {
-        $com = "";
-        while (($d = $this->read()) != chr(0)) {
-            $com .= $d;
+        $this->session->send($cmd.$arg);
+        $s = $this->session->receive();
+        if ($this->session->ok() !== true) {
+            throw new BaseXException($this->session->readString());
         }
-        return $com;
+        return $s;
     }
 
-    private function read()
+    public function current()
     {
-        if ($this->bpos == $this->bsize) {
-            $this->bsize = socket_recv($this->socket, $this->buffer, 4096, 0);
-            $this->bpos = 0;
-        }
-        return $this->buffer[$this->bpos++];
+        return $this->cache[$this->pos];
     }
 
-    private function sendCmd($code, $arg, $input)
+    public function key()
     {
-        socket_write($this->socket, chr($code).$arg.chr(0).$input.chr(0));
-        $this->info = $this->receive();
-        if ($this->ok() != true) {
-            throw new BaseXException($this->info);
-        }
+        return $this->pos;
     }
 
-    public function send($str)
+    public function valid()
     {
-        socket_write($this->socket, $str.chr(0));
+        return $this->more();
     }
 
-    /**
-     * Was the last command/query successful?
-     *
-     * @internal not idempotent, not intended for use by client code
-     * @return bool
-     */
-    public function ok()
+    public function rewind()
     {
-        return $this->read() == chr(0);
-    }
-
-    /**
-     * @internal
-     * @return string
-     */
-    public function receive()
-    {
-        $this->init();
-        return $this->readString();
     }
 }
