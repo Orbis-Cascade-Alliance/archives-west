@@ -225,7 +225,12 @@ class AW_Search {
           $query->bind('s', $this->get_sort());
         }
         if ($query) {
-          $result_string = $query->execute();
+          try {
+            $result_string = $query->execute();
+          }
+          catch (BaseXException $e) {
+            throw new Exception($e->getMessage());
+          }
           $query->close();
           $session->close();
           if ($result_string) {
@@ -239,7 +244,7 @@ class AW_Search {
         }
       }
       catch (Exception $e) {
-        throw new Exception('Error communicating with BaseX for full-text searching.');
+        throw new Exception($e->getMessage());
       }
       $this->results = $results;
     }
