@@ -10,6 +10,15 @@ if (isset($_GET['ark']) && !empty($_GET['ark'])) {
   $ark = filter_var($_GET['ark'], FILTER_SANITIZE_STRING);
   try {
     $finding_aid = new AW_Finding_Aid($ark);
+    // Return XML document
+    if (!is_null($finding_aid)) {
+      header('Content-Type: text/xml');
+      $raw = $finding_aid->get_raw();
+      if (stristr($raw, '<?xml-stylesheet')) {
+        $raw = preg_replace('/<\?xml-stylesheet[^\?]+\?>/','', $raw);
+      }
+      echo $raw;
+    }
   }
   catch (Exception $e) {
     log_error($e->getMessage());
@@ -19,13 +28,6 @@ if (isset($_GET['ark']) && !empty($_GET['ark'])) {
 else {
   header('Location: /');
 }
-// Return XML document
-header('Content-Type: text/xml');
-$raw = $finding_aid->get_raw();
-if (stristr($raw, '<?xml-stylesheet')) {
-  $raw = preg_replace('/<\?xml-stylesheet[^\?]+\?>/','', $raw);
-}
-echo $raw;
 
 ?>
 
