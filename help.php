@@ -28,6 +28,6 @@ include(AW_INCLUDES . '/header.php');
 
 <h2>My institution wants to contribute finding aids to Archives West. How can we do that?</h2>
 
-<p>Archives West is part of the Archives &amp; Manuscripts (A&amp;M) program of the Orbis Cascade Alliance. See <a href="https://www.orbiscascade.org/programs/ulc/archives-and-manuscripts-collections/participating/">Participating in A&amp;M</a>.</p>
+<p>Archives West is part of the Archives &amp; Manuscripts (A&amp;M) program of the Orbis Cascade Alliance. See <a href="https://www.orbiscascade.org/programs/osdc/archives-and-manuscripts-collections/participating/">Participating in A&amp;M</a>.</p>
 
 <?php include(AW_INCLUDES . '/footer.php'); ?>
