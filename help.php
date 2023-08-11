@@ -26,4 +26,8 @@ include(AW_INCLUDES . '/header.php');
 
 <p>For other issues, you can submit the <a href="https://www.orbiscascade.org/about/contact/forms/website-problem-report/">Website Problem Report Form</a> to contact the Orbis Cascade Alliance.</p>
 
+<h2>My institution wants to contribute finding aids to Archives West. How can we do that?</h2>
+
+<p>Archives West is part of the Archives &amp; Manuscripts (A&amp;M) program of the Orbis Cascade Alliance. See <a href="https://www.orbiscascade.org/programs/ulc/archives-and-manuscripts-collections/participating/">Participating in A&amp;M</a>.</p>
+
 <?php include(AW_INCLUDES . '/footer.php'); ?>
