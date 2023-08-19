@@ -72,7 +72,6 @@ include(AW_INCLUDES . '/header.php');
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=orfp">Pacific University, Archives</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=orashs">Southern Oregon University, Hannon Library</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=oru">University of Oregon Libraries, Special Collections and University Archives</a></li>
-              <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=oreuurm">University of Oregon, Archives of Northwest Folklore</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=ormonw">Western Oregon University Archives</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=orsaw">Willamette University Archives and Special Collections</a></li>
             </ul>
