@@ -62,6 +62,7 @@ function rename_c($c, $ead) {
 // Convert file contents from ArchivesSpace to Archives West EAD
 function convert_file($file_contents, $mainagencycode) {
   $errors = array();
+  $converted_ead = '';
   
   // Remove namespaces
   $ead_string = strip_namespaces($file_contents);
