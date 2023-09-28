@@ -167,8 +167,17 @@ th, td {
   float: right;
 }
 
+a#aeon {
+  background: #43177d;
+  color: #ffffff;
+  padding: .5rem;
+  text-decoration: none;
+}
+
 .backtotop:hover,
-.backtotop:focus {
+.backtotop:focus,
+a#aeon:hover,
+a#aeon:focus {
   color: #ffffff;
   text-decoration: underline;
 }
