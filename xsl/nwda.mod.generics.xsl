@@ -38,6 +38,11 @@ Major or significant revision history:
           </xsl:when>
         </xsl:choose>
       </xsl:attribute>
+	  <xsl:if test="@id">
+	    <xsl:attribute name="id">
+		  <xsl:value-of select="@id"/>
+		</xsl:attribute>
+	  </xsl:if>
       <xsl:attribute name="target">_blank</xsl:attribute>
 			<xsl:apply-templates/>
 		</xsl:element>
