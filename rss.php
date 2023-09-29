@@ -5,6 +5,10 @@
 require_once(getenv('AW_HOME') . '/defs.php');
 include(AW_INCLUDES . '/server-header.php');
 
+function escape_ampersands($string) {
+  return str_replace('&', '&amp;', $string);
+}
+
 $arks = array();
 if ($mysqli = connect()) {
   if ($ark_result = $mysqli->query('SELECT ark, date FROM arks WHERE active=1 AND file<>"" ORDER BY date DESC LIMIT 10')) {
@@ -40,10 +44,10 @@ if (!empty($arks)) {
         $result = $brief_records[$ark];
         $link = AW_DOMAIN . '/ark:' . $ark;
         $item = $rss->channel->addChild('item');
-        $item->addChild('title', $result['title']);
+        $item->addChild('title', escape_ampersands($result['title']));
         $item->addChild('link', $link);
         $item->addChild('author', $result['repo_info']['name']);
-        $item->addChild('description', $result['abstract']);
+        $item->addChild('description', escape_ampersands($result['abstract']));
         $item->addChild('guid', $link);
         $item->addChild('pubDate', date('r', strtotime($date)));
       }
