@@ -168,10 +168,14 @@ th, td {
 }
 
 a#aeon {
-  background: #43177d;
   color: #ffffff;
-  padding: .5rem;
+  padding: .5rem .5rem .5rem 2.5rem;
   text-decoration: none;
+  background-color: #43177d;
+  background-image: url('/layout/images/aeon.png');
+  background-repeat: no-repeat;
+  background-size: 1.5rem;
+  background-position: .5rem;
 }
 
 .backtotop:hover,
