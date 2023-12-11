@@ -14,11 +14,7 @@ include(AW_INCLUDES . '/header.php');
 <h1>Help</h1>
 <h2>I found a description of materials that interest me. How do I get those materials?</h2>
 
-<p>You have three options for getting materials: Look at them online, visit an institution in person, or contact the institution to get copies of materials.</p>
-
-<p>If the material is online, you'll see that indicated with "digital objects available" in the search results or in the description with "yes" or "no." If it indicates "yes," you can see a gallery of digital objects associated with that collection. You can get more information about those objects by clicking on them. In most cases, only a few items from a collection have been digitized.</p>
-
-<p>If the materials are not online, you'll need either to visit in person or contact the institution to get copies. Each collection description has information on the holding institution and their complete contact information (website, phone, email). The <a href="/contact.php">Contact page</a> also has information on open hours and getting copies.</p>
+<p>Materials are made available by the institution indicated in the "Repository" section of the finding aid. In some cases, the institution may provide access to digitized materials online&mdash;you can check the finding aid for direct links to materials when they are available. However, in most cases you will need to contact the instituton directly to visit in person, or request copies of materials. Check the "Repository" section of the finding aid for complete contact information. The <a href="/contact.php">Contact page</a> also has information on open hours and getting copies.</p>
 
 <h2>I found a problem on this website. Who do I contact?</h2>
 
