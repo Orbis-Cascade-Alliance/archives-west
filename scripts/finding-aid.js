@@ -7,18 +7,13 @@ $(document).ready(function() {
   
   // Handle behavior of Table of Contents depending on window width
   toc_structure();
-  toc_scroll();
   table_structure();
   var toc_offset = $('#toc').offset();
   if (typeof(toc_offset) != 'undefined') {
     toc_top = toc_offset.top;
     $(window).resize(function() {
       toc_structure();
-      toc_scroll();
       table_structure();
-    });
-    $(window).scroll(function() {
-      toc_scroll();
     });
   }
   
@@ -128,30 +123,6 @@ function toc_structure() {
       $('#toc h2').append('<span id="toc-toggle" class="glyphicon glyphicon-triangle-right" onclick="toggle_section(this, $(\'#toc > ul\'));"></span>');
       $('#toc > ul').hide();
     }
-  }
-}
-
-// Fix position of Table of Contents on scroll
-function toc_scroll() {
-  if ($(window).outerWidth() >= 1200) {
-    if ($(window).scrollTop() >= toc_top) {
-      $('#toc').css({
-        'position': 'fixed',
-        'top': '0'
-      });
-    }
-    else {
-      $('#toc').css({
-        position: 'absolute',
-        top: 'auto'
-      });
-    }
-  }
-  else {
-    $('#toc').css({
-      position: 'relative',
-      top: 'auto'
-    });
   }
 }
 

@@ -39,7 +39,9 @@ h4 {
 }
 
 #toc {
-  position: absolute;
+  position: sticky;
+  top: 0;
+  float: left;
   width: 360px;
   background-color: #ffffff;
   padding: 0;
@@ -220,6 +222,7 @@ a#aeon:focus {
   
   #toc {
     position: relative;
+    float: none;
     width: 100%;
     background-color: transparent;
     border-radius: none;
