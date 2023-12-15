@@ -1,5 +1,3 @@
-var toc_top;
-
 $(document).ready(function() {
   
   // Style return to top links
@@ -8,14 +6,10 @@ $(document).ready(function() {
   // Handle behavior of Table of Contents depending on window width
   toc_structure();
   table_structure();
-  var toc_offset = $('#toc').offset();
-  if (typeof(toc_offset) != 'undefined') {
-    toc_top = toc_offset.top;
-    $(window).resize(function() {
-      toc_structure();
-      table_structure();
-    });
-  }
+  $(window).resize(function() {
+    toc_structure();
+    table_structure();
+  });
   
   // Attach handler to toggle buttons
   $('.toggle-button')
