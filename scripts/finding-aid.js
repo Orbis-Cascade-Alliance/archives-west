@@ -135,7 +135,6 @@ function toc_structure() {
 function toc_scroll() {
   if ($(window).outerWidth() >= 1200) {
     if ($(window).scrollTop() >= toc_top) {
-      console.log('fixed');
       $('#toc').css({
         'position': 'fixed',
         'top': '0'
@@ -159,13 +158,13 @@ function toc_scroll() {
 // Mobile tables
 function table_structure() {
   if ($(window).outerWidth() > 760) {
-    $('thead, tr').show();
-    $('td').css({
+    $('table thead, table tbody tr').show();
+    $('table td').css({
       'display': 'table-cell',
       'border-top': '1px solid #ddd',
       'padding': '.5rem'
     });
-    $('.table-label').remove();
+    $('span.table-label').remove();
   }
   else {
     $('table').each(function() {
