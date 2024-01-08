@@ -77,10 +77,10 @@ else if ($alert_message = get_alert('tools')) {
     
     <h2>Get Help</h2>
     <ul>
-      <li><a href="https://www.orbiscascade.org/programs/ulc/help-request/" target="_blank">Help Request Form</a></li>
-      <li><a href="https://drive.google.com/file/d/1kNFMUjlvmhABIgDr7LEplU4Qitx0QjZv/view?usp=sharing" target="_blank">Alliance EAD Best Practices</a></li>
-      <li><a href="https://www.orbiscascade.org/programs/ulc/archives-and-manuscripts-collections/ead/" target="_blank">Archives West Tutorials and Documentation</a></li>
-      <li><a href="https://www.orbiscascade.org/programs/ulc/archives-and-manuscripts-collections/archivesspace/" target="_blank">ArchivesSpace Tutorials and Documentation</a></li>
+      <li><a href="https://www.orbiscascade.org/programs/osdc/help-request/" target="_blank">Help Request Form</a></li>
+      <li><a href="https://drive.google.com/file/d/1u7IbWDMAH2sk59nU3YMpIU5bAUEpZp92/view" target="_blank">Alliance EAD Best Practices</a></li>
+      <li><a href="https://www.orbiscascade.org/programs/osdc/archives-and-manuscripts-collections/ead/" target="_blank">Archives West Tutorials and Documentation</a></li>
+      <li><a href="https://www.orbiscascade.org/programs/osdc/archives-and-manuscripts-collections/archivesspace/" target="_blank">ArchivesSpace Tutorials and Documentation</a></li>
       <li><a href="https://docs.google.com/document/d/1jlZXNyNlmRuDBV8YknPkEV0Kyiyqd7r4V6ia2gKoQes/edit?usp=sharing" target="_blank">Identify XML Errors with Notepad++</a></li>
     </ul>
   </div>
