@@ -559,7 +559,7 @@ Changes:
 
 		<!-- added note in addition to did/note for item 2F on revision specifications-->
 		<xsl:if test="string(did/origination|did/physdesc|did/physloc|did/note|did/abstract|arrangement|odd|scopecontent|
-			acqinfo|custodhist|processinfo|note|bioghist|accessrestrict|userestrict|index|altformavail)">
+			acqinfo|custodhist|processinfo|note|bioghist|accessrestrict|userestrict|index|altformavail|phystech)">
 
 
 			<xsl:for-each select="did">
@@ -623,7 +623,7 @@ Changes:
 			<xsl:for-each select="arrangement | odd | acqinfo | accruals | custodhist |
 				processinfo | separatedmaterial | scopecontent | note | origination |
 				physdesc | physloc | bioghist |     accessrestrict | userestrict |
-				altformavail">
+				altformavail | phystech">
 				<div class="{name()}">
 					<xsl:apply-templates/>
 				</div>
@@ -779,13 +779,13 @@ Changes:
 			physdesc | physloc | origination | note | following-sibling::odd |
 			following-sibling::scopecontent | following-sibling::arrangement | following-sibling::bioghist  |
             following-sibling::accessrestrict | following-sibling::userestrict | following-sibling::note |
-            following-sibling::altformavail) and parent::c01">
+            following-sibling::altformavail | following-sibling::phystech) and parent::c01">
 
 			<xsl:for-each select="following-sibling::acqinfo | following-sibling::accruals | following-sibling::custodhist | following-sibling::processinfo | following-sibling::separatedmaterial |
 				physdesc | physloc | origination | note | following-sibling::odd |
 				following-sibling::scopecontent | following-sibling::arrangement | following-sibling::bioghist  |
                 following-sibling::accessrestrict | following-sibling::userestrict | following-sibling::note | 
-                following-sibling::altformavail">
+                following-sibling::altformavail | following-sibling::phystech">
 				<xsl:call-template name="archdesc_minor_children">
 					<xsl:with-param name="withLabel">false</xsl:with-param>
 				</xsl:call-template>

@@ -591,12 +591,19 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-
+		
+		<a id="{$odd_id}"/>
 		<xsl:choose>
-			<xsl:when test="@type='hist' and not(ancestor::dsc)">
-				<a id="{$odd_id}"/>
+			<xsl:when test="not(ancestor::dsc)">
 				<h3>
-					<xsl:value-of select="$odd_head_histbck"/>
+				<xsl:choose>
+					<xsl:when test="@type='hist'">
+						<xsl:value-of select="$odd_head_histbck"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="$odd_head"/>
+					</xsl:otherwise>
+				</xsl:choose>
 					<small>
 						<a href="#" class="toggle-button" id="toggle-{$class}">
 							<span class="glyphicon glyphicon-triangle-bottom"> </span>
@@ -608,18 +615,9 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 				</h3>
 			</xsl:when>
 			<xsl:otherwise>
-				<a id="{$odd_id}"/>
-				<h3>
+				<h5>
 					<xsl:value-of select="$odd_head"/>
-					<small>
-						<a href="#" class="toggle-button" id="toggle-{$class}">
-							<span class="glyphicon glyphicon-triangle-bottom"> </span>
-						</a>
-					</small>
-					<small>
-						<a href="#top" title="Return to Top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
-					</small>
-				</h3>
+				</h5>
 			</xsl:otherwise>
 		</xsl:choose>
 
@@ -829,7 +827,7 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 	</xsl:template>
 
 	<!-- ********************* </physloc> ********************* -->
-<xsl:template match="c01//accessrestrict | c01//userestrict | c01//note | c01//altformavail | c01//custodhist | c01//processinfo | c01//separatedmaterial | c01//acqinfo">
+<xsl:template match="c01//accessrestrict | c01//userestrict | c01//note | c01//altformavail | c01//custodhist | c01//processinfo | c01//separatedmaterial | c01//acqinfo | c01//phystech">
 		<xsl:variable name="class">
 			<xsl:choose>
 				<xsl:when test="local-name()='accessrestrict'">
@@ -855,6 +853,9 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 				</xsl:when>
 				<xsl:when test="local-name()='acqinfo'">
 					<xsl:text>acqinfo</xsl:text>
+				</xsl:when>
+				<xsl:when test="local-name()='phystech'">
+					<xsl:text>phystech</xsl:text>
 				</xsl:when>
 			</xsl:choose>
 		</xsl:variable>
