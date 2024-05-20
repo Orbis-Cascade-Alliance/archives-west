@@ -637,6 +637,11 @@ function upload_file($file_contents, $file_name, $ark, $replace, $user_id) {
       $errors[] = 'This ARK is associated with the file <strong>' . $current_finding_aid->get_file() . '</strong>.';
       $upload = false;
     }
+    // If this ARK is associated with a deleted file, print error
+    else if (!$current_finding_aid->is_active()) {
+      $errors[] = 'This ARK is associated with a deleted finding aid. Submit a help request to restore the file.';
+      $upload = false;
+    }
 
     if ($upload) {
       // Check ARK in file against the ARK submitted
