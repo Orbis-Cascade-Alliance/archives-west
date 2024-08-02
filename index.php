@@ -60,7 +60,6 @@ include(AW_INCLUDES . '/header.php');
           <button id="btn_Oregon" aria-controls="Oregon" aria-expanded="false">Oregon</button>
             <ul id="Oregon" class="searchterms" aria-labelledby="btn_Oregon" style="display: none;">
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=orbec">Central Oregon Community College</a></li>
-              <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=orsltcc">Confederated Tribes of the Siletz, Tribal Cultural Collections</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=orngf">George Fox University Archives</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=orel">Lane Community College Archives</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=orpl">Lewis &amp; Clark College, Special Collections and Archives</a></li>
