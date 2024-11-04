@@ -204,7 +204,7 @@ function load_jobs() {
 
 // View history of a finding aid
 function view_history(el) {
-  var ul = $(el).next('.history').clone();
+  var ark = $(el).parents('.date').siblings('.ark').text();
   var title = $(el).parents('.date').siblings('.title').text();
   if (title != '') {
     $('#dialog-history').dialog('option', 'title', 'History of ' + title);
@@ -212,5 +212,8 @@ function view_history(el) {
   else {
     $('#dialog-history').dialog('option', 'title', 'History');
   }
-  $('#dialog-history').html(ul).dialog('open');
+  $('#dialog-history').html('<p>Loading...</p>').dialog('open');
+  $.post('finding-aids-history.php', {ark: ark}, function(result) {
+      $('#dialog-history').html(result);
+  });
 }

@@ -33,13 +33,6 @@ if (isset($_POST['order']) && !empty($_POST['order'])) {
 $sort_field = $split_order[0];
 $sort_dir = $split_order[1];
 
-// Declare actions
-$actions = array(
-  'add' => 'added',
-  'replace' => 'replaced',
-  'delete' => 'deleted'
-);
-
 // Query and print
 if ($repo_id != 0) {
   
@@ -48,11 +41,11 @@ if ($repo_id != 0) {
   // Query MySQL and get titles from BaseX
   $arks = array();
   if ($mysqli = connect()) {
-    $ark_query = 'SELECT arks.id, arks.ark, arks.date, arks.file, arks.cached, concat_updates.history, concat_updates.last_update
+    $ark_query = 'SELECT arks.id, arks.ark, arks.date, arks.file, arks.cached, last_updates.last_update
       FROM arks LEFT JOIN (
-        SELECT ark, GROUP_CONCAT(CONCAT(action, ",", date) ORDER BY date DESC SEPARATOR \'|\') as history, MAX(date) as last_update FROM updates GROUP BY ark
-      ) as concat_updates
-      ON arks.ark=concat_updates.ark
+        SELECT ark, MAX(date) as last_update FROM updates GROUP BY ark
+      ) as last_updates
+      ON arks.ark=last_updates.ark
       WHERE arks.repo_id=' . $repo_id . ' AND arks.active=1';
     if ($sort_field == 'ark' || $sort_field == 'file') {
       $ark_query .= ' ORDER BY arks.' . $order;
@@ -206,18 +199,12 @@ if ($repo_id != 0) {
             }
           }
           echo '</td>
-          <td class="file"><a href="' . AW_DOMAIN . '/ark:' . $ark . '/xml" target="_blank" title="View XML for ' . $ark_info['file'] . '">' . mb_strimwidth($ark_info['file'], 0, 30, "...") . '</a></td>
-          <td class="date">';
-          echo '<span onclick="view_history(this);" title="View History">' . substr($ark_info['date'], 0, 10) . '</span>';
-          echo '<ul class="history">';
-          if ($ark_info['history']) {
-            foreach (explode('|', $ark_info['history']) as $record) {
-              $exploded_record = explode(',', $record);
-              echo '<li>File ' . $actions[$exploded_record[0]] . ' ' . date('F j, Y g:i a', strtotime($exploded_record[1])) . '</li>';
-            }
-          }
-          echo '<li>ARK created ' . date('F j, Y', strtotime($ark_info['creation_date'])) . '</li>';
-          echo '</ul></td>
+          <td class="file">
+            <a href="' . AW_DOMAIN . '/ark:' . $ark . '/xml" target="_blank" title="View XML for ' . $ark_info['file'] . '">' . mb_strimwidth($ark_info['file'], 0, 30, "...") . '</a>
+          </td>
+          <td class="date">
+            <span onclick="view_history(this);" title="View History">' . substr($ark_info['date'], 0, 10) . '</span>
+          </td>
           <td class="upload"><a href="' . AW_DOMAIN . '/tools/upload.php?ark=' . $ark . '">' . ($ark_info['file']=='' ? 'Upload' : 'Replace') . '</a></td>
           <td class="delete"><button class="btn-delete" type="button" onclick="confirm_deletion(\'' . $ark . '\', \'' . str_replace($quotes, $replacements, $ark_info['title']) . '\')">Delete</button></td>
         </tr>';
