@@ -489,7 +489,7 @@ function convert_file($file_contents, $mainagencycode) {
       }
       
       // Remove <unitid> elements with type "aspace_uri" added in 3.5.1
-      foreach ($xpath->query('//unitid[type="aspace_uri"]') as $aspace_unitid) {
+      foreach ($xpath->query('//unitid[@type="aspace_uri"]') as $aspace_unitid) {
         $aspace_unitid->parentNode->removechild($aspace_unitid);
       }
       
