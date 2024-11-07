@@ -112,6 +112,7 @@ include(AW_INCLUDES . '/header.php');
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=waseumn">University of Washington Libraries, Government Publications, Maps, and Microforms and Newspapers</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=waseumc">University of Washington Libraries, Media Archive</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=wauar">University of Washington Libraries, Special Collections</a></li>
+              <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=waboubl">University of Washington Libraries, UW Bothell</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=waps">Washington State University Libraries, Manuscripts, Archives, and Special Collections</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=wabecp">Western Washington University, Center for Pacific Northwest Studies</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=wabewwus">Western Washington University, Special Collections</a></li>
