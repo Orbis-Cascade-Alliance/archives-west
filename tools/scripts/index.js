@@ -32,6 +32,10 @@ $(document).ready(function() {
     autoOpen: false,
     width: 500
   });
+  $('#dialog-terminate').dialog({
+    autoOpen: false,
+    width: 500
+  });
   
   // Finding aids table
   if ($('#results').data('tab') == 'f') {
@@ -199,6 +203,14 @@ function load_jobs() {
     
     // Apply pagination
     apply_pagination();
+  });
+}
+
+// Terminate a job (admins only)
+function terminate_job(job_id) {
+  $.post('jobs-terminate.php', {job_id: job_id}, function(data) {
+    $('#dialog-terminate').html(data).dialog('open');
+    load_jobs();
   });
 }
 

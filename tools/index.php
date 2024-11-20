@@ -164,6 +164,9 @@ if ($repo_id != 0) {
 <div id="dialog-history" title="History">
   <p>Loading...</p>
 </div>
+<div id="dialog-terminate" title="Job Termination">
+  <p>Processing...</p>
+</div>
 <?php
 include(AW_TOOL_INCLUDES . '/tools-footer.php');
 ?>

@@ -96,6 +96,14 @@ button.btn-delete:focus {
   padding-left: 1rem;
 }
 
+button.btn-terminate {
+  background: #772222;
+}
+button.btn-terminate:hover,
+button.btn-terminate:focus {
+  background: #994444; 
+}
+
 /* Alert */
 .alert {
   background: #ffffcc;

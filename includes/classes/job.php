@@ -115,6 +115,16 @@ class AW_Job {
     }
   }
   
+  function set_failed() {
+    if ($mysqli = connect()) {
+      $mysqli->query('UPDATE jobs SET complete=2 WHERE id=' . $this->get_id());
+      $mysqli->close();
+    }
+    else {
+      throw new Exception('MySQL connection error.');
+    }
+  }
+  
   function set_message($message) {
     $this->message = $message;
   }

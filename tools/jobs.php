@@ -54,7 +54,11 @@ if ($repo_id != 0) {
 
     // Print table
     $types = get_job_types();
-    echo '<table id="jobs"><thead><tr><th>Job ID</th><th>Date</th><th>Type</th><th>Status</th><th>Report</th></tr></thead><tbody>';
+    echo '<table id="jobs"><thead><tr><th>Job ID</th><th>Date</th><th>Type</th><th>Status</th><th>Report</th>';
+    if ($user->is_admin()) {
+        echo '<th>Admin Only</th>';
+    }
+    echo '</tr></thead><tbody>';
     foreach ($jobs as $job_id => $job_info) {
       $statuses = array(
         0 => 'In Progress',
@@ -67,7 +71,15 @@ if ($repo_id != 0) {
         <td class="no-break">' . date('Y-m-d h:i a', strtotime($job_info['date'])) . '</td>
         <td class="no-break">' . $types[$job_info['type']] . '</td>
         <td class="no-break">' . $status . '</td>
-        <td><a href="jobs-view.php?j=' . $job_id . '" class="no-break">View Report</a></td></tr>';
+        <td><a href="jobs-view.php?j=' . $job_id . '" class="no-break">View Report</a></td>';
+        if ($user->is_admin()) {
+            echo '<td>';
+            if ($status == 'In Progress') {
+                echo '<button class="btn-terminate" onclick="terminate_job(' . $job_id . ')">Terminate</button>';
+            }
+            echo '</td>';
+        }
+      echo '</tr>';
     }
     echo '</tbody></table>';
   }
