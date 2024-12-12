@@ -24,12 +24,12 @@ class AW_Finding_Aid {
     if ($mysqli = connect()) {
       $ark_query = 'SELECT arks.id, arks.ark, arks.file, arks.date, GREATEST(arks.date, COALESCE(max_updates.max_date, 0)) as last_date,
         arks.repo_id, arks.cached, arks.active FROM arks LEFT JOIN (
-          SELECT ark, MAX(date) as max_date FROM updates GROUP BY ark
+          SELECT ark, MAX(date) as max_date FROM updates WHERE ark=?
         ) as max_updates
         ON arks.ark=max_updates.ark
         WHERE arks.ark=?';
       $ark_stmt = $mysqli->prepare($ark_query);
-      $ark_stmt->bind_param('s', $ark);
+      $ark_stmt->bind_param('ss', $ark, $ark);
       $ark_stmt->execute();
       if ($ark_result = $ark_stmt->get_result()) {
         if ($ark_result->num_rows == 1) {
