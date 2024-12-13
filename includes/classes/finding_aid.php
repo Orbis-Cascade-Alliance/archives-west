@@ -223,20 +223,12 @@ class AW_Finding_Aid {
     }
   }
   
-  // Get title from BaseX
+  // Get title from XML file
   function get_title() {
     if (!isset($this->title)) {
       try {
-        $session = new AW_Session();
-        $query = $session->get_query('get-export.xq');
-        $query->bind('d', $this->get_repo()->get_id());
-        $query->bind('a', $this->get_ark());
-        $result_string = $query->execute();
-        $query->close();
-        $session->close();
-        if ($result_string) {
-          $result_xml = simplexml_load_string($result_string);
-          $this->title = (string) $result_xml->ead->title;
+        if ($xml = $this->get_xml()) {
+          $this->title = $xml->archdesc->did->unittitle;
         }
       }
       catch (Exception $e) {
