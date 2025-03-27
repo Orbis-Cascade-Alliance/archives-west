@@ -101,9 +101,16 @@ function convert_file($file_contents, $mainagencycode) {
     if ($eadid = $xpath->query('//eadheader/eadid')->item(0)) {
 
       // Remove globally unwanted attributes
-      foreach (array('audience', 'label', 'id', 'datechar', 'parent') as $attribute) {
+      foreach (array('audience', 'label', 'datechar', 'parent') as $attribute) {
         foreach ($xpath->query('//*[@' . $attribute . ']') as $node) {
           $node->removeAttribute($attribute);
+        }
+      }
+      
+      // Remove IDs from all nodes except Aeon external references
+      foreach ($xpath->query('//*[@id]') as $node) {
+        if ($node->getAttribute('id') != 'aeon') {
+          $node->removeAttribute('id');
         }
       }
       
