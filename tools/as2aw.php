@@ -7,8 +7,8 @@ require_once(getenv('AW_HOME') . '/defs.php');
 include(AW_INCLUDES . '/server-header.php');
 include(AW_TOOL_INCLUDES . '/tools-header.php');
 ?>
-  <link rel="stylesheet" href="/tools/layout/as2aw.css" />
-  <script src="/tools/scripts/as2aw.js"></script>
+  <link rel="stylesheet" href="<?php echo AW_DOMAIN;?>/tools/layout/as2aw.css" />
+  <script src="<?php echo AW_DOMAIN;?>"/tools/scripts/as2aw.js"></script>
 <?php
 include(AW_TOOL_INCLUDES . '/tools-header-end.php');
 ?>
@@ -37,6 +37,7 @@ if ($repo_id != 0) {?>
     else {
   ?>
     <form id="form-download" method="post" action="as2aw.php">
+    <label for="converted-ead">Converted XML</label>
     <textarea id="converted-ead"><?php echo str_replace('&amp;', '&amp;amp;', $_SESSION['converted_ead']); ?></textarea>
     <p><input type="button" onclick="download_ead()" value="Download File" /></p>
     </form>
