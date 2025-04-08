@@ -178,7 +178,7 @@ function print_brief_records($arks, $query) {
       echo '<h4><a href="' . AW_DOMAIN . '/ark:' . $ark;
       if ($query) {echo '?q=' . $query;}
       echo '" target="_blank">' . $result['title'] . '</a></h4>';
-      echo '<p class="repo"><span class="label">Repository:</span> <a href="/contact.php#' . $result['repo_info']['mainagencycode'] . '">' . $result['repo_info']['name'] . '</a></p>';
+      echo '<p class="repo"><span class="label">Repository:</span> <a href="' . AW_DOMAIN . '/contact.php#' . $result['repo_info']['mainagencycode'] . '">' . $result['repo_info']['name'] . '</a></p>';
       if ($result['abstract']) {
         echo '<p class="abstract"><span class="label">Abstract:</span> ' . add_links($result['abstract']) . '</p>';
       }
