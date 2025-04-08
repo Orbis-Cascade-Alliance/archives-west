@@ -19,10 +19,10 @@ if ($user->is_admin()) {
   }
   ?>
 
-  <p>Enter ARKs below for deletion, separated by line breaks.</p>
   <form id="form-batch-delete" action="<?php echo AW_DOMAIN; ?>/tools/delete-process.php" method="post">
     <input type="hidden" name="type" value="batch" />
-    <p><textarea name="ark" rows="10" cols="50"></textarea></p>
+    <p><label for="ark">Enter ARKs below for deletion, separated by line breaks.</label></p>
+    <p><textarea name="ark" id="ark" rows="10" cols="50"></textarea></p>
     <p><input type="submit" value="Delete Finding Aids" /></p>
   </form>
 

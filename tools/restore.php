@@ -33,31 +33,12 @@ if ($user->is_admin()) {
       $_SESSION['restoration_errors'] = array();
     }
     
-    // Construct ARK select element
-    $ark_select = null;
-    if ($mysqli = connect()) {
-      $empty_result = $mysqli->query('SELECT ark FROM arks WHERE repo_id=' . $repo_id . ' AND active=0');
-      if ($empty_result->num_rows > 0) {
-        ob_start();
-        echo '<form id="form-ark" action="' . AW_DOMAIN . '/tools/restore-process.php" method="post">
-          <p><select name="ark">';
-        while ($empty_row = $empty_result->fetch_row()) {
-          echo '<option value="' . $empty_row[0] . '">' . $empty_row[0] . '</option>';
-        }
-        echo '</select> <input type="submit" value="Restore Finding Aid" /></p>
-        </form>';
-        $ark_select = ob_get_contents();
-        ob_end_clean();
-      }
-      $mysqli->close();
-    }
-    
     $ark_select = build_ark_select($repo_id, 0, 0);
     if ($ark_select) {
-      echo '<p>Select a deleted ARK from the dropdown below.</p>';
       echo '<form id="form-ark" action="' . AW_DOMAIN . '/tools/restore-process.php" method="post">
-          <p>' . $ark_select . ' <input type="submit" value="Restore Finding Aid" /></p>
-        </form>';
+        <p><label for="ark">Select a deleted ARK from the dropdown below.</label></p>
+        <p>' . $ark_select . ' <input type="submit" value="Restore Finding Aid" /></p>
+      </form>';
     }
     else {
       echo '<p>This repository has no deleted ARKs to restore.</p>';
