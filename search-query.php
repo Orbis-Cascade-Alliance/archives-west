@@ -81,11 +81,12 @@ if (!empty($_POST)) {
       
       // Finding aids
       echo '<div id="finding-aids"><h2 class="visuallyhidden">Results</h2>';
+      echo '<h3 class="visuallyhidden">Page Navigation</h3>';
       include(AW_INCLUDES . '/pagination.php');
       echo $search->print_result_count();
       echo print_nav('top');
       echo '<div id="brief-loading" class="loading"></div>';
-      echo '<div id="brief-records">';
+      echo '<div id="brief-records"><h3 class="visuallyhidden">Finding Aids</h3>';
       echo print_brief_records($first_arks, $query);
       echo '</div>';
       echo print_nav('bottom');
