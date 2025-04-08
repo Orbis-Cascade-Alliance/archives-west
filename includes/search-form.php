@@ -1,5 +1,5 @@
 <form id="search-form" method="get" action="<?php echo AW_DOMAIN; ?>/search.php">
-  <h2 class="visuallyhidden">Search</h2>
+  <h2 class="visuallyhidden">Search Form</h2>
   <label for="r" class="visuallyhidden">Repository</label>
   <select name="r" id="r">
     <option value="">All Archives West Repositories</option>

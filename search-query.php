@@ -79,16 +79,8 @@ if (!empty($_POST)) {
       echo '<p id="excluded-words">' . $search->print_excluded_words() . '</p>';
       echo '<div class="flex">';
       
-      // Facets
-      echo '<div id="facets">';
-      echo '<h2>Refine Search</h2>';
-      echo print_sort($query, $sort);
-      echo $search->print_selected_facets();
-      echo $search->print_facets();
-      echo '</div>';
-      
       // Finding aids
-      echo '<div id="finding-aids"><h2 class="visuallyhidden">Finding Aids</h2>';
+      echo '<div id="finding-aids"><h2 class="visuallyhidden">Results</h2>';
       include(AW_INCLUDES . '/pagination.php');
       echo $search->print_result_count();
       echo print_nav('top');
@@ -97,6 +89,14 @@ if (!empty($_POST)) {
       echo print_brief_records($first_arks, $query);
       echo '</div>';
       echo print_nav('bottom');
+      echo '</div>';
+      
+      // Facets
+      echo '<div id="facets">';
+      echo '<h2>Refine Search</h2>';
+      echo print_sort($query, $sort);
+      echo $search->print_selected_facets();
+      echo $search->print_facets();
       echo '</div>';
       
       // All result ARKs to store in JS for pagination
