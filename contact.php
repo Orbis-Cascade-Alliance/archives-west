@@ -51,7 +51,7 @@ if ($mysqli = connect()) {
   }
   
   // Print dropdown to jump to repository
-  echo '<form id="jump-form" action="' . AW_DOMAIN . '/contact.php"><select name="repo" id="repo-select"><option value="">Jump to...</option>';
+  echo '<form id="jump-form" action="' . AW_DOMAIN . '/contact.php"><label for="repo-select">Jump to:</label> <select name="repo" id="repo-select"><option value="">Select a repository</option>';
   foreach ($repo_options as $mainagencycode => $name) {
     echo '<option value="' . $mainagencycode . '">' . $name . '</option>';
   }
