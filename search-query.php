@@ -91,12 +91,12 @@ if (!empty($_POST)) {
       echo '<div id="finding-aids"><h2 class="visuallyhidden">Finding Aids</h2>';
       include(AW_INCLUDES . '/pagination.php');
       echo $search->print_result_count();
-      echo print_nav();
+      echo print_nav('top');
       echo '<div id="brief-loading" class="loading"></div>';
       echo '<div id="brief-records">';
       echo print_brief_records($first_arks, $query);
       echo '</div>';
-      echo print_nav();
+      echo print_nav('bottom');
       echo '</div>';
       
       // All result ARKs to store in JS for pagination

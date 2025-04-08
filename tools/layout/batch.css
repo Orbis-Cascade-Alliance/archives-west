@@ -3,19 +3,20 @@
   margin: 0 auto;
 }
 
-#label-manual {
+#btn-manual {
+  color: #000000;
   background: #e0e0e0;
   border: 1px solid #cccccc;
   border-radius: .25rem;
   padding: .5rem;
 }
 
-#label-manual:hover,
-#label-manual:focus {
+#btn-manual:hover,
+#btn-manual:focus {
   background: #eeeeee;
 }
 
-#label-manual input {
+#btn-manual + input {
   display: none;
 }
 

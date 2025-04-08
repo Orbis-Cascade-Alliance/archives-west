@@ -136,7 +136,8 @@ if ($repo_id != 0) {
         echo '>' . $sort_label . '</option>';
       }
       echo '</select>
-          <select name="dir">';
+          <label for="dir">Direction:</label>
+          <select name="dir" id="dir">';
       foreach (array('ASC'=>'Ascending', 'DESC'=>'Descending') as $dir_value => $dir_label) {
         echo '<option value="' . $dir_value . '"';
         if ($dir_value == $sort_dir) {
@@ -203,7 +204,7 @@ if ($repo_id != 0) {
             <a href="' . AW_DOMAIN . '/ark:' . $ark . '/xml" target="_blank" title="View XML for ' . $ark_info['file'] . '">' . mb_strimwidth($ark_info['file'], 0, 30, "...") . '</a>
           </td>
           <td class="date">
-            <span onclick="view_history(this);" title="View History">' . substr($ark_info['date'], 0, 10) . '</span>
+            <button onclick="view_history(this);" title="View History">' . substr($ark_info['date'], 0, 10) . '</button>
           </td>
           <td class="upload"><a href="' . AW_DOMAIN . '/tools/upload.php?ark=' . $ark . '">' . ($ark_info['file']=='' ? 'Upload' : 'Replace') . '</a></td>
           <td class="delete"><button class="btn-delete" type="button" onclick="confirm_deletion(\'' . $ark . '\', \'' . str_replace($quotes, $replacements, $ark_info['title']) . '\')">Delete</button></td>

@@ -36,10 +36,8 @@ if ($repo_id != 0) {
     <ul id="list"></ul>
   </div>
   <p>
-    <label id="label-manual" for="manual">
-    Browse...
-      <input type="file" name="manual" id="manual" multiple="multiple" />
-    </label>
+    <button type="button" id="btn-manual">Browse...</button>
+    <input type="file" name="manual" id="manual" multiple="multiple" />
   </p>
   <p>
     <input type="checkbox" name="replace_files" id="replace_files" />

@@ -87,13 +87,13 @@ function get_id_from_mainagencycode($mainagencycode) {
 }
 
 // Print previous and next buttons for search
-function print_nav() {
+function print_nav($location) {
   return '<nav class="page-nav">
     <div class="prev">
       <button onclick="nav_page(\'prev\');">&laquo; Previous page</button>
     </div>
     <div class="jump">
-      <p>Page <select name="page" class="page-select"><option value="1">1</option></select> of <span class="total-pages"></span></p>
+      <p><label for="page_' . $location . '">Page</label> <select name="page" id="page_' . $location . '" class="page-select"><option value="1">1</option></select> of <span class="total-pages"></span></p>
     </div>
     <div class="next">
       <button onclick="nav_page(\'next\');">Next page &raquo;</button>

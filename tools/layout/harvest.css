@@ -1,9 +1,9 @@
-label {
+#form-harvest-single label {
   display: block;
   font-weight: bold;
 }
 
-label.inline {
+#form-harvest-single label.inline {
   display: inline;
   font-weight: normal;
 }

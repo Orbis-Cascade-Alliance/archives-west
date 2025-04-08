@@ -18,9 +18,11 @@
   white-space: nowrap;
 }
 
-#finding-aids .date span {
+#finding-aids .date button {
   color: #0066cc;
+  background: transparent;
   text-decoration: underline;
+  font-size: 100%;
   cursor: pointer;
 }
 

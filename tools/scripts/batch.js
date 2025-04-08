@@ -32,6 +32,10 @@ $(document).ready(function(){
   });
   
   // Browse upload alternative
+  $('#btn-manual').click(function() {
+    $('#manual').click();
+  });
+  
   $('#manual').change(function(e) {
     append_to_formdata(e.target.files);
     update_dropzone();

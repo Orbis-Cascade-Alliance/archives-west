@@ -51,10 +51,10 @@ $(document).ready(function() {
 // Apply pagination handlers
 function apply_pagination() {
   $('#results table tbody tr').addClass('show');    
-  $('#results .prev').click(function() {
+  $('#results .prev button').click(function() {
     change_page('prev');
   });
-  $('#results .next').click(function() {
+  $('#results .next button').click(function() {
     change_page('next');
   });
   change_page();
