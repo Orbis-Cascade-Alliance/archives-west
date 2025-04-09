@@ -11,13 +11,14 @@ include(AW_INCLUDES . '/header.php');
 
 <?php include(AW_INCLUDES . '/header-end.php'); ?>
 
+<h1 class="visuallyhidden">Archives West: Home</h1>
+
 <div id="homesearchtop" role="search">
   <div id="spacer"></div>
   <?php include(AW_INCLUDES . '/search-form.php'); ?>
 </div>
 
 <div id="homecontent" class="container-fluid" role="main">
-  <h1 class="visuallyhidden">Archives West: Home</h1>
   <div id="home-about">
     <p>Archives West provides access to descriptions of primary sources in the western United States, including correspondence, diaries or photographs. Digital reproductions of the materials are available in some cases.</p>
   </div>
