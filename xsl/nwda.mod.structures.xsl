@@ -93,13 +93,9 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 		<h3>
 			<a id="overview"/>
 			<xsl:value-of select="$overview_head"/>
-			<small>
-				<a href="#" class="toggle-button" id="toggle-overview">
-					<span class="glyphicon glyphicon-triangle-bottom"> </span>
-				</a>
-			</small>
+      <button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-overview" aria-controls="overview-content" aria-expanded="true" title="Close"></button>
 		</h3>
-		<div class="overview overview-content">
+		<div class="overview" id="overview-content">
 			<dl class="dl-horizontal">
 				<!--origination-->
 				<xsl:if test="string(did/origination)">
@@ -470,11 +466,7 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 				<a id="{$bioghist_id}"/>
 				<h3>
 					<xsl:value-of select="$bioghist_head"/>
-					<small>
-						<a href="#" class="toggle-button" id="toggle-{$class}">
-							<span class="glyphicon glyphicon-triangle-bottom"> </span>
-						</a>
-					</small>
+          <button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true" title="Close"></button>
 					<small>
 						<a href="#top" title="Return to Top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 					</small>
@@ -486,11 +478,7 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 				<a id="{$bioghist_id}"/>
 				<h3>
 					<xsl:value-of select="$bioghist_head"/>
-					<small>
-						<a href="#" class="toggle-button" id="toggle-{$class}">
-							<span class="glyphicon glyphicon-triangle-bottom"> </span>
-						</a>
-					</small>
+					<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true" title="Close"></button>
 					<small>
 						<a href="#top" title="Return to Top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 					</small>
@@ -501,13 +489,9 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 					<a id="{$historical_id}"/>
 					<h3>
 						<xsl:value-of select="$historical_head"/>
+						<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true" title="Close"></button>
 						<small>
-							<a href="#" class="toggle-button" id="toggle-{$class}">
-								<span class="glyphicon glyphicon-triangle-bottom"> </span>
-							</a>
-						</small>
-						<small>
-							<a href="#top" title="Return to Top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
+							<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 						</small>
 					</h3>
 				</xsl:if>
@@ -515,15 +499,13 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 		</xsl:choose>
 		<div>
 			<xsl:attribute name="class">
-				<xsl:choose>
-					<xsl:when test="name(..) = 'archdesc'">
-						<xsl:value-of select="concat($class, ' ', $class, '-content')"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="$class"/>
-					</xsl:otherwise>
-				</xsl:choose>
+        <xsl:value-of select="$class"/>
 			</xsl:attribute>
+      <xsl:if test="name(..) = 'archdesc'">
+        <xsl:attribute name="id">
+          <xsl:value-of select="concat($class, '-content')"/>
+        </xsl:attribute>
+      </xsl:if>
 			<xsl:for-each select="p">
 				<p>
 					<xsl:apply-templates/>
@@ -549,28 +531,22 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 			<a id="{$scopecontent_id}"/>
 			<h3>
 				<xsl:value-of select="$scopecontent_head"/>
+				<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true" title="Close"></button>
 				<small>
-					<a href="#" class="toggle-button" id="toggle-{$class}">
-						<span class="glyphicon glyphicon-triangle-bottom"> </span>
-					</a>
-				</small>
-				<small>
-					<a href="#top" title="Return to Top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
+					<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 				</small>
 			</h3>
 		</xsl:if>
 
 		<div>
 			<xsl:attribute name="class">
-				<xsl:choose>
-					<xsl:when test="name(..) = 'archdesc'">
-						<xsl:value-of select="concat($class, ' ', $class, '-content')"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="$class"/>
-					</xsl:otherwise>
-				</xsl:choose>
+        <xsl:value-of select="$class"/>
 			</xsl:attribute>
+      <xsl:if test="name(..) = 'archdesc'">
+        <xsl:attribute name="id">
+          <xsl:value-of select="concat($class, '-content')"/>
+        </xsl:attribute>
+      </xsl:if>
 			<xsl:for-each select="p">
 				<p>
 					<xsl:apply-templates/>
@@ -604,13 +580,9 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 						<xsl:value-of select="$odd_head"/>
 					</xsl:otherwise>
 				</xsl:choose>
+					<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true" title="Close"></button>
 					<small>
-						<a href="#" class="toggle-button" id="toggle-{$class}">
-							<span class="glyphicon glyphicon-triangle-bottom"> </span>
-						</a>
-					</small>
-					<small>
-						<a href="#top" title="Return to Top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
+						<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 					</small>
 				</h3>
 			</xsl:when>
@@ -623,15 +595,13 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 
 		<div>
 			<xsl:attribute name="class">
-				<xsl:choose>
-					<xsl:when test="name(..) = 'archdesc'">
-						<xsl:value-of select="concat($class, ' ', $class, '-content')"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="$class"/>
-					</xsl:otherwise>
-				</xsl:choose>
+        <xsl:value-of select="$class"/>
 			</xsl:attribute>
+      <xsl:if test="name(..) = 'archdesc'">
+        <xsl:attribute name="id">
+          <xsl:value-of select="concat($class, '-content')"/>
+        </xsl:attribute>
+      </xsl:if>
 			<xsl:for-each select="p">
 				<p>
 					<xsl:apply-templates/>
@@ -650,16 +620,12 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 				</xsl:if>
 				<a id="{$useinfo_id}"/>
 				<xsl:value-of select="$useinfo_head"/>
+				<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-usediv" aria-controls="usediv-content" aria-expanded="true" title="Close"></button>
 				<small>
-					<a href="#" class="toggle-button" id="toggle-usediv">
-						<span class="glyphicon glyphicon-triangle-bottom"> </span>
-					</a>
-				</small>
-				<small>
-					<a href="#top" title="Return to Top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
+					<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 				</small>
 			</h3>
-			<div class="use usediv-content">
+			<div class="use" id="usediv-content">
 				<xsl:for-each select="altformavail | userestrict | prefercite">
 					<xsl:call-template name="archdesc_minor_children">
 						<xsl:with-param name="withLabel">true</xsl:with-param>
@@ -677,16 +643,12 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 		<a id="administrative_info"/>
 		<h3>
 			<xsl:text>Administrative Information</xsl:text>
+			<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-ai" aria-controls="ai-content" aria-expanded="true" title="Close"></button>
 			<small>
-				<a href="#" class="toggle-button" id="toggle-ai">
-					<span class="glyphicon glyphicon-triangle-bottom"> </span>
-				</a>
-			</small>
-			<small>
-				<a href="#top" title="Return to Top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
+				<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 			</small>
 		</h3>
-		<div class="ai ai-content">
+		<div class="ai" id="ai-content">
 			<xsl:apply-templates select="arrangement"/>
 			<xsl:call-template name="admininfo"/>
 			<xsl:if test="string(index[not(ancestor::dsc)])">

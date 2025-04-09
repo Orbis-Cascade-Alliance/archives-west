@@ -26,6 +26,14 @@ h4 {
   font-size: 1rem;
 }
 
+button.glyphicon {
+  background: transparent;
+  border: 0;
+  color: #005AA3;
+  cursor: pointer;
+  padding: 0;
+}
+
 .glyphicon-triangle-right::before {
   content: "\25B6";
 }
@@ -100,7 +108,7 @@ h4 {
 
 #docBody h3 .glyphicon,
 #docBody h4 .glyphicon {
-  margin-left: 0.5rem;
+  margin: auto 0.5rem;
 }
 
 #downloads {
@@ -159,7 +167,7 @@ th, td {
   text-transform: capitalize;
 }
 
-.backtotop {
+a[href="#top"] {
   font-size: 1rem;
   font-weight: normal;
   background: #43177d;
@@ -167,6 +175,7 @@ th, td {
   padding: .25rem .5rem .25rem 0;
   text-decoration: none;
   float: right;
+  vertical-align: middle;
 }
 
 a#aeon {
@@ -180,16 +189,12 @@ a#aeon {
   background-position: .5rem;
 }
 
-.backtotop:hover,
-.backtotop:focus,
+a[href="#top"]:hover,
+a[href="#top"]:focus,
 a#aeon:hover,
 a#aeon:focus {
   color: #ffffff;
   text-decoration: underline;
-}
-
-.backtotop .glyphicon {
-  margin-right: 0.5rem;
 }
 
 #main .footer {
@@ -253,7 +258,7 @@ img.daoimage {
 
 @media screen and (max-width: 760px) {
   
-  .backtotop,
+  a[href="#top"],
   #btn-qr  {
     display: none !important;
   }

@@ -1,8 +1,5 @@
 $(document).ready(function() {
   
-  // Style return to top links
-  $('a[title="Return to Top"]').addClass('backtotop');
-  
   // Handle behavior of Table of Contents depending on window width
   toc_structure();
   table_structure();
@@ -12,23 +9,19 @@ $(document).ready(function() {
   });
   
   // Attach handler to toggle buttons
-  $('.toggle-button')
+  $('button.glyphicon')
     .each(function() {
-      var id = $(this).attr('id').substring(7);
-      var content = $('.' + id + '-content');
-      if ($(this).children('.glyphicon').hasClass('glyphicon-triangle-bottom')) {
-        content.show();
+      var content_id = $(this).attr('aria-controls');
+      if ($(this).hasClass('glyphicon-triangle-bottom')) {
+        $('#' + content_id).show();
       }
       else {
-        content.hide();
+        $('#' + content_id).hide();
       }
     })
     .click(function(e) {
       e.preventDefault();
-      var id = $(this).attr('id').substring(7);
-      var content = $('.' + id + '-content');
-      var glyphicon = $(this).children('.glyphicon').eq(0);
-      toggle_section(glyphicon, content);
+      toggle_section(this);
     });
     
   // Add links to controlaccess headings
@@ -93,14 +86,15 @@ $(document).ready(function() {
 });
 
 // Toggle content with glyphicons
-function toggle_section(glyphicon, content) {
-  if (content.is(':visible')) {
-    content.hide();
-    $(glyphicon).removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-right');
+function toggle_section(glyphicon) {
+  var content_id = $(glyphicon).attr('aria-controls');
+  if ($('#' + content_id).is(':visible')) {
+    $('#' + content_id).hide();
+    $(glyphicon).removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-right').attr('aria-expanded', 'false').attr('title', 'Open');
   }
   else {
-    content.show();
-    $(glyphicon).removeClass('glyphicon-triangle-right').addClass('glyphicon-triangle-bottom');
+    $('#' + content_id).show();
+    $(glyphicon).removeClass('glyphicon-triangle-right').addClass('glyphicon-triangle-bottom').attr('aria-expanded', 'true').attr('title', 'Close');
   }
 }
 
@@ -114,7 +108,7 @@ function toc_structure() {
   else {
     $('#toc').css('max-height', 'auto');
     if ($('#toc-toggle').length == 0) {
-      $('#toc h2').append('<span id="toc-toggle" class="glyphicon glyphicon-triangle-right" onclick="toggle_section(this, $(\'#toc > ul\'));"></span>');
+      $('#toc h2').append('<button id="toc-toggle" class="glyphicon glyphicon-triangle-right" onclick="toggle_section(this);">Open</button>');
       $('#toc > ul').hide();
     }
   }

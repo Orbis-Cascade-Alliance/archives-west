@@ -40,17 +40,13 @@ Changes:
 		<a id="{$dsc_id}"/>
 		<h3>
 			<xsl:value-of select="$dsc_head"/>
+			<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-dscdiv" aria-controls="dscdiv-content" aria-expanded="true" title="Close"></button>
 			<small>
-				<a href="#" class="toggle-button" id="toggle-dscdiv">
-					<span class="glyphicon glyphicon-triangle-bottom"> </span>
-				</a>
-			</small>
-			<small>
-				<a href="#top" title="Return to Top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
+				<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 			</small>
 		</h3>
 
-		<div class="dsc dscdiv-content">
+		<div class="dsc" id="dscdiv-content">
 			<xsl:choose>
 				<!-- if there are c02's apply normal templates -->
 				<xsl:when test="descendant::c02">
@@ -201,19 +197,12 @@ Changes:
 		<thead>
 			<tr>
 				<xsl:if test="descendant::container">
-					<xsl:choose>
-						<xsl:when test="descendant::did[count(container) = 2]">
-							<th class="c0x_container_small">
-								<span class="c0x_header">Container(s)</span>
-							</th>
-							<th class="c0x_container_small"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<th class="c0x_container_small">
-								<span class="c0x_header">Container(s)</span>
-							</th>
-						</xsl:otherwise>
-					</xsl:choose>
+          <th class="c0x_container_small">
+            <xsl:if test="descendant::did[count(container) = 2]">
+              <xsl:attribute name="colspan">2</xsl:attribute>
+            </xsl:if>
+            <span class="c0x_header">Container(s)</span>
+          </th>
 				</xsl:if>
 
 				<th class="c0x_content">
@@ -701,7 +690,7 @@ Changes:
 					</xsl:choose>
 					<!-- END what if no unitititle-->
 					<small>
-						<a href="#top" title="Return to Top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
+						<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 					</small>
 				</h4>
 				<!-- March 2015: Adding container display as per revision specification 7.1.2 -->

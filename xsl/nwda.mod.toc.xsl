@@ -68,13 +68,11 @@
 			</xsl:if>
 			<xsl:if test="(string(userestrict)) or (string(altformavail))">
 				<li>
-					<a href="#" class="toggle-button" id="toggle-use">
-						<span class="glyphicon glyphicon-triangle-right"> </span>
-					</a>
+					<button type="button" class="glyphicon glyphicon-triangle-right" id="toggle-use" aria-controls="use-content" aria-expanded="false" title="Open"></button>
 					<a href="#{$useinfo_id}" class="showuseinfo">
 						<xsl:value-of select="$useinfo_head"/>
 					</a>
-					<ul style="display:none" class="list-unstyled use-content">
+					<ul style="display:none" class="list-unstyled use-content" id="use-content">
 						<xsl:if test="string(altformavail)">
 							<li>
 								<a href="#{$altformavail_id}" class="showuseinfo">
@@ -105,13 +103,11 @@
 				string(accruals) or      string(separatedmaterial) or string(originalsloc)     or string(bibliography) or
 				string(otherfindaid) or string(relatedmaterial) or      string(index) or string(did/physloc)">
 				<li>
-					<a href="#" class="toggle-button" id="toggle-admin">
-						<span class="glyphicon glyphicon-triangle-right"> </span>
-					</a>
+					<button type="button" class="glyphicon glyphicon-triangle-right" id="toggle-admin" aria-controls="admin-content" aria-expanded="false" title="Open"></button>
 					<a href="#administrative_info">
 						<xsl:text>Administrative Information</xsl:text>
 					</a>
-					<ul style="display:none" class="list-unstyled admin-content">
+					<ul style="display:none" class="list-unstyled" id="admin-content">
 						<xsl:if test="string(arrangement)">
 							<li>
 								<a href="#{$arrangement_id}" class="showai">
@@ -202,9 +198,7 @@
 			<xsl:if test="string(dsc)">
 				<li>
 					<xsl:if test="//c02">
-						<a href="#" class="toggle-button" id="toggle-dsc">
-							<span class="glyphicon glyphicon-triangle-bottom"> </span>
-						</a>
+						<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-dsc" aria-controls="dsc-content" aria-expanded="true" title="Close"></button>
 					</xsl:if>
 					<a href="#{$dsc_id}" class="showdsc">
 						<xsl:value-of select="$dsc_head"/>
@@ -228,7 +222,7 @@
 		<!-- if there are c02's anywhere in the dsc, then display the c01 headings
 			if there are no c02's, all of the c01's are an in-depth type of dsc -->
 		<xsl:if test="//c02">
-			<ul class="list-unstyled dsc-content">
+			<ul class="list-unstyled" id="dsc-content">
 				<xsl:for-each select="//c01">
 					<li>
 						<a>
