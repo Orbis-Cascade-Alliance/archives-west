@@ -468,7 +468,7 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 					<xsl:value-of select="$bioghist_head"/>
           <button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true" title="Close"></button>
 					<small>
-						<a href="#top" title="Return to Top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
+						<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 					</small>
 				</h3>
 
@@ -480,7 +480,7 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 					<xsl:value-of select="$bioghist_head"/>
 					<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true" title="Close"></button>
 					<small>
-						<a href="#top" title="Return to Top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
+						<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 					</small>
 				</h3>
 			</xsl:when>

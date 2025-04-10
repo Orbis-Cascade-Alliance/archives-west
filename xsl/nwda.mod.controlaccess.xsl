@@ -13,7 +13,7 @@ Modifications and Revisions by Mark Carlson, 2004
 				<xsl:value-of select="$controlaccess_head"/>
         <button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-controlaccess" aria-controls="controlaccess-content" aria-expanded="true" title="Close"></button>
 				<small>
-					<a href="#top" title="Return to Top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
+					<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 				</small>
 			</h3>
 
