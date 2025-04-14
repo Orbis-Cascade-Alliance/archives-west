@@ -9,8 +9,11 @@
 	<!-- TOC TEMPLATE - creates Table of Contents -->
 	<xsl:template name="toc">
 
-		<h2>Table of Contents</h2>
-		<ul class="list-unstyled">
+		<h2>
+      Table of Contents
+      <button type="button" id="toc-toggle" class="glyphicon glyphicon-triangle-bottom" aria-controls="toc-ul" aria-expanded="true" title="Close"></button>
+    </h2>
+		<ul class="list-unstyled" id="toc-ul">
 			<xsl:if test="did">
 				<li>
 					<a href="#overview" id="showoverview">

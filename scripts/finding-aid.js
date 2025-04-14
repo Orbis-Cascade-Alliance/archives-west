@@ -102,15 +102,13 @@ function toggle_section(glyphicon) {
 function toc_structure() { 
   if ($(window).outerWidth() >= 1200) {
     $('#toc').css('max-height', $(window).height());
-    $('#toc-toggle').remove();
-    $('#toc > ul').show();
+    $('#toc-toggle').hide();
+    $('#toc-ul').show();
   }
   else {
     $('#toc').css('max-height', 'auto');
-    if ($('#toc-toggle').length == 0) {
-      $('#toc h2').append('<button type="button" id="toc-toggle" class="glyphicon glyphicon-triangle-right" aria-controls="toc-ul" aria-expanded="false" onclick="toggle_section(this);" title="Open"></button>');
-      $('#toc > ul').attr('id', 'toc-ul');
-    }
+    $('#toc-toggle').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-right').attr('aria-expanded', 'false').attr('title', 'Open').show();
+    $('#toc-ul').hide();
   }
 }
 
