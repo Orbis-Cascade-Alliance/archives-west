@@ -108,8 +108,8 @@ function toc_structure() {
   else {
     $('#toc').css('max-height', 'auto');
     if ($('#toc-toggle').length == 0) {
-      $('#toc h2').append('<button id="toc-toggle" class="glyphicon glyphicon-triangle-right" onclick="toggle_section(this);">Open</button>');
-      $('#toc > ul').hide();
+      $('#toc h2').append('<button type="button" id="toc-toggle" class="glyphicon glyphicon-triangle-right" aria-controls="toc-ul" aria-expanded="false" onclick="toggle_section(this);" title="Open"></button>');
+      $('#toc > ul').attr('id', 'toc-ul');
     }
   }
 }
