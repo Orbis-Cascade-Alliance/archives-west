@@ -8,7 +8,7 @@ include(AW_INCLUDES . '/server-header.php');
 include(AW_TOOL_INCLUDES . '/tools-header.php');
 ?>
   <link rel="stylesheet" href="<?php echo AW_DOMAIN;?>/tools/layout/as2aw.css" />
-  <script src="<?php echo AW_DOMAIN;?>"/tools/scripts/as2aw.js"></script>
+  <script src="<?php echo AW_DOMAIN;?>/tools/scripts/as2aw.js"></script>
 <?php
 include(AW_TOOL_INCLUDES . '/tools-header-end.php');
 ?>
