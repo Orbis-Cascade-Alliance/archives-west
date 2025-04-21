@@ -29,9 +29,6 @@ include(AW_INCLUDES . '/header.php');
     <a href="http://www.azarchivesonline.org/xtf/search">Arizona Archives Online</a>
   </li>
   <li>
-    <a href="http://rmoa.unm.edu">Rocky Mountain Online Archive</a>
-  </li>
-  <li>
     <a href="https://beta.worldcat.org/archivegrid/">ArchiveGrid</a>
   </li>
 </ul>
