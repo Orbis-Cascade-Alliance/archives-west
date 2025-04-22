@@ -302,9 +302,12 @@ function convert_file($file_contents, $mainagencycode) {
           $date->setAttribute('encodinganalog', 'date');
           $date->setAttribute('calendar', 'gregorian');
           $date->setAttribute('era', 'ce');
-          $year = $date->nodeValue;
-          $normalized_year = preg_replace('|\D|', '', $year);
-          $date->setAttribute('normal', $normalized_year);
+          $date_value = $date->nodeValue;
+          preg_match_all('/[0-9]{4}/', $date_value, $year_matches);
+          if (isset($year_matches[0])) {
+            $normalized_year = implode('/', $year_matches[0]);
+            $date->setAttribute('normal', $normalized_year);
+          }
           $publicationstmt->replaceChild($date, $date->parentNode);
         }
       }
