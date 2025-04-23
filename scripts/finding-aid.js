@@ -3,7 +3,7 @@ $(document).ready(function() {
   // Alerts
   var ark = window.location.href.match(/80444\/xv[0-9]{5,6}/);
   if (ark.length == 1) {
-    $.get('alert.php', {type: 'finding_aid', ark: ark[0]}, function(result) {
+    $.get('/alert.php', {type: 'finding_aid', ark: ark[0]}, function(result) {
       $('#main-content').prepend(result);
     });
   }
