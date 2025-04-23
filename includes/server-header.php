@@ -1,5 +1,6 @@
 <?php
 // Include classes and functions
+require_once(AW_CLASSES . '/alert.php');
 require_once(AW_CLASSES . '/finding_aid.php');
 require_once(AW_CLASSES . '/job.php');
 require_once(AW_CLASSES . '/mail.php');

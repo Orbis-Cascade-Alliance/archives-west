@@ -86,6 +86,25 @@ function get_id_from_mainagencycode($mainagencycode) {
   return $repo_id;
 }
 
+// Get a repository ID from an ARK
+function get_id_from_ark($ark) {
+  $repo_id = 0;
+  if ($mysqli = connect()) {
+    $repo_stmt = $mysqli->prepare('SELECT repo_id FROM arks WHERE ark=?');
+    $repo_stmt->bind_param('s', $ark);
+    $repo_stmt->execute();
+    $repo_result = $repo_stmt->get_result();
+    if ($repo_result->num_rows == 1) {
+      while ($repo_row = $repo_result->fetch_row()) {
+        $repo_id = $repo_row[0];
+      }
+    }
+    $repo_stmt->close();
+    $mysqli->close();
+  }
+  return $repo_id;
+}
+
 // Print previous and next buttons for search
 function print_nav($location) {
   return '<nav class="page-nav">
@@ -212,31 +231,6 @@ function print_rss() {
   else {
     echo 'Error: Could not get finding aid records from BaseX.';
   }
-}
-
-// Get alert message of a type
-// "all" - all pages of the public website, in /includes/header-end.php
-// "finding_aid" - all finding aids for a repository, in /finding-aid.php
-// "tools" - homepage of the management tools, in /tools/index.php
-function get_alert($type, $repo_id = 0) {
-  $alert = '';
-  if ($mysqli = connect()) {
-    $today = date('Y-m-d H:i:s');
-    $alert_query = 'SELECT message FROM alerts
-      WHERE type="' . $type . '"
-      AND repo_id=' . $repo_id . '
-      AND start <= "' . $today . '"
-      AND end >= "' . $today . '"';
-    if ($result = $mysqli->query($alert_query)) {
-      if ($result->num_rows == 1) {
-        while ($row = $result->fetch_row()) {
-          $alert = $row[0];
-        }
-      }
-    }
-    $mysqli->close();
-  }
-  return $alert;
 }
 
 // Check maintenance mode

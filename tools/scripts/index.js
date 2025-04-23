@@ -1,5 +1,9 @@
 $(document).ready(function() {
   
+  $.get('../alert.php', {type: 'tools'}, function(result) {
+    $('#page-content').prepend(result);
+  });
+  
   // jQuery UI Dialogs
   $('#dialog-keyword').dialog({
     autoOpen: false,

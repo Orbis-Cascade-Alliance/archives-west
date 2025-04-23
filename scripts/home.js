@@ -1,7 +1,4 @@
 $(document).ready(function(){
-  
-  // Load the RSS feed
-  //$('#rss-content').load('https://archiveswest.orbiscascade.org/search/feed.aspx');
 
   // Load a picture for the banner
   var rnd = Math.floor((Math.random() * 12) + 1);
@@ -20,5 +17,10 @@ $(document).ready(function(){
 		  }
 	  });
 	});
+  
+  // Alerts
+  $.get('alert.php', {type: 'home'}, function(result) {
+    $('#main-content').prepend(result);
+  });
     
 });

@@ -1,5 +1,16 @@
 $(document).ready(function() {
   
+  // Alerts
+  var ark = window.location.href.match(/80444\/xv[0-9]{5,6}/);
+  if (ark.length == 1) {
+    $.get('alert.php', {type: 'finding_aid', ark: ark[0]}, function(result) {
+      $('#main-content').prepend(result);
+    });
+  }
+  
+  // Style return to top links
+  $('a[title="Return to Top"]').addClass('backtotop');
+  
   // Handle behavior of Table of Contents depending on window width
   toc_structure();
   table_structure();
