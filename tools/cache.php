@@ -28,9 +28,9 @@ if (isset($argv[1]) && !empty($argv[1])) {
         echo '
         <div id="downloads">
           <button type="button" class="btn" onclick="print_finding_aid()">Print</button>
-          &#160;<a class="btn" href="' . AW_DOMAIN . '/ark:' . $ark . '/xml" target="_blank" role="button">View XML</a>';
+          <a class="btn" href="' . AW_DOMAIN . '/ark:' . $ark . '/xml" target="_blank" role="button">View XML</a>';
         if ($qr_code = $finding_aid->get_qr_code()) {
-          echo '&#160;<a id="btn-qr" class="btn" href="' . $qr_code . '" target="_blank" role="button">QR Code</a>';
+          echo ' <a id="btn-qr" class="btn" href="' . $qr_code . '" target="_blank" role="button">QR Code</a>';
         }
         echo '</div>';
         echo $finding_aid->transform();
