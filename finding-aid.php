@@ -26,6 +26,5 @@ else {
   header('Location: /');
 }
 
-include(AW_INCLUDES . '/footer.php');
 ?>
 
