@@ -121,6 +121,7 @@ button.glyphicon {
 	border: 1px solid #43177d;
   display: inline-block;
   padding: .25rem .5rem;
+  margin-right: .25rem;
   text-align: center;
   text-decoration: none;
   white-space: nowrap;
