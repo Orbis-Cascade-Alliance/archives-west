@@ -9,7 +9,7 @@ include(AW_INCLUDES . '/header.php');
 
 $decoded_query = '';
 if (isset($_GET['q']) && !empty($_GET['q'])) {
-  $decoded_query = urldecode($_GET['q']);
+  $decoded_query = urldecode(filter_var($_GET['q'], FILTER_SANITIZE_STRING));
 }
 ?>
 
