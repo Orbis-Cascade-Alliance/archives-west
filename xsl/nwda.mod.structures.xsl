@@ -276,7 +276,7 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 					</dt>
 					<dd>
 						<xsl:choose>
-							<xsl:when test="langmaterial/text()">
+							<xsl:when test="not(did/langmaterial/language)">
 								<span property="dcterms:language">
 									<xsl:apply-templates select="did/langmaterial"/>
 								</span>
