@@ -75,6 +75,13 @@ h1 {
   border-radius: .25rem;
 }
 
+#applied-facets button.remove::before {
+  display: inline-block;
+  content: "\0058";
+  padding: .25rem;
+  min-height: 16px;
+}
+
 .page-nav {
   display: flex;
   margin: 1rem 0;
@@ -86,7 +93,7 @@ h1 {
 }
 
 .page-nav > div button {
-  background: #666666;
+  background: #555555;
   color: white;
   padding: .5rem;
   border: none;
@@ -95,7 +102,7 @@ h1 {
 
 .page-nav > div button:hover,
 .page-nav > div button:focus {
-  background: #777777;
+  background: #666666;
 }
 
 .page-nav .jump {

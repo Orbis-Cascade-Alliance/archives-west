@@ -143,17 +143,24 @@ h3 {
   margin: 0 0 .5rem 0;
 }
 
-#search-form select {
+#search-form .repositories,
+#search-form .keywords {
+  display: flex;
+  align-items: center;
+}
+
+#search-form .repositories > label,
+#search-form .keywords > label {
+  flex: 0 0 100px;
+}
+
+#search-form .repositories select {
   width: 100%;
 }
 
-#search-form .keywords {
-  display: flex;
-  margin-top: .5rem;
-}
-
+#search-form .keywords,
 #search-form .options {
-  margin-top: .25rem;
+  margin-top: .5rem;
 }
 
 #search-form input,
@@ -178,6 +185,12 @@ h3 {
 #search-form input[type="submit"]:hover,
 #search-form input[type="submit"]:focus {
   filter: brightness(1.1);
+}
+
+#search-form input[type="checkbox"] {
+  width: 24px;
+  height: 24px;
+  vertical-align: middle;
 }
 
 #main-content {

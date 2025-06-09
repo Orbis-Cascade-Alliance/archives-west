@@ -31,7 +31,7 @@ if ($mysqli = connect()) {
         echo $repo['name'];
       }
       echo '</h2>';
-      echo '<p class="search-link"><img src="' . AW_DOMAIN . '/layout/images/filing-cabinet.png" alt="Finding Aid icon" /> <a href="' . AW_DOMAIN . '/search.php?r=' . $repo['mainagencycode'] . '">Browse Finding Aids</a></p>';
+      echo '<p class="search-link"><img src="' . AW_DOMAIN . '/layout/images/filing-cabinet.png" alt="Finding Aid icon" /> <a href="' . AW_DOMAIN . '/search.php?r=' . $repo['mainagencycode'] . '">Browse Finding Aids in ' . $repo['name'] . '</a></p>';
       if ($repo['collection']) {
         echo '<h3>Collection Information</h3>';
         echo '<div class="pre">' . add_links($repo['collection']) . '</div>';

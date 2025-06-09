@@ -14,9 +14,9 @@ if (isset($_GET['q']) && !empty($_GET['q'])) {
 ?>
 
 <title>Search<?php if ($decoded_query) {echo ': ' . $decoded_query;}?> - <?php echo SITE_TITLE; ?></title>
-<link rel="stylesheet" href="<?php echo AW_DOMAIN; ?>/layout/search.css?v=1.1" />
+<link rel="stylesheet" href="<?php echo AW_DOMAIN; ?>/layout/search.css?v=1.2" />
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="<?php echo AW_DOMAIN; ?>/scripts/search.js"></script>
+<script src="<?php echo AW_DOMAIN; ?>/scripts/search.js?v=1.1"></script>
 
 <?php include(AW_INCLUDES . '/header-end.php'); ?>
 
