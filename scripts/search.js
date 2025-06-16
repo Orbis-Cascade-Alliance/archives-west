@@ -68,10 +68,17 @@ function search(page) {
   }).done(function() {
     if (arks.length > 0) {
       // Limit facets to 5 items each
-      $('#facets ul').each(function() {
-        $(this).children('li:gt(4)').hide();
-        if ($(this).children('li:not(:visible)').length > 0) {
-          $(this).after('<button onclick="expand_facets(this);">Show more</button>');
+      var facet_name, facet_plural, facet_ul;
+      $('#facets h3').each(function() {
+        facet_name = $(this).text();
+        facet_plural = facet_name + 's';
+        if (facet_name.slice(-1) == 'y') {
+          facet_plural = facet_name.substring(0, facet_name.length - 1) + 'ies';
+        }
+        facet_ul = $(this).next('ul');
+        facet_ul.children('li:gt(4)').hide();
+        if (facet_ul.children('li:not(:visible)').length > 0) {
+          facet_ul.after('<button onclick="expand_facets(this);">Show more ' + facet_plural.toLowerCase() + '</button>');
         }
       });
       

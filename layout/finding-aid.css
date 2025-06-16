@@ -36,10 +36,12 @@ button.glyphicon {
 
 .glyphicon-triangle-right::before {
   content: "\25B6";
+  padding: .33rem;
 }
 
 .glyphicon-triangle-bottom::before {
   content: "\25BC";
+  padding: .33rem;
 }
 
 .glyphicon-arrow-up::before {

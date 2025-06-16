@@ -319,11 +319,11 @@ class AW_Search {
     $repos = $this->get_repos();
     $facets_html = '<div id="applied-facets">';
     if ($repo = $this->get_repo()) {
-      $facets_html .= '<div class="repo" data-type="repo" data-term="' . $repo->get_mainagencycode() . '">Repository: ' . $repo->get_name() . ' <button class="remove" title="Remove" onclick="remove_facet(this)">X</span></div>';
+      $facets_html .= '<div class="repo" data-type="repo" data-term="' . $repo->get_mainagencycode() . '">Repository: ' . $repo->get_name() . ' <button class="remove" title="Remove ' . $repo->get_name() . '" aria-label="Remove ' . $repo->get_name() . '" onclick="remove_facet(this)"></button></div>';
     }
     if ($facets = $this->get_facets()) {
       foreach ($facets as $facet_type => $facet_term) {
-        $facets_html .= '<div class="facet" data-type="' . $facet_type . '" data-term="' . $facet_term . '">' . $facet_headings[$facet_type] . ': ' . $facet_term . ' <button class="remove" title="Remove" onclick="remove_facet(this)">X</span></div>';
+        $facets_html .= '<div class="facet" data-type="' . $facet_type . '" data-term="' . $facet_term . '">' . $facet_headings[$facet_type] . ': ' . $facet_term . ' <button class="remove" title="Remove ' . $facet_term . '" aria-label="Remove ' . $facet_term . '" onclick="remove_facet(this)"></button></div>';
       }
     }
     $facets_html .= '</div>';
