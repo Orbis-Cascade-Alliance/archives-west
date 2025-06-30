@@ -17,15 +17,20 @@ $user = get_session_user();
 $repo_id = get_user_repo_id($user);
 try {
   $repo = new AW_Repo($repo_id);
-  if (isset($_FILES['ead']['tmp_name']) && !empty($_FILES['ead']['tmp_name'])) {
-    $file_contents = file_get_contents($_FILES['ead']['tmp_name']);
-    if (trim($file_contents) != '') {
-      $conversion_result = convert_file($file_contents, $repo->get_mainagencycode());
-      $converted_ead = $conversion_result['ead'];
-      $errors = $conversion_result['errors'];
+  if (isset($_FILES['ead']) && !empty($_FILES['ead'])) {
+    if (isset($_FILES['ead']['tmp_name']) && !empty($_FILES['ead']['tmp_name'])) {
+      $file_contents = file_get_contents($_FILES['ead']['tmp_name']);
+      if (trim($file_contents) != '') {
+        $conversion_result = convert_file($file_contents, $repo->get_mainagencycode());
+        $converted_ead = $conversion_result['ead'];
+        $errors = $conversion_result['errors'];
+      }
+      else {
+        $errors[] = 'File is empty.';
+      }
     }
     else {
-      $errors[] = 'File is empty.';
+      $errors[] = 'Could not parse file. Check for syntax errors.';
     }
   }
   else {

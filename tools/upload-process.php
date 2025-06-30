@@ -23,12 +23,18 @@ if (isset($_POST['replace']) && $_POST['replace'] == 1) {
  
 // Upload file 
 if (isset($_FILES['ead']) && !empty($_FILES['ead'])) {
-  $file_contents = file_get_contents($_FILES['ead']['tmp_name']);
-  $file_name = basename($_FILES['ead']['name']);
-  $upload_result = upload_file($file_contents, $file_name, $ark, $replace, $user->get_id());
-  $_SESSION['upload_file'] = $file_name;
-  $_SESSION['upload_errors'] = $upload_result['errors'];
-  start_index_process();
+  if (isset($_FILES['ead']['tmp_name']) && !empty($_FILES['ead']['tmp_name'])) {
+    $file_contents = file_get_contents($_FILES['ead']['tmp_name']);
+    $file_name = basename($_FILES['ead']['name']);
+    $upload_result = upload_file($file_contents, $file_name, $ark, $replace, $user->get_id());
+    $_SESSION['upload_file'] = $file_name;
+    $_SESSION['upload_errors'] = $upload_result['errors'];
+    start_index_process();
+  }
+  else {
+    $_SESSION['upload_file'] = 'Unknown';
+    $_SESSION['upload_errors'] = array('Could not parse file. Check for syntax errors.');
+  }
 }
 header('Location: ' . AW_DOMAIN . '/tools/upload.php?ark=' . $ark);
 ?>

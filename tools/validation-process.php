@@ -17,12 +17,17 @@ else {
 }
  
 if (isset($_FILES['ead']) && !empty($_FILES['ead'])) {
-  $file_contents = file_get_contents($_FILES['ead']['tmp_name']);
-  $validation_result = validate_file($file_contents, $repo_id);
-  $_SESSION['validation_file'] = basename($_FILES['ead']['name']);
-  $_SESSION['validation_ark'] = $validation_result['ark'];
-  $_SESSION['validation_errors'] = $validation_result['errors'];
-  
+  if (isset($_FILES['ead']['tmp_name']) && !empty($_FILES['ead']['tmp_name'])) {
+    $file_contents = file_get_contents($_FILES['ead']['tmp_name']);
+    $validation_result = validate_file($file_contents, $repo_id);
+    $_SESSION['validation_file'] = basename($_FILES['ead']['name']);
+    $_SESSION['validation_ark'] = $validation_result['ark'];
+    $_SESSION['validation_errors'] = $validation_result['errors'];
+  }
+  else {
+    $_SESSION['validation_file'] = 'Unknown';
+    $_SESSION['validation_errors'] = array('Could not parse file. Check for syntax errors.');
+  }
 }
 header('Location: ' . AW_DOMAIN . '/tools/validation.php');
 ?>

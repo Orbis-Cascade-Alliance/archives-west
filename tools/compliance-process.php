@@ -18,10 +18,16 @@ if (isset($_POST['all']) && $_POST['all']=='no') {
 // Get uploaded file from POST
 $transformed_ead = null;
 if (isset($_FILES['ead']) && !empty($_FILES['ead'])) {
-  $file_contents = file_get_contents($_FILES['ead']['tmp_name']);
-  $compliance_results = check_compliance($file_contents, $all);
-  $_SESSION['compliance_report'] = $compliance_results['report'];
-  $_SESSION['compliance_errors'] = $compliance_results['errors'];
+  if (isset($_FILES['ead']['tmp_name']) && !empty($_FILES['ead']['tmp_name'])) {
+    $file_contents = file_get_contents($_FILES['ead']['tmp_name']);
+    $compliance_results = check_compliance($file_contents, $all);
+    $_SESSION['compliance_report'] = $compliance_results['report'];
+    $_SESSION['compliance_errors'] = $compliance_results['errors'];
+  }
+  else {
+    $_SESSION['compliance_report'] = '<p>No report generated. See error list above.</p>';
+    $_SESSION['compliance_errors'] = array('Could not parse file. Check for syntax errors.');
+  }
 }
 header('Location: ' . AW_DOMAIN . '/tools/compliance.php');
 ?>
