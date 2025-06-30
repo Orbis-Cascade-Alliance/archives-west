@@ -30,7 +30,7 @@ try {
       }
     }
     else {
-      $errors[] = 'Could not parse file. Check for syntax errors.';
+      $errors[] = 'Could not parse XML. File may be empty or too large.';
     }
   }
   else {

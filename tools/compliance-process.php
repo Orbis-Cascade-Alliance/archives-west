@@ -26,7 +26,7 @@ if (isset($_FILES['ead']) && !empty($_FILES['ead'])) {
   }
   else {
     $_SESSION['compliance_report'] = '<p>No report generated. See error list above.</p>';
-    $_SESSION['compliance_errors'] = array('Could not parse file. Check for syntax errors.');
+    $_SESSION['compliance_errors'] = array('Could not parse XML. File may be empty or too large.');
   }
 }
 header('Location: ' . AW_DOMAIN . '/tools/compliance.php');

@@ -33,7 +33,7 @@ if (isset($_FILES['ead']) && !empty($_FILES['ead'])) {
   }
   else {
     $_SESSION['upload_file'] = 'Unknown';
-    $_SESSION['upload_errors'] = array('Could not parse file. Check for syntax errors.');
+    $_SESSION['upload_errors'] = array('Could not parse XML. File may be empty or too large.');
   }
 }
 header('Location: ' . AW_DOMAIN . '/tools/upload.php?ark=' . $ark);
