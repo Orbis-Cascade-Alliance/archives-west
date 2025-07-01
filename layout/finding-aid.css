@@ -19,6 +19,13 @@ h4 {
   font-weight: normal;
 }
 
+mark {
+  text-decoration-line: underline;
+  text-decoration-style: double;
+  background-color: transparent;
+  color: inherit;
+}
+
 .glyphicon {
   position: relative;
   display: inline-block;
