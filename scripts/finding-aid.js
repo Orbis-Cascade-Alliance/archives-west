@@ -99,13 +99,15 @@ $(document).ready(function() {
 // Toggle content with glyphicons
 function toggle_section(glyphicon) {
   var content_id = $(glyphicon).attr('aria-controls');
+  var title = $(glyphicon).attr('title');
+  title = title.substring(title.indexOf(' ') + 1);
   if ($('#' + content_id).is(':visible')) {
     $('#' + content_id).hide();
-    $(glyphicon).removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-right').attr('aria-expanded', 'false').attr('title', 'Open');
+    $(glyphicon).removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-right').attr('aria-expanded', 'false').attr('title', 'Open ' + title);
   }
   else {
     $('#' + content_id).show();
-    $(glyphicon).removeClass('glyphicon-triangle-right').addClass('glyphicon-triangle-bottom').attr('aria-expanded', 'true').attr('title', 'Close');
+    $(glyphicon).removeClass('glyphicon-triangle-right').addClass('glyphicon-triangle-bottom').attr('aria-expanded', 'true').attr('title', 'Close ' + title);
   }
 }
 

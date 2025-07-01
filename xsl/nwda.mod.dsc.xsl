@@ -40,7 +40,12 @@ Changes:
 		<a id="{$dsc_id}"/>
 		<h3>
 			<xsl:value-of select="$dsc_head"/>
-			<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-dscdiv" aria-controls="dscdiv-content" aria-expanded="true" title="Close"></button>
+			<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-dscdiv" aria-controls="dscdiv-content" aria-expanded="true">
+        <xsl:attribute name="title">
+          <xsl:text>Close </xsl:text>
+          <xsl:value-of select="$dsc_head"/>
+        </xsl:attribute>
+      </button>
 			<small>
 				<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 			</small>

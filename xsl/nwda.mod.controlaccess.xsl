@@ -11,7 +11,12 @@ Modifications and Revisions by Mark Carlson, 2004
 		<div id="{$controlaccess_id}">
 			<h3>
 				<xsl:value-of select="$controlaccess_head"/>
-        <button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-controlaccess" aria-controls="controlaccess-content" aria-expanded="true" title="Close"></button>
+        <button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-controlaccess" aria-controls="controlaccess-content" aria-expanded="true">
+          <xsl:attribute name="title">
+            <xsl:text>Close </xsl:text>
+            <xsl:value-of select="$controlaccess_head"/>
+          </xsl:attribute>
+        </button>
 				<small>
 					<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 				</small>

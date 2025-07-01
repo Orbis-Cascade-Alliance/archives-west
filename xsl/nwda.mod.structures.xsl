@@ -93,7 +93,12 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 		<h3>
 			<a id="overview"/>
 			<xsl:value-of select="$overview_head"/>
-      <button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-overview" aria-controls="overview-content" aria-expanded="true" title="Close"></button>
+      <button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-overview" aria-controls="overview-content" aria-expanded="true">
+        <xsl:attribute name="title">
+          <xsl:text>Close </xsl:text>
+          <xsl:value-of select="$overview_head"/>
+        </xsl:attribute>
+      </button>
 		</h3>
 		<div class="overview" id="overview-content">
 			<dl class="dl-horizontal">
@@ -466,7 +471,12 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 				<a id="{$bioghist_id}"/>
 				<h3>
 					<xsl:value-of select="$bioghist_head"/>
-          <button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true" title="Close"></button>
+          <button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true">
+            <xsl:attribute name="title">
+              <xsl:text>Close </xsl:text>
+              <xsl:value-of select="$bioghist_head"/>
+            </xsl:attribute>
+          </button>
 					<small>
 						<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 					</small>
@@ -478,7 +488,12 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 				<a id="{$bioghist_id}"/>
 				<h3>
 					<xsl:value-of select="$bioghist_head"/>
-					<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true" title="Close"></button>
+					<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true">
+            <xsl:attribute name="title">
+              <xsl:text>Close </xsl:text>
+              <xsl:value-of select="$bioghist_head"/>
+            </xsl:attribute>
+          </button>
 					<small>
 						<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 					</small>
@@ -489,7 +504,12 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 					<a id="{$historical_id}"/>
 					<h3>
 						<xsl:value-of select="$historical_head"/>
-						<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true" title="Close"></button>
+						<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true">
+              <xsl:attribute name="title">
+                <xsl:text>Close </xsl:text>
+                <xsl:value-of select="$historical_head"/>
+              </xsl:attribute>
+            </button>
 						<small>
 							<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 						</small>
@@ -531,7 +551,12 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 			<a id="{$scopecontent_id}"/>
 			<h3>
 				<xsl:value-of select="$scopecontent_head"/>
-				<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true" title="Close"></button>
+				<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true">
+          <xsl:attribute name="title">
+              <xsl:text>Close </xsl:text>
+              <xsl:value-of select="$scopecontent_head"/>
+            </xsl:attribute>
+        </button>
 				<small>
 					<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 				</small>
@@ -580,7 +605,19 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 						<xsl:value-of select="$odd_head"/>
 					</xsl:otherwise>
 				</xsl:choose>
-					<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true" title="Close"></button>
+					<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true">
+            <xsl:attribute name="title">
+              <xsl:text>Close </xsl:text>
+              <xsl:choose>
+                <xsl:when test="@type='hist'">
+                  <xsl:value-of select="$odd_head_histbck"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="$odd_head"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:attribute>
+          </button>
 					<small>
 						<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 					</small>
@@ -620,7 +657,12 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 				</xsl:if>
 				<a id="{$useinfo_id}"/>
 				<xsl:value-of select="$useinfo_head"/>
-				<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-usediv" aria-controls="usediv-content" aria-expanded="true" title="Close"></button>
+				<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-usediv" aria-controls="usediv-content" aria-expanded="true">
+          <xsl:attribute name="title">
+            <xsl:text>Close </xsl:text>
+            <xsl:value-of select="$useinfo_head"/>
+          </xsl:attribute>
+        </button>
 				<small>
 					<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 				</small>
@@ -643,7 +685,7 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 		<a id="administrative_info"/>
 		<h3>
 			<xsl:text>Administrative Information</xsl:text>
-			<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-ai" aria-controls="ai-content" aria-expanded="true" title="Close"></button>
+			<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-ai" aria-controls="ai-content" aria-expanded="true" title="Close Administrative Information"></button>
 			<small>
 				<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 			</small>
