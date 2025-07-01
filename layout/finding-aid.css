@@ -262,8 +262,7 @@ img.daoimage {
 
 @media screen and (max-width: 760px) {
   
-  a[href="#top"],
-  #btn-qr  {
+  a[href="#top"] {
     display: none !important;
   }
   
