@@ -58,8 +58,7 @@ if ($repo_id != 0) {
           'cached' => $ark_row['cached'],
           'title' => 'Unknown',
           'date' => $ark_row['last_update'] > $ark_row['date'] ? $ark_row['last_update'] : $ark_row['date'],
-          'creation_date' => $ark_row['date'],
-          'history' => $ark_row['history']
+          'creation_date' => $ark_row['date']
         );
         if ($ark_row['file'] == '') {
           $unused++;

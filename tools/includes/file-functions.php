@@ -126,6 +126,11 @@ function convert_file($file_contents, $mainagencycode) {
         }
       }
       
+      // Remove daogrps (until Archives West supports Digital Object harvesting)
+      foreach ($xpath->query('//did/daogrp') as $daogrp) {
+        $daogrp->parentNode->removeChild($daogrp);
+      }
+      
       // Rewrite attribute values to lowercase
       $to_convert = array(
         '//container' => 'type',
