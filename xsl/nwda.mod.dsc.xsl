@@ -164,21 +164,6 @@ Changes:
 					<xsl:if test="(@level='item' or @level='file') and container">
 						<tr>
 							<td>
-								<span class="containerLabel">
-									<xsl:value-of select="did/container[1]/@type"/>
-								</span>
-							</td>
-							<xsl:if test="did/container[2]">
-								<td>
-									<span class="containerLabel">
-										<xsl:value-of select="did/container[2]/@type"/>
-									</span>
-								</td>
-							</xsl:if>
-							<td class="c0x_content"/>
-						</tr>
-						<tr>
-							<td>
 								<xsl:value-of select="did/container[1]"/>
 							</td>
 							<xsl:if test="did/container[2]">
@@ -203,11 +188,19 @@ Changes:
 			<tr>
 				<xsl:if test="descendant::container">
           <th class="c0x_container_small">
-            <xsl:if test="descendant::did[count(container) = 2]">
-              <xsl:attribute name="colspan">2</xsl:attribute>
-            </xsl:if>
-            <span class="c0x_header">Container(s)</span>
+            <span class="c0x_header">
+              <xsl:call-template name="regularize_container">
+                <xsl:with-param name="current_val" select="descendant::did/container[1]/@type"/>
+              </xsl:call-template>
+            </span>
           </th>
+          <xsl:if test="descendant::did/container[2]">
+            <th class="c0x_container_small">
+              <xsl:call-template name="regularize_container">
+                <xsl:with-param name="current_val" select="descendant::did/container[2]/@type"/>
+              </xsl:call-template>
+            </th>
+          </xsl:if>
 				</xsl:if>
 
 				<th class="c0x_content">
@@ -225,11 +218,6 @@ Changes:
 	<!-- ********************* END LABELS FOR TABLE ************************** -->
 	<!-- ********************* START c0xs *************************** -->
 	<xsl:template match="c02|c03|c04|c05|c06|c07|c08|c09|c10|c11|c12">
-
-		<!-- ********* ROW FOR DISPLAYING CONTAINER TYPES ********* -->
-		<xsl:if test="did/container">
-			<xsl:call-template name="container_row"/>
-		</xsl:if>
 
 		<!-- *********** ROW FOR DISPLAYING CONTAINER, CONTENT, AND DATE DATA **************-->
 
@@ -349,120 +337,6 @@ Changes:
 
 	<!-- ********************* END c0xs *************************** -->
 
-	<!-- *** CONTAINER ROW ** -->
-
-	<xsl:template name="container_row">
-		<!-- variables are created to grab container type data.
-		this logic basically only creates the row and its table cells if there is firstor second container
-		data returned from the template call.  this logic cuts back on processing time for the server
-		and download time for the user - Ethan Gruber 7/29/07 -->
-
-		<xsl:variable name="first_container">
-			<xsl:call-template name="container_type">
-				<xsl:with-param name="container_number" select="1"/>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:variable name="second_container">
-			<xsl:call-template name="container_type">
-				<xsl:with-param name="container_number" select="2"/>
-			</xsl:call-template>
-		</xsl:variable>
-
-		<!-- if none of the container variables contains any data, the row will not be created -->		
-
-		<xsl:if test="string($first_container) or string($second_container)">
-			<tr>
-				<xsl:choose>
-					<!-- for two containers -->
-					<xsl:when test="did/container[2]">
-						<td>
-							<span class="containerLabel">
-								<xsl:value-of select="$first_container"/>
-							</span>
-						</td>
-						<td>
-							<span class="containerLabel">
-								<xsl:value-of select="$second_container"/>
-							</span>
-						</td>
-						<td/>
-						<xsl:choose>
-							<xsl:when test="count(//c02) &gt; 0">
-								<xsl:if test="ancestor::c01/descendant::did/unitdate">
-									<td class="c0x_date"/>
-								</xsl:if>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:if test="ancestor::dsc/descendant::did/unitdate">
-									<td class="c0x_date"/>
-								</xsl:if>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:when>
-
-					<!-- for one container -->
-					<xsl:otherwise>
-						<xsl:variable name="container_colspan">
-							<xsl:choose>
-								<xsl:when test="count(//c02) &gt; 0">
-									<xsl:choose>
-										<xsl:when test="ancestor::c01/descendant::did/container[2]">2</xsl:when>
-										<xsl:otherwise>1</xsl:otherwise>
-									</xsl:choose>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:choose>
-										<xsl:when test="ancestor::dsc/descendant::did/container[2]">2</xsl:when>
-										<xsl:otherwise>1</xsl:otherwise>
-									</xsl:choose>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:variable>
-						<td colspan="{$container_colspan}">
-							<span class="containerLabel">
-								<xsl:value-of select="$first_container"/>
-							</span>
-						</td>
-						<td/>
-						<xsl:choose>
-							<xsl:when test="count(//c02) &gt; 0">
-								<xsl:if test="ancestor::c01/descendant::did/unitdate">
-									<td class="c0x_date"/>
-								</xsl:if>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:if test="ancestor::dsc/descendant::did/unitdate">
-									<td class="c0x_date"/>
-								</xsl:if>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:otherwise>
-				</xsl:choose>
-			</tr>
-		</xsl:if>
-	</xsl:template>
-
-	<!-- ******************** DISPLAYS TYPE OF CONTAINER ****************** -->
-	
-	<xsl:template name="container_type">
-		<xsl:param name="container_number"/>
-		<xsl:variable name="current_val">
-			<xsl:value-of select="did/container[$container_number]/@type"/>
-		</xsl:variable>
-		<xsl:variable name="last_val">
-			<xsl:value-of select="preceding-sibling::*[1]/did/container[$container_number]/@type"/>
-		</xsl:variable>
-
-		<!-- if the last value is not equal to the first value, then the regularize_container template is called.  -->
-		<xsl:if test="$last_val != $current_val">
-			<xsl:call-template name="regularize_container">
-				<xsl:with-param name="current_val" select="$current_val"/>
-			</xsl:call-template>
-		</xsl:if>
-	</xsl:template>
-
-	<!-- ******************** END TYPE OF CONTAINER ****************** -->
-
 	<!-- ******************** CONVERT CONTAINER TYPE TO REGULAR TEXT ****************** -->
 
 	<xsl:template name="regularize_container">
@@ -539,6 +413,9 @@ Changes:
 			<xsl:when test="$current_val = 'rolled-document'">
 				<xsl:text>Rolled Document</xsl:text>
 			</xsl:when>
+      <xsl:when test="$current_val = 'item'">
+        <xsl:text>Item</xsl:text>
+      </xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of select="$current_val"/>
 			</xsl:otherwise>
