@@ -19,6 +19,12 @@ h4 {
   font-weight: normal;
 }
 
+h5 {
+  font-size: 100%;
+  font-weight: bold;
+  margin-top: 1rem;
+}
+
 mark {
   text-decoration-line: underline;
   text-decoration-style: double;
@@ -115,8 +121,7 @@ button.glyphicon {
   padding-top: 0;
 }
 
-#docBody h3 .glyphicon,
-#docBody h4 .glyphicon {
+#docBody .glyphicon {
   margin: auto 0.5rem;
 }
 
@@ -171,13 +176,6 @@ th, td {
   border-top: 1px solid #ddd;
 }
 
-.containerLabel {
-  color: #6c34a8;
-  font-size: 85%;
-  text-decoration: none;
-  text-transform: capitalize;
-}
-
 a[href="#top"] {
   font-size: 1rem;
   font-weight: normal;
@@ -186,7 +184,11 @@ a[href="#top"] {
   padding: .25rem .5rem .25rem 0;
   text-decoration: none;
   float: right;
-  vertical-align: middle;
+  margin-top: 3rem;
+}
+
+#dscdiv-content a[href="#top"] {
+  margin-top: 0;
 }
 
 a#aeon {
@@ -208,8 +210,47 @@ a#aeon:focus {
   text-decoration: underline;
 }
 
+#dscdiv-content ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.c0x_table_row {
+  display: table-row;
+}
+
+.c0x_table_row > div {
+  display: table-cell;
+  padding: .5rem 1rem;
+  border-top: 1px solid #cccccc;
+}
+
+.c0x_table_row:last-child > div {
+  padding-bottom: 2rem;
+}
+
+.c0x_table_labels {
+  font-weight: bold;
+}
+
+.c0x_table .c0x_label {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
 #main .footer {
   text-align: center;
+}
+
+#main .footer .author {
+  font-size: 120%;
 }
 
 .hidden {
@@ -283,6 +324,36 @@ img.daoimage {
 
   dd {
     margin-left: 0;
+  }
+  
+  .c0x_table_labels {
+    display: none !important;
+  }
+  
+  .c0x_table .c0x_label {
+    position: relative;
+  }
+  
+  .c0x_label::after {
+    content: ': ';
+  }
+
+  li.c0x_table_row {
+    display: list-item;
+    border-bottom: 1px solid #cccccc;
+  }
+  
+  div.c0x_table_row {
+    display: block;
+  }
+
+  .c0x_table_row > div {
+    display: block;
+    border: none;
+  }
+  
+  .c0x_table_row:last-child > div {
+    padding-bottom: inherit;
   }
   
 }

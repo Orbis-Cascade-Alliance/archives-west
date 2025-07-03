@@ -13,10 +13,8 @@ $(document).ready(function() {
   
   // Handle behavior of Table of Contents depending on window width
   toc_structure();
-  table_structure();
   $(window).resize(function() {
     toc_structure();
-    table_structure();
   });
   
   // Attach handler to toggle buttons
@@ -122,56 +120,6 @@ function toc_structure() {
     $('#toc').css('max-height', 'auto');
     $('#toc-toggle').removeClass('glyphicon-triangle-bottom').addClass('glyphicon-triangle-right').attr('aria-expanded', 'false').attr('title', 'Open').show();
     $('#toc-ul').hide();
-  }
-}
-
-// Mobile tables
-function table_structure() {
-  if ($(window).outerWidth() > 760) {
-    $('table thead, table tbody tr').show();
-    $('table td').css({
-      'display': 'table-cell',
-      'border-top': '1px solid #ddd',
-      'padding': '.5rem'
-    });
-    $('span.table-label').remove();
-  }
-  else {
-    $('table').each(function() {
-      $(this).find('thead').hide();
-      $(this).find('td').css({
-        'display': 'block',
-        'border-top': 'none',
-        'padding': '.5rem 0'
-      });
-      var container_labels = [];
-      $(this).find('tbody tr').each(function() {
-        if ($(this).find('td span.containerLabel').length > 0) {
-          container_labels = [];
-          $(this).children('td').each(function() {
-            if ($(this).children('span.containerLabel').length > 0) {
-              container_labels.push($(this).children('span.containerLabel').text());
-            }
-            else {
-              container_labels.push('');
-            }
-          });
-          $(this).hide();
-        }
-        else {
-          var i = 0;
-          $(this).children('td').each(function() {
-            if (typeof(container_labels[i]) != 'undefined' && container_labels[i] != '' && $(this).text() != '' && $(this).children('.c02').length == 0 && $(this).children('.table-label').length == 0 && $(this).text().substring(0, container_labels[i].length) != container_labels[i]) {
-              $(this).prepend('<span class="table-label">' + container_labels[i] + ':</span> ');
-            }
-            if ($(this).is(':last-child')) {
-              $(this).css('border-bottom', '1px solid #ddd');
-            }
-            i++;
-          });
-        }
-      });
-    });
   }
 }
 

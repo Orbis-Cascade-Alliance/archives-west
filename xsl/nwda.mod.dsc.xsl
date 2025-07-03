@@ -38,6 +38,7 @@ Changes:
 			<a id="{@id}"/>
 		</xsl:if>
 		<a id="{$dsc_id}"/>
+    <a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 		<h3>
 			<xsl:value-of select="$dsc_head"/>
 			<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-dscdiv" aria-controls="dscdiv-content" aria-expanded="true">
@@ -46,422 +47,242 @@ Changes:
           <xsl:value-of select="$dsc_head"/>
         </xsl:attribute>
       </button>
-			<small>
-				<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
-			</small>
 		</h3>
-
 		<div class="dsc" id="dscdiv-content">
-			<xsl:choose>
-				<!-- if there are c02's apply normal templates -->
-				<xsl:when test="descendant::c02">
-					<xsl:apply-templates select="*[not(self::head)]"/>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:apply-templates select="p"/>
-					<!-- if there are no c02's then all of the c01s are displayed as rows in a table, like an in-depth finding aid -->
-					<table class="table table-striped" summary="A listing of materials in {./did/unittitle}.">
-						<xsl:call-template name="table_label"/>
-						<xsl:call-template name="indepth"/>
-					</table>
-				</xsl:otherwise>
-			</xsl:choose>
+      <ul>
+        <xsl:apply-templates select="*[not(self::head)]"/>
+      </ul>
 		</div>
 	</xsl:template>
 	<!-- ********************* </DSC> *********************** -->
-	<!-- ********************* <SERIES> *************************** -->
-	<xsl:template match="c01">
-		<xsl:if test="@id">
-			<a id="{@id}"/>
-		</xsl:if>
-		<xsl:for-each select="*[@id] | did/*[@id]">
-			<a id="{@id}"/>
-		</xsl:for-each>
-		<div class="c01">
-			<xsl:call-template name="dsc_table"/>
-		</div>
-	</xsl:template>
-	<!-- ********************* </SERIES> *************************** -->
-	<!-- ********************* In-Depth DSC Type ********************* -->
-	<xsl:template name="indepth">
-		<tbody>
-			<xsl:for-each select="c01">
-				<xsl:if test="did/container">
-					<xsl:call-template name="container_row"/>
-				</xsl:if>
-				<xsl:variable name="current_pos" select="position()"/>
-				<tr>
-					<!-- only display table cells for containers when they exist within the c01s -->
-					<xsl:if test="parent::node()/descendant::container">
-						<xsl:choose>
-							<xsl:when test="not(parent::node()/descendant::did/container[2])">
-								<td>
-									<xsl:value-of select="did/container[1]"/>
-								</td>
-							</xsl:when>
-							<xsl:otherwise>
-								<td>
-									<xsl:value-of select="did/container[1]"/>
-								</td>
-								<td>
-									<xsl:value-of select="did/container[2]"/>
-								</td>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:if>
-
-					<td class="c0x_content">
-						<xsl:if test="string(did/unitid)">
-							<xsl:value-of select="did/unitid"/>
-							<xsl:if test="did/unittitle">
-								<xsl:text>: </xsl:text>
-							</xsl:if>
-						</xsl:if>
-						<xsl:choose>
-							<!-- 2022-11-16 print unittitle if present, or generic link if not -->
-							<xsl:when test="did/unittitle">
-								<xsl:apply-templates select="did/unittitle"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:if test="did/daogrp">
-									<xsl:apply-templates select="did/daogrp"/>
-								</xsl:if>
-							</xsl:otherwise>
-						</xsl:choose>
-						<xsl:call-template name="c0x_children"/>
-					</td>
-
-					<xsl:if test="ancestor::dsc/descendant::did/unitdate">
-						<td class="c0x_date">
-							<xsl:for-each select="did/unitdate">
-								<xsl:value-of select="."/>
-								<xsl:if test="not(position() = last())">
-									<xsl:text>, </xsl:text>
-								</xsl:if>
-							</xsl:for-each>
-						</td>
-					</xsl:if>
-				</tr>
-			</xsl:for-each>
-		</tbody>
-	</xsl:template>
-
-	<!-- ********************* ANALYTICOVER/COMBINED DSC TYPE *************************** -->
-	<!--columnar dates are the default-->
-	<xsl:template name="dsc_table">
-		<xsl:variable select="count(../../preceding-sibling::*)+1" name="pppos"/>
-		<xsl:variable select="count(../preceding-sibling::*)+1" name="ppos"/>
-		<xsl:variable select="count(preceding-sibling::*)+1" name="cpos"/>
-		<div id="id{$pppos}_{name(..)}_{$ppos}_{name()}_{$cpos}">
-			<xsl:apply-templates select="did"/>
-		</div>
-
-		<xsl:if test="descendant::c02">
-			<table class="table table-striped" summary="A listing of materials in {./did/unittitle}.">
-				<!-- calls the labels for the table -->
-				<xsl:call-template name="table_label"/>
-				<tbody>
-					<xsl:if test="(@level='item' or @level='file') and container">
-						<tr>
-							<td>
-								<span class="containerLabel">
-									<xsl:value-of select="did/container[1]/@type"/>
-								</span>
-							</td>
-							<xsl:if test="did/container[2]">
-								<td>
-									<span class="containerLabel">
-										<xsl:value-of select="did/container[2]/@type"/>
-									</span>
-								</td>
-							</xsl:if>
-							<td class="c0x_content"/>
-						</tr>
-						<tr>
-							<td>
-								<xsl:value-of select="did/container[1]"/>
-							</td>
-							<xsl:if test="did/container[2]">
-								<td>
-									<xsl:value-of select="did/container[2]"/>
-								</td>
-							</xsl:if>
-							<td class="c0x_content"/>
-						</tr>
-					</xsl:if>
-					<xsl:apply-templates select="c02|c03|c04|c05|c06|c07|c08|c09|c10|c11|c12" />
-				</tbody>
-			</table>
-		</xsl:if>
-
-
-	</xsl:template>
-	<!-- ********************* </DSC TABLE> *************************** -->
-	<!-- ********************* LABELS FOR TABLE ********************* -->
-	<xsl:template name="table_label">
-		<thead>
-			<tr>
-				<xsl:if test="descendant::container">
-          <th class="c0x_container_small">
-            <xsl:if test="descendant::did[count(container) = 2]">
-              <xsl:attribute name="colspan">2</xsl:attribute>
-            </xsl:if>
-            <span class="c0x_header">Container(s)</span>
-          </th>
-				</xsl:if>
-
-				<th class="c0x_content">
-					<span class="c0x_header">Description</span>
-				</th>
-
-				<xsl:if test="string(descendant::did/unitdate)">
-					<th class="c0x_date">
-						<span class="c0x_header">Dates</span>
-					</th>
-				</xsl:if>
-			</tr>
-		</thead>
-	</xsl:template>
-	<!-- ********************* END LABELS FOR TABLE ************************** -->
 	<!-- ********************* START c0xs *************************** -->
-	<xsl:template match="c02|c03|c04|c05|c06|c07|c08|c09|c10|c11|c12">
-
-		<!-- ********* ROW FOR DISPLAYING CONTAINER TYPES ********* -->
-		<xsl:if test="did/container">
-			<xsl:call-template name="container_row"/>
-		</xsl:if>
-
-		<!-- *********** ROW FOR DISPLAYING CONTAINER, CONTENT, AND DATE DATA **************-->
-
-		<!--all c0x level items are their own row; indentation created by css only-->
-
-		<tr>
-			<!-- if there is only one container, the td is 170 pixels wide, otherwise 85 for two containers -->
-
-			<xsl:choose>
-				<xsl:when test="count(did/container) = 1">
-					<td>
-						<xsl:value-of select="did/container[1]"/>
-					</td>
-					<xsl:if test="ancestor-or-self::c01/descendant::did/container[2]">
-						<td/>
-					</xsl:if>
-				</xsl:when>
-				<xsl:when test="count(did/container) = 2">
-					<td>
-						<xsl:value-of select="did/container[1]"/>
-					</td>
-					<td>
-						<xsl:value-of select="did/container[2]"/>
-					</td>
-				</xsl:when>
-				<xsl:when test="ancestor-or-self::c01/descendant::did/container">
-					<xsl:choose>
-						<xsl:when test="ancestor-or-self::c01/descendant::did/container[2]">
-							<td colspan="2"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<td/>
-						</xsl:otherwise>
-					</xsl:choose>
-
-				</xsl:when>
-			</xsl:choose>
-
-			<xsl:variable select="count(../../preceding-sibling::*)+1" name="pppos"/>
-			<xsl:variable select="count(../preceding-sibling::*)+1" name="ppos"/>
-			<xsl:variable select="count(preceding-sibling::*)+1" name="cpos"/>
-			<td class="c0x_content" id="id{$pppos}_{name(..)}_{$ppos}_{name()}_{$cpos}">
-				<div class="{name()}">
-					<xsl:for-each select="*[@id] | did/*[@id]">
-						<a id="{@id}"/>
-					</xsl:for-each>
-					<!-- 2022-11-16 print unittitle if present, or generic link if not -->
-					<xsl:choose>
-						<xsl:when test="did/unittitle">
-							<xsl:choose>
-								<!-- series, subseries, etc are bold -->
-								<xsl:when test="(@level='series' or @level='subseries' or @otherlevel='sub-subseries' or @level='otherlevel') and child::node()/did">
-									<b>
-										<xsl:if test="string(did/unitid)">
+	<xsl:template match="c01|c02|c03|c04|c05|c06|c07|c08|c09|c10|c11|c12">
+      
+      <!-- if current c0x the first of a series, or if current c0x is an item and its previous sibling was a series,
+      or if the containers have changed, print "headers" -->
+      <xsl:if test="did/container and not(child::node()/did)">
+        <!-- compare container types to previous sibling's -->
+        <xsl:variable name="previous_containers" select="preceding-sibling::*[1]/did/container"/>
+        <xsl:variable name="same_containers">
+          <xsl:for-each select="did/container">
+            <xsl:call-template name="compare_containers">
+              <xsl:with-param name="previous_containers" select="$previous_containers"/>
+              <xsl:with-param name="container_pos" select="position()"/>
+              <xsl:with-param name="current_type" select="@type"/>
+            </xsl:call-template>
+          </xsl:for-each>
+        </xsl:variable>
+        <xsl:if test="((parent::node()/@level='series' or parent::node()/@level='subseries' or parent::node()/@otherlevel!='') and position()=1)
+            or ((@level='file' or @level='item') and (preceding-sibling::*[1]/@level='series' or preceding-sibling::*[1]/@level='subseries' or preceding-sibling::*[1]/@otherlevel!=''))
+            or $same_containers!=''">
+          <li class="c0x_table_labels c0x_table_row" aria-hidden="true">
+            <xsl:for-each select="did/container/@type">
+              <div>
+                <xsl:call-template name="regularize_container">
+                  <xsl:with-param name="current_val" select="."/>
+                </xsl:call-template>
+              </div>
+            </xsl:for-each>
+            <xsl:if test="did/unittitle">
+              <div>Description</div>
+            </xsl:if>
+            <xsl:if test="did/unitdate">
+              <div>Dates</div>
+            </xsl:if>
+          </li>
+        </xsl:if>
+      </xsl:if>
+      
+      <!-- start list item -->
+      <li class="{name()}">
+        <xsl:for-each select="*[@id] | did/*[@id]">
+          <a id="{@id}"/>
+        </xsl:for-each>
+      
+          <!-- if current c0x has container, print details -->
+          <!-- don't apply to c01 -->
+          <xsl:if test="did/container and not(local-name(.)='c01')">
+            <xsl:choose>
+              <xsl:when test="child::node()/did">
+                <div class="c0x_table_labels c0x_table_row" aria-hidden="true">
+                  <xsl:for-each select="did/container/@type">
+                    <div>
+                      <xsl:call-template name="regularize_container">
+                        <xsl:with-param name="current_val" select="."/>
+                      </xsl:call-template>
+                    </div>
+                  </xsl:for-each>
+                  <xsl:if test="did/unittitle">
+                    <div>Description</div>
+                  </xsl:if>
+                  <xsl:if test="did/unitdate">
+                    <div>Dates</div>
+                  </xsl:if>
+                </div>
+                <div class="c0x_table_row">
+                  <!-- Containers -->
+                  <xsl:apply-templates select="did/container" />
+                  <!-- unittitle or daogrp -->
+                  <xsl:call-template name="c0x_description">
+                    <xsl:with-param name="did" select="did" />
+                  </xsl:call-template>
+                  <!-- Dates -->
+                  <xsl:call-template name="c0x_dates">
+                    <xsl:with-param name="unitdates" select="did/unitdate"/>
+                  </xsl:call-template>
+                </div>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:attribute name="class">
+                  <xsl:text>c0x_table_row</xsl:text>
+                </xsl:attribute>
+                <!-- Containers -->
+                <xsl:apply-templates select="did/container" />
+                <!-- unittitle or daogrp -->
+                <xsl:call-template name="c0x_description">
+                  <xsl:with-param name="did" select="did" />
+                </xsl:call-template>
+                <!-- Dates -->
+                <xsl:call-template name="c0x_dates">
+                  <xsl:with-param name="unitdates" select="did/unitdate"/>
+                </xsl:call-template>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:if>
+          
+          <!-- if next c0x child has did, print heading and start new list -->
+          <xsl:if test="child::node()/did">
+            <!-- series headings -->
+            <xsl:if test="@level='series' or @level='subseries' or @otherlevel!=''">
+              <xsl:choose>
+                <!-- h4 for series defined in c01/did template -->
+                <xsl:when test="local-name(.)='c01'">
+                  <xsl:apply-templates select="did" />
+                </xsl:when>
+                <!-- h5 unitid/title and date for subseries -->
+                <xsl:when test="@level='series' or @level='subseries'">
+                  <h5>
+                    <xsl:if test="string(did/unitid)">
 											<xsl:apply-templates select="did/unitid"/>
 											<xsl:text>: </xsl:text>
 										</xsl:if>
 										<xsl:apply-templates select="did/unittitle"/>
-									</b>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:if test="string(did/unitid)">
-										<xsl:value-of select="did/unitid"/>
-										<xsl:text>: </xsl:text>
-									</xsl:if>
-									<xsl:apply-templates select="did/unittitle" />
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:if test="did/daogrp">
-								<xsl:apply-templates select="did/daogrp"/>
-							</xsl:if>
-						</xsl:otherwise>
-					</xsl:choose>
-					<xsl:call-template name="c0x_children"/>
+                    <xsl:if test="did/unitdate">
+                      <xsl:text>, </xsl:text>
+                      <xsl:for-each select="did/unitdate">
+                        <xsl:value-of select="."/>
+                        <xsl:if test="not(position() = last())">
+                          <xsl:text>, </xsl:text>
+                        </xsl:if>
+                      </xsl:for-each>
+                    </xsl:if>
+                  </h5>
+                </xsl:when>
+                <xsl:otherwise>
+                  <p><xsl:apply-templates select="did" /></p>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:if>
+            <ul class="c0x_table">
+              <xsl:apply-templates select="c01|c02|c03|c04|c05|c06|c07|c08|c09|c10|c11|c12" />
+            </ul>
+          </xsl:if>
 
-				</div>
-			</td>
-			<!-- if the date layout is columnar, then the column is displayed -->
-			<xsl:if test="ancestor-or-self::c01/descendant::did/unitdate">
-				<td class="c0x_date">
-					<xsl:for-each select="did/unitdate">
-						<xsl:choose>
-							<xsl:when test="(parent::node()/parent::node()[@level='series'] or parent::node()/parent::node()[@level='subseries']         or
-								parent::node()/parent::node()[@otherlevel='sub-subseries'] or parent::node()/parent::node()[@level='otherlevel'])">
-								<b>
-									<xsl:value-of select="."/>
-								</b>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="."/>
-							</xsl:otherwise>
-						</xsl:choose>
-						<!-- place a semicolon and a space between dates -->
-						<xsl:if test="not(position() = last())">
-							<xsl:text>; </xsl:text>
-						</xsl:if>
-					</xsl:for-each>
-				</td>
-			</xsl:if>
-		</tr>
-		<xsl:apply-templates select="c02|c03|c04|c05|c06|c07|c08|c09|c10|c11|c12" />
+          <!-- if neither of the above, print contents -->
+          <xsl:if test="not(did/container and not(local-name(.)='c01')) and not(child::node()/did)">
+            <xsl:call-template name="c0x_description">
+              <xsl:with-param name="did" select="did" />
+            </xsl:call-template>
+          </xsl:if>
+        
+      </li>
 	</xsl:template>
-
+  
+  <!-- c0x_description -->
+  <!-- print unittitle or daogrp -->
+  <xsl:template name="c0x_description">
+    <xsl:param name="did"></xsl:param>
+    <xsl:choose>
+      <xsl:when test="$did/unittitle">
+        <div class="c0x_description">
+          <span class="c0x_label">Description</span>
+          <xsl:text> </xsl:text>
+          <xsl:if test="string($did/unitid)">
+            <xsl:value-of select="$did/unitid"/>
+            <xsl:text>: </xsl:text>
+          </xsl:if>
+          <xsl:apply-templates select="$did/unittitle" />
+          <xsl:call-template name="c0x_children"/>
+        </div>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:if test="$did/daogrp">
+          <div class="c0x_description">
+            <span class="c0x_label">Description</span>
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="$did/daogrp"/>
+          </div>
+        </xsl:if>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
+  
+  <!-- c0x_date -->
+  <xsl:template name="c0x_dates">
+    <xsl:param name="unitdates"/>
+    <xsl:if test="$unitdates">
+      <div class="c0x_date">
+        <span class="c0x_label">Dates</span>
+        <xsl:text> </xsl:text>
+        <xsl:for-each select="$unitdates">
+          <xsl:value-of select="."/>
+          <!-- place a semicolon and a space between dates -->
+          <xsl:if test="not(position() = last())">
+            <xsl:text>; </xsl:text>
+          </xsl:if>
+        </xsl:for-each>
+      </div>
+    </xsl:if>
+  </xsl:template>
+  
 	<!-- APPLY TEMPLATES FOR UNITTITLE -->
 	<xsl:template match="unittitle">
 		<xsl:choose>
-		<xsl:when test="parent::node()/daogrp">
-			<xsl:apply-templates select="parent::node()/daogrp"/>
-		</xsl:when>
-		<xsl:otherwise>
-			<xsl:apply-templates/>
-		</xsl:otherwise>
+      <xsl:when test="parent::node()/daogrp">
+        <xsl:apply-templates select="parent::node()/daogrp"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:apply-templates/>
+      </xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>	
+  
 
 	<!-- ********************* END c0xs *************************** -->
 
-	<!-- *** CONTAINER ROW ** -->
-
-	<xsl:template name="container_row">
-		<!-- variables are created to grab container type data.
-		this logic basically only creates the row and its table cells if there is firstor second container
-		data returned from the template call.  this logic cuts back on processing time for the server
-		and download time for the user - Ethan Gruber 7/29/07 -->
-
-		<xsl:variable name="first_container">
-			<xsl:call-template name="container_type">
-				<xsl:with-param name="container_number" select="1"/>
-			</xsl:call-template>
-		</xsl:variable>
-		<xsl:variable name="second_container">
-			<xsl:call-template name="container_type">
-				<xsl:with-param name="container_number" select="2"/>
-			</xsl:call-template>
-		</xsl:variable>
-
-		<!-- if none of the container variables contains any data, the row will not be created -->		
-
-		<xsl:if test="string($first_container) or string($second_container)">
-			<tr>
-				<xsl:choose>
-					<!-- for two containers -->
-					<xsl:when test="did/container[2]">
-						<td>
-							<span class="containerLabel">
-								<xsl:value-of select="$first_container"/>
-							</span>
-						</td>
-						<td>
-							<span class="containerLabel">
-								<xsl:value-of select="$second_container"/>
-							</span>
-						</td>
-						<td/>
-						<xsl:choose>
-							<xsl:when test="count(//c02) &gt; 0">
-								<xsl:if test="ancestor::c01/descendant::did/unitdate">
-									<td class="c0x_date"/>
-								</xsl:if>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:if test="ancestor::dsc/descendant::did/unitdate">
-									<td class="c0x_date"/>
-								</xsl:if>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:when>
-
-					<!-- for one container -->
-					<xsl:otherwise>
-						<xsl:variable name="container_colspan">
-							<xsl:choose>
-								<xsl:when test="count(//c02) &gt; 0">
-									<xsl:choose>
-										<xsl:when test="ancestor::c01/descendant::did/container[2]">2</xsl:when>
-										<xsl:otherwise>1</xsl:otherwise>
-									</xsl:choose>
-								</xsl:when>
-								<xsl:otherwise>
-									<xsl:choose>
-										<xsl:when test="ancestor::dsc/descendant::did/container[2]">2</xsl:when>
-										<xsl:otherwise>1</xsl:otherwise>
-									</xsl:choose>
-								</xsl:otherwise>
-							</xsl:choose>
-						</xsl:variable>
-						<td colspan="{$container_colspan}">
-							<span class="containerLabel">
-								<xsl:value-of select="$first_container"/>
-							</span>
-						</td>
-						<td/>
-						<xsl:choose>
-							<xsl:when test="count(//c02) &gt; 0">
-								<xsl:if test="ancestor::c01/descendant::did/unitdate">
-									<td class="c0x_date"/>
-								</xsl:if>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:if test="ancestor::dsc/descendant::did/unitdate">
-									<td class="c0x_date"/>
-								</xsl:if>
-							</xsl:otherwise>
-						</xsl:choose>
-					</xsl:otherwise>
-				</xsl:choose>
-			</tr>
-		</xsl:if>
-	</xsl:template>
-
-	<!-- ******************** DISPLAYS TYPE OF CONTAINER ****************** -->
-	
-	<xsl:template name="container_type">
-		<xsl:param name="container_number"/>
-		<xsl:variable name="current_val">
-			<xsl:value-of select="did/container[$container_number]/@type"/>
-		</xsl:variable>
-		<xsl:variable name="last_val">
-			<xsl:value-of select="preceding-sibling::*[1]/did/container[$container_number]/@type"/>
-		</xsl:variable>
-
-		<!-- if the last value is not equal to the first value, then the regularize_container template is called.  -->
-		<xsl:if test="$last_val != $current_val">
-			<xsl:call-template name="regularize_container">
-				<xsl:with-param name="current_val" select="$current_val"/>
-			</xsl:call-template>
-		</xsl:if>
-	</xsl:template>
-
-	<!-- ******************** END TYPE OF CONTAINER ****************** -->
+	<!-- *** CONTAINERS ** -->
+  <xsl:template match="container">
+    <div class="c0x_container">
+      <span class="c0x_label">
+        <xsl:call-template name="regularize_container">
+          <xsl:with-param name="current_val" select="@type"/>
+        </xsl:call-template>
+      </span>
+      <xsl:text> </xsl:text>
+      <xsl:value-of select="." />
+    </div>
+  </xsl:template>
+  
+  <!-- compare container types and print "false" if they don't match -->
+  <xsl:template name="compare_containers">
+    <xsl:param name="previous_containers"/>
+    <xsl:param name="container_pos"/>
+    <xsl:param name="current_type"/>
+    <xsl:if test="$previous_containers[$container_pos]/@type != $current_type">
+      <xsl:text>false</xsl:text>
+    </xsl:if>
+  </xsl:template>
+  
 
 	<!-- ******************** CONVERT CONTAINER TYPE TO REGULAR TEXT ****************** -->
 
@@ -482,6 +303,9 @@ Changes:
 			<xsl:when test="$current_val = 'box-folder'">
 				<xsl:text>Box/Folder</xsl:text>
 			</xsl:when>
+      <xsl:when test="$current_val = 'item'">
+        <xsl:text>Item</xsl:text>
+      </xsl:when>
 			<xsl:when test="$current_val = 'volume'">
 				<xsl:text>Volume</xsl:text>
 			</xsl:when>
@@ -540,7 +364,7 @@ Changes:
 				<xsl:text>Rolled Document</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="$current_val"/>
+				<xsl:value-of select="translate(concat(translate(substring($current_val, 1, 1),$lcChars,$ucChars), substring($current_val, 2)), '-', ' ')"/>
 			</xsl:otherwise>
 		</xsl:choose>
 
@@ -630,12 +454,13 @@ Changes:
 	</xsl:template>
 	<!-- kept from original mod.dsc -->
 
-	<xsl:template match="c01//did">
+	<xsl:template match="c01/did">
 		<!-- c01 only -->
 		<xsl:choose>
 			<xsl:when test="parent::c01 and //c02">
 				<xsl:if test="count(parent::c01/preceding-sibling::c01)!='0'"/>
 				<xsl:variable select="count(../preceding-sibling::c01)+1" name="ppos"/>
+        <a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 				<h4>
 					<xsl:attribute name="id">
 						<xsl:choose>
@@ -694,15 +519,20 @@ Changes:
 						</xsl:otherwise>
 					</xsl:choose>
 					<!-- END what if no unitititle-->
-					<small>
-						<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
-					</small>
 				</h4>
+        
 				<!-- March 2015: Adding container display as per revision specification 7.1.2 -->
 				<xsl:if test="count(container) &gt; 0">
 					<p>
 						<strong>Container(s): </strong>
-						<xsl:apply-templates select="container" mode="c01"/>
+            <xsl:for-each select="container">
+              <xsl:call-template name="regularize_container">
+                <xsl:with-param name="current_val" select="@type"/>
+              </xsl:call-template>
+              <xsl:text> </xsl:text>
+              <xsl:value-of select="."/>
+              <xsl:if test="position()!=last()">, </xsl:if>
+            </xsl:for-each>
 					</p>
 				</xsl:if>
 				<!-- May 2015: Adding abstract, which had not previously been displayed -->
@@ -749,14 +579,7 @@ Changes:
 					<xsl:otherwise>Subordinate Component</xsl:otherwise>
 				</xsl:choose>
 				<!-- END what if no unitititle-->
-
-				<!-- March 2015: Adding container display as per revision specification 7.1.2 -->
-				<xsl:if test="count(container) &gt; 0">
-					<p>
-						<strong>Container(s): </strong>
-						<xsl:apply-templates select="container" mode="c01"/>
-					</p>
-				</xsl:if>
+        
 				<!-- May 2015: Adding abstract, which had not previously been displayed -->
 				<xsl:if test="count(abstract) &gt; 0">
 					<p>
@@ -810,12 +633,12 @@ Changes:
 					<xsl:for-each select="daoloc">
 						<xsl:if test="@label = following::arc[1]/@to">
 							<img src="{@href}" class="daoimage" bolder="0">
-								<xsl:if test="following::arc[1]/@title">
+								<xsl:if test="@title">
 									<xsl:attribute name="title">
-										<xsl:value-of select="following::arc[1]/@title"/>
+										<xsl:value-of select="@title"/>
 									</xsl:attribute>
 									<xsl:attribute name="alt">
-										<xsl:value-of select="following::arc[1]/@title"/>
+										<xsl:value-of select="@title"/>
 									</xsl:attribute>
 								</xsl:if>
 							</img>
@@ -837,12 +660,12 @@ Changes:
 						<xsl:for-each select="daoloc">
 							<xsl:if test="@label = following-sibling::arc[1]/@to">
 								<img src="{@href}" class="daoimage" border="0">
-									<xsl:if test="following::arc[1]/@title">
+									<xsl:if test="@title">
 										<xsl:attribute name="title">
-											<xsl:value-of select="following::arc[1]/@title"/>
+											<xsl:value-of select="@title"/>
 										</xsl:attribute>
 										<xsl:attribute name="alt">
-											<xsl:value-of select="following::arc[1]/@title"/>
+											<xsl:value-of select="@title"/>
 										</xsl:attribute>
 									</xsl:if>
 								</img>
