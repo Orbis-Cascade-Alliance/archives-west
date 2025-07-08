@@ -19,7 +19,7 @@ h4 {
   font-weight: normal;
 }
 
-h5 {
+h5, h6, h7 {
   font-size: 100%;
   font-weight: bold;
   margin-top: 1rem;
@@ -216,25 +216,26 @@ a#aeon:focus {
   list-style: none;
 }
 
-.c0x_table_row {
+.c0x_table {
+  display: table;
+  padding: 1rem;
+}
+
+.c0x_row {
   display: table-row;
 }
 
-.c0x_table_row > div {
+.c0x_row > div {
   display: table-cell;
   padding: .5rem 1rem;
   border-top: 1px solid #cccccc;
-}
-
-.c0x_table_row:last-child > div {
-  padding-bottom: 2rem;
 }
 
 .c0x_table_labels {
   font-weight: bold;
 }
 
-.c0x_table .c0x_label {
+.c0x_label {
   border: 0;
   clip: rect(0 0 0 0);
   height: 1px;

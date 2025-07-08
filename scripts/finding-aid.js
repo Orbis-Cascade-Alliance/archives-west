@@ -67,6 +67,7 @@ $(document).ready(function() {
         $(this).wrapInner('<a href="/search.php?facet=' + facet + ':' + encodeURIComponent(facet_term) + '"></a>');
       });
     }
+    
   });
     
   // Highlight keyword matches
@@ -91,6 +92,9 @@ $(document).ready(function() {
     $('#dialog-qr').dialog('open').html('<img src="' + $(this).attr('href') + '" alt="QR Code" />');
     return false;
   });
+  
+  // Display DSC as a table
+  format_table();
   
 });
 
@@ -126,4 +130,86 @@ function toc_structure() {
 // Print window
 function print_finding_aid() {
   window.print();
+}
+
+// Add "table headings"
+function format_table() {
+  var prev_li, comparison, label_row, desc, cont, date;
+  $('#dscdiv-content li').each(function() {
+    prev_li = $(this).prev('li');
+    comparison = compare_rows(prev_li, this);
+    desc = $(this).children('.c0x_description').length;
+    cont = $(this).children('.c0x_container').length;
+    date = $(this).children('.c0x_date').length;
+    
+    // Add row class
+    if (desc || cont || date) {
+      $(this).addClass('c0x_row');
+    }
+    // If the current item the first of a series, or its previous sibling was a series,
+    // or if the containers have changed, print "headers"
+    if ($(prev_li).length == 0 || $(prev_li).has('ul').length > 0 || comparison === false) {
+      desc = $(this).children('.c0x_description').length;
+      cont = $(this).children('.c0x_container').length;
+      label_row = '<li class="c0x_table_labels c0x_row" aria-hidden="true">';
+      if (cont > 0) {
+        $(this).children('.c0x_container').children('.c0x_label').each(function() {
+          label_row += '<div>' + $(this).text() + '</div>';
+        });
+      }
+      if (desc > 0) {
+        label_row += '<div>Description</div>';
+      }
+      label_row += '</li>';
+      $(this).before(label_row);
+    } 
+  });
+  
+  // Wrap "tables" for Display
+  $('#dscdiv-content li.c0x_table_labels').each(function() {
+    $(this).nextUntil('li.c0x_table_labels').addBack().wrapAll('<div class="c0x_table">');
+  });
+  
+  // Date "column"
+  $('.c0x_table').each(function() {
+    if ($(this).children('li').children('.c0x_date').length > 0) {
+      $(this).children('li').each(function() {
+        if ($(this).hasClass('c0x_table_labels')) {
+          $(this).append('<div>Dates</div>');
+        }
+        else if ($(this).children('div.c0x_date').length == 0) {
+          $(this).append('<div class="c0x_date"></div>');
+        }
+      })
+    }
+  })
+}
+
+function compare_rows(prev_li, current_li) {
+  var prev_labels = $(prev_li).children('div').children('.c0x_label');
+  var current_labels = $(current_li).children('div').children('.c0x_label');
+  var current_dates = $(current_li).children('.c0x_date').length;
+  
+  // Check if this is the first item in a list
+  if ($(prev_labels).length != 0) {
+    // If different lengths, check if the difference is a missing date
+    if ($(prev_labels).length != $(current_labels).length) {
+      if ($(current_labels).length != $(prev_li).children('div:not(.c0x_date)').length && $(current_li).children('div:not(.c0x_date)').length != $(prev_labels).length) {
+        return false;
+      }
+    }
+    // Compare text of labels
+    for (var c = 0; c < $(prev_labels).length; c++) {
+      if (typeof $(current_labels).eq(c)[0] != 'undefined') {
+        if ($(prev_labels).eq(c)[0].textContent.trim() != $(current_labels).eq(c)[0].textContent.trim()) {
+          return false;
+        }
+      }
+    }
+    // If all labels except for missing dates are the same, don't add row
+    return true;
+  }
+  else {
+    return false;
+  }
 }
