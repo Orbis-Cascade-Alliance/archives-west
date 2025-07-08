@@ -1,6 +1,7 @@
 #main-content {
   width: auto;
   margin: 0 1rem;
+  position: relative;
 }
 
 h2 {
@@ -183,8 +184,9 @@ a[href="#top"] {
   color: #ffffff;
   padding: .25rem .5rem .25rem 0;
   text-decoration: none;
-  float: right;
   margin-top: 3rem;
+  position: absolute;
+  right: 0;
 }
 
 #dscdiv-content a[href="#top"] {

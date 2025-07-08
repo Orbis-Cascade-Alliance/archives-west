@@ -177,15 +177,13 @@ Changes:
           <xsl:call-template name="c0x_children"/>
         </div>
       </xsl:when>
-      <xsl:otherwise>
-        <xsl:if test="$did/daogrp">
-          <div class="c0x_description">
-            <span class="c0x_label">Description</span>
-            <xsl:text> </xsl:text>
-            <xsl:apply-templates select="$did/daogrp"/>
-          </div>
-        </xsl:if>
-      </xsl:otherwise>
+      <xsl:when test="$did/daogrp">
+        <div class="c0x_description">
+          <span class="c0x_label">Description</span>
+          <xsl:text> </xsl:text>
+          <xsl:apply-templates select="$did/daogrp"/>
+        </div>
+      </xsl:when>
     </xsl:choose>
   </xsl:template>
   
