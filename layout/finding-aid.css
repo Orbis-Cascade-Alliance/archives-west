@@ -235,6 +235,7 @@ a#aeon:focus {
 
 .c0x_table_labels {
   font-weight: bold;
+  text-transform: capitalize;
 }
 
 .c0x_label {
