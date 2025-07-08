@@ -324,7 +324,7 @@ Changes:
 				<xsl:text>Rolled Document</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="translate(concat(translate(substring($current_val, 1, 1),$lcChars,$ucChars), substring($current_val, 2)), '-', ' ')"/>
+				<xsl:value-of select="translate(concat(translate(substring($current_val, 1, 1), $lcChars, $ucChars), substring($current_val, 2)), '-_', '  ')"/>
 			</xsl:otherwise>
 		</xsl:choose>
 
