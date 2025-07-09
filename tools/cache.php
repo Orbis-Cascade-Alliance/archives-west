@@ -18,12 +18,12 @@ if (isset($argv[1]) && !empty($argv[1])) {
     if ($finding_aid->is_active()) {
       if ($finding_aid->get_file()) {
         echo '<title>' . $finding_aid->get_title() . ' - ' . SITE_TITLE . '</title>
-        <link rel="stylesheet" href="' . AW_DOMAIN . '/layout/finding-aid.css?v=1.1" />
+        <link rel="stylesheet" href="' . AW_DOMAIN . '/layout/finding-aid.css?v=1.2" />
         <link rel="stylesheet" href="' . AW_DOMAIN . '/layout/finding-aid-print.css" />
         <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
         <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
         <script src="' . AW_DOMAIN . '/scripts/jquery.mark.min.js"></script>
-        <script src="' . AW_DOMAIN . '/scripts/finding-aid.js?v=1.1"></script>';
+        <script src="' . AW_DOMAIN . '/scripts/finding-aid.js?v=1.2"></script>';
         include(AW_INCLUDES . '/header-end.php');
         echo '
         <div id="downloads">
