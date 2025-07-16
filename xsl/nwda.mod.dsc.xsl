@@ -138,7 +138,7 @@ Changes:
     <xsl:apply-templates select="$c0x/did/unittitle"/>
     <xsl:if test="$c0x/did/unitdate/node()[not(self::comment()) and not(normalize-space(.))]">
       <xsl:text>, </xsl:text>
-      <xsl:for-each select="$c0x/did/unitdate/node()[not(self::comment())]">
+      <xsl:for-each select="$c0x/did/unitdate">
         <xsl:value-of select="."/>
         <xsl:if test="not(position() = last())">
           <xsl:text>, </xsl:text>
