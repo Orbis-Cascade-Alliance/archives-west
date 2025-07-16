@@ -261,6 +261,11 @@ a#aeon:focus {
   font-weight: bold;
 }
 
+.c0x_description .scopecontent {
+  font-weight: normal;
+  margin-left: 2rem;
+}
+
 .c0x_description .c0x_label {
   display: none;
 }
