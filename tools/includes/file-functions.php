@@ -13,7 +13,7 @@ function strip_namespaces($xml_string) {
 // Add DTD declaration, if missing
 function add_dtd($xml_string) {
   if (!stristr($xml_string, '<!DOCTYPE')) {
-    return str_replace('<ead>','<!DOCTYPE ead PUBLIC "+//ISBN 1-931666-00-8//DTD ead.dtd (Encoded Archival Description (EAD) Version 2002)//EN" "http://archiveswest.orbiscascade.org/ead.dtd">' . "\r\n\r\n" . '<ead>', $xml_string);
+    return str_replace('<ead>','<!DOCTYPE ead PUBLIC "+//ISBN 1-931666-00-8//DTD ead.dtd (Encoded Archival Description (EAD) Version 2002)//EN" "https://archiveswest.orbiscascade.org/ead.dtd">' . "\r\n\r\n" . '<ead>', $xml_string);
   }
   return $xml_string;
 }

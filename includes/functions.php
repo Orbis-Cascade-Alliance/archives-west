@@ -212,9 +212,12 @@ function print_brief_records($arks, $query) {
 // Print RSS feed entries
 function print_rss() {
   ob_start();
-  $url = AW_DOMAIN . '/rss.php';
-  echo '<p class="rss-subscribe"><img src="/layout/images/rss.svg" width="16px" alt="RSS icon" /> <a href="' . $url . '">Subscribe to our RSS feed</a></p>';
-  if ($rss = simplexml_load_file($url)) {
+  echo '<p class="rss-subscribe"><img src="/layout/images/rss.svg" width="16px" alt="RSS icon" /> <a href="' . AW_DOMAIN . '/rss.php' . '">Subscribe to our RSS feed</a></p>';
+  ob_start();
+  include(AW_HTML . '/rss.php');
+  $rss = ob_get_contents();
+  ob_end_clean();
+  if ($rss = simplexml_load_string($rss)) {
     foreach ($rss->channel->item as $item) {
       $pubdate = (string) $item->pubDate;
       $date = date('F j, Y g:i a', strtotime($pubdate));
