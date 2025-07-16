@@ -82,6 +82,17 @@ $(document).ready(function() {
     }
   }
   
+  // TEMPORARY
+  // Switch CSS versions to show table vs. list displays
+  if (urlParams.get('display') == 'list') {
+    var links = document.getElementsByTagName('link');
+    for (var l = 0; l < links.length; l++) {
+      if (links[l].getAttribute('href').indexOf('finding-aid.css') != -1) {
+        links[l].setAttribute('href', links[l].getAttribute('href').replace('finding-aid.css', 'finding-aid-list.css'))
+      }
+    }
+  }
+  
   // Dialog for QR codes
   $('#dialog-qr').dialog({
     autoOpen: false,
@@ -94,7 +105,10 @@ $(document).ready(function() {
   });
   
   // Display DSC as a table
-  format_table();
+  // REMOVE DISPLAY CHECK IN PRODUCTION
+  if (urlParams.get('display') != 'list') {
+    format_table();
+  }
   
 });
 
