@@ -251,14 +251,6 @@ a#aeon:focus {
   background: #f9f9f9;
 }
 
-.c0x_label {
-  font-weight: bold;
-}
-
-.c0x_label::after {
-  content: ': ';
-}
-
 .c0x_row {
   display: flex;
   flex-direction: column;
@@ -266,6 +258,11 @@ a#aeon:focus {
 
 .c0x_description {
   order: 1;
+  font-weight: bold;
+}
+
+.c0x_description .c0x_label {
+  display: none;
 }
 
 .c0x_date {
@@ -274,10 +271,6 @@ a#aeon:focus {
 
 .c0x_container {
   order: 3;
-}
-
-.c0x_label {
-  font-weight: bold;
 }
 
 .c0x_label::after {
