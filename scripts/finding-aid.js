@@ -91,6 +91,11 @@ $(document).ready(function() {
         links[l].setAttribute('href', links[l].getAttribute('href').replace('finding-aid.css', 'finding-aid-list.css'))
       }
     }
+    $('#dscdiv-content li').each(function() {
+      if ($(this).children('.c0x_description').length || $(this).children('.c0x_container').length || $(this).children('.c0x_date').length) {
+        $(this).addClass('c0x_row');
+      }
+    });
   }
   
   // Dialog for QR codes
