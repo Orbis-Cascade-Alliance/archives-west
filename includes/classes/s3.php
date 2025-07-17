@@ -1,5 +1,6 @@
 <?php
 // AW_S3 saves copies of EADs to the AWS S3 buckets
+// Examples: https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/php_s3_code_examples.html
 require AW_HTML . '/aws/vendor/autoload.php';
 use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
@@ -58,4 +59,29 @@ class AW_S3 {
       throw new Exception('AwsException: ' . $e->getMessage());
     }
   }
+  
+  function delete_files($files) {
+    $objects = array();
+    foreach ($files as $file_path) {
+      $objects[] = [
+        'Key' => $this->get_key($file_path)
+      ];
+    }
+    $client = $this->get_client();
+    try {
+      $result = $client->deleteObjects([
+        'Bucket' => $this->bucket,
+        'Delete' => [
+          'Objects' => $objects
+        ]
+      ]);
+    }
+    catch (S3Exception $e) {
+      throw new Exception('S3Exception: ' . $e->getMessage());
+    }
+    catch (AwsException $e) {
+      throw new Exception('AwsException: ' . $e->getMessage());
+    }
+  }
+  
 }
