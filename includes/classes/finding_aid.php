@@ -138,6 +138,22 @@ class AW_Finding_Aid {
         $mysqli->close();
       }
     }
+    // Publish deletion message to AWS S3
+    $bucket = S3_CACHE;
+    if (!empty($bucket)) {
+      $ark = $this->get_ark();
+      ob_start();
+      include(AW_HTML . '/deleted.php');
+      $html = ob_get_contents();
+      ob_end_clean();
+      try {
+        $s3 = new AW_S3($bucket['name'], $bucket['region'], $bucket['class'], $bucket['path']);
+        $s3->put_file($this->get_qualifier() . '.html', $html);
+      }
+      catch (Exception $e) {
+        log_error($e->getMessage());
+      }
+    }
   }
   
   // Get raw XML file

@@ -8,6 +8,8 @@ $repo_name = '';
 $repo_mainagencycode = '';
 if (isset($_GET['ark']) && !empty($_GET['ark'])) {
   $ark = filter_var($_GET['ark'], FILTER_SANITIZE_STRING);
+}
+if (isset($ark) && !empty($ark)) {
   if ($repo_id = get_id_from_ark($ark)) {
     try {
       $repo = new AW_Repo($repo_id);
