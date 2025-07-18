@@ -60,6 +60,24 @@ class AW_S3 {
     }
   }
   
+  function put_source($file_path, $source) {
+    $client = $this->get_client();
+    try {
+      $result = $client->putObject([
+        'Bucket' => $this->bucket,
+        'Key' => $this->get_key($file_path),
+        'StorageClass' => $this->storage_class,
+        'SourceFile' => $source
+      ]);
+    }
+    catch (S3Exception $e) {
+      throw new Exception('S3Exception: ' . $e->getMessage());
+    }
+    catch (AwsException $e) {
+      throw new Exception('AwsException: ' . $e->getMessage());
+    }
+  }
+  
   function delete_files($files) {
     $objects = array();
     foreach ($files as $file_path) {
