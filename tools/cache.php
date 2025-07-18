@@ -68,7 +68,7 @@ if (isset($argv[1]) && !empty($argv[1])) {
     if (!empty($bucket)) {
       try {
         $s3 = new AW_S3($bucket['name'], $bucket['region'], $bucket['class'], $bucket['path']);
-        $s3->put_file($cache_file, $html);
+        $s3->put_source($cache_file, $cache_path);
       }
       catch (Exception $e) {
         log_error($e->getMessage());
