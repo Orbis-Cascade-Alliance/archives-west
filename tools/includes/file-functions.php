@@ -743,7 +743,7 @@ function upload_file($file_contents, $file_name, $ark, $replace, $user_id) {
               foreach (S3_BUCKETS as $bucket) {
                 try {
                   $s3 = new AW_S3($bucket['name'], $bucket['region'], $bucket['class'], $bucket['path']);
-                  $s3->put_file($repo->get_folder() . '/' . $file_name, $file_contents);
+                  $s3->put_source($repo->get_folder() . '/' . $file_name, $file_path);
                 }
                 catch (Exception $e) {
                   log_error($e->getMessage());
