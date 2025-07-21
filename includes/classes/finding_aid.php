@@ -148,7 +148,7 @@ class AW_Finding_Aid {
       ob_end_clean();
       try {
         $s3 = new AW_S3($bucket['name'], $bucket['region'], $bucket['class'], $bucket['path']);
-        $s3->put_file($this->get_qualifier() . '.html', $html);
+        $s3->put_contents($this->get_qualifier() . '.html', $html, 'text/html');
       }
       catch (Exception $e) {
         log_error($e->getMessage());

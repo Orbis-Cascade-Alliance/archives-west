@@ -42,14 +42,15 @@ class AW_S3 {
     return $this->client;
   }
   
-  function put_file($file_path, $file_contents) {
+  function put_contents($file_path, $file_contents, $content_type) {
     $client = $this->get_client();
     try {
       $result = $client->putObject([
         'Bucket' => $this->bucket,
         'Key' => $this->get_key($file_path),
         'StorageClass' => $this->storage_class,
-        'Body' => $file_contents
+        'Body' => $file_contents,
+        'ContentType' => $this->content_type
       ]);
     }
     catch (S3Exception $e) {
