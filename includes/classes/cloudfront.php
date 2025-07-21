@@ -35,7 +35,7 @@ class AW_CloudFront {
     $client = $this->get_client();
     $callerReference = uniqid();
     try {
-      $result = $cloudFrontClient->createInvalidation([
+      $result = $client->createInvalidation([
         'DistributionId' => $this->distribution_id,
         'InvalidationBatch' => [
           'CallerReference' => $callerReference,
