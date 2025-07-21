@@ -72,7 +72,7 @@ if (isset($argv[1]) && !empty($argv[1])) {
         $distribution = AW_CLOUDFRONT;
         if (!empty($distribution)) {
           $cf = new AW_CloudFront($distribution['id'], $distribution['region']);
-          $cf->create_invalidation(array($bucket['path'] . $cache_file));
+          $cf->create_invalidation(array('/' . $bucket['path'] . $cache_file));
         }
       }
       catch (Exception $e) {
