@@ -19,7 +19,6 @@ class AW_CloudFront {
     if (!isset($this->client)) {
       try {
         $this->client = new Aws\CloudFront\CloudFrontClient([
-          'profile' => 'default',
           'version' => 'latest',
           'region' => $this->region
         ]);
