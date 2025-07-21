@@ -50,7 +50,7 @@ class AW_S3 {
         'Key' => $this->get_key($file_path),
         'StorageClass' => $this->storage_class,
         'Body' => $file_contents,
-        'ContentType' => $this->content_type
+        'ContentType' => $content_type
       ]);
     }
     catch (S3Exception $e) {
