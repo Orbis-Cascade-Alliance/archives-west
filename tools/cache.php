@@ -68,14 +68,20 @@ if (isset($argv[1]) && !empty($argv[1])) {
       try {
         $s3 = new AW_S3($bucket['name'], $bucket['region'], $bucket['class'], $bucket['path']);
         $s3->put_source($cache_file, $cache_path);
+        // Clear CloudFront cache
+        $distribution = AW_CLOUDFRONT;
+        if (!empty($distribution)) {
+          $cf = new AW_CloudFront($distribution['id'], $distribution['region']);
+          $cf->create_invalidation(array($bucket['path'] . $cache_file));
+        }
       }
       catch (Exception $e) {
         log_error($e->getMessage());
         $mail = new AW_Mail(ADMIN_EMAIL, 'AWS Cache Exception for ' . $ark, $e->getMessage());
         $mail->send();
-      }
+      }  
     }
-    
+
     // Set cached value in arks table to 1
     if ($mysqli = connect()) {
       $mysqli->query('UPDATE arks SET cached=1 WHERE ark="' . $ark . '"');

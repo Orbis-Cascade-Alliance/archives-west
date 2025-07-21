@@ -1,7 +1,7 @@
 <?php
 // AW_S3 saves copies of EADs to the AWS S3 buckets
 // Examples: https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/php_s3_code_examples.html
-require AW_HTML . '/aws/vendor/autoload.php';
+require_once AW_HTML . '/aws/vendor/autoload.php';
 use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
 use Aws\S3\Exception\S3Exception;
@@ -36,7 +36,7 @@ class AW_S3 {
         throw new Exception('S3Exception: ' . $e->getMessage());
       }
       catch (AwsException $e) {
-        throw new Exception('AwsException: ' . $e->getMessage());
+        throw new Exception('AwsException: ' . $e->getAwsErrorMessage());
       }
     }
     return $this->client;
@@ -57,7 +57,7 @@ class AW_S3 {
       throw new Exception('S3Exception: ' . $e->getMessage());
     }
     catch (AwsException $e) {
-      throw new Exception('AwsException: ' . $e->getMessage());
+      throw new Exception('AwsException: ' . $e->getAwsErrorMessage());
     }
   }
   
@@ -75,7 +75,7 @@ class AW_S3 {
       throw new Exception('S3Exception: ' . $e->getMessage());
     }
     catch (AwsException $e) {
-      throw new Exception('AwsException: ' . $e->getMessage());
+      throw new Exception('AwsException: ' . $e->getAwsErrorMessage());
     }
   }
   
