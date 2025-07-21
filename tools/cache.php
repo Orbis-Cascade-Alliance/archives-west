@@ -62,7 +62,6 @@ if (isset($argv[1]) && !empty($argv[1])) {
     fclose($fh);
     
     // Save file in AWS S3
-    require_once(AW_INCLUDES . '/classes/s3.php');
     $cache_file = $finding_aid->get_qualifier() . '.html';
     $bucket = S3_CACHE;
     if (!empty($bucket)) {
