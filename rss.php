@@ -53,7 +53,10 @@ if (!empty($arks)) {
       }
     }
     if (!headers_sent()) {
-      header('Content-Type: text/xml');
+      if (!isset($content_type)) {
+        $content_type = 'text/xml';
+      }
+      header('Content-Type: ' . $content_type);
     }
     echo $rss->asXML();
   }

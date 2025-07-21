@@ -22,5 +22,10 @@ $(document).ready(function(){
   $.get('alert.php', {type: 'home'}, function(result) {
     $('#main-content').prepend(result);
   });
+  
+  // RSS
+  $.get('rss-print.php', function(result) {
+    $('#rss-content').html(result);
+  });
     
 });

@@ -209,33 +209,6 @@ function print_brief_records($arks, $query) {
   return $results_html;
 }
 
-// Print RSS feed entries
-function print_rss() {
-  ob_start();
-  echo '<p class="rss-subscribe"><img src="/layout/images/rss.svg" width="16px" alt="RSS icon" /> <a href="' . AW_DOMAIN . '/rss.php' . '">Subscribe to our RSS feed</a></p>';
-  ob_start();
-  include(AW_HTML . '/rss.php');
-  $rss = ob_get_contents();
-  ob_end_clean();
-  if ($rss = simplexml_load_string($rss)) {
-    foreach ($rss->channel->item as $item) {
-      $pubdate = (string) $item->pubDate;
-      $date = date('F j, Y g:i a', strtotime($pubdate));
-      echo '<div class="rss-item">';
-      echo '<p class="rss-date">' . $date . '</p>';
-      echo '<p class="rss-title"><a href="' . (string) $item->link . '">' . (string) $item->title . '</a></p>';
-      echo '<p class="rss-desc"><i>' . (string) $item->author . '</i>' . (string) $item->description . '</p>';
-      echo '</div>';
-    }
-    $rss_html = ob_get_contents();
-    ob_end_clean();
-    return $rss_html;
-  }
-  else {
-    echo 'Error: Could not get finding aid records from BaseX.';
-  }
-}
-
 // Check maintenance mode
 function check_maintenance_mode() {
   return file_exists(AW_HTML . '/maintenance.html');
