@@ -753,7 +753,7 @@ function upload_file($file_contents, $file_name, $ark, $replace, $user_id) {
               // Start caching process
               $finding_aid = new AW_Finding_Aid($ark);
               if ($replace) {
-                $finding_aid->delete_cache();
+                $finding_aid->delete_cache(1);
               }
               $finding_aid->build_cache();
               

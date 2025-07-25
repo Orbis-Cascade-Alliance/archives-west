@@ -130,7 +130,7 @@ class AW_Finding_Aid {
   }
   
   // Delete the existing cache
-  function delete_cache() {
+  function delete_cache($replace = 0) {
     if (file_exists($this->cache_path)) {
       unlink($this->cache_path);
       if ($mysqli = connect()) {
@@ -143,7 +143,12 @@ class AW_Finding_Aid {
     if (!empty($bucket)) {
       $ark = $this->get_ark();
       ob_start();
-      include(AW_HTML . '/deleted.php');
+      if ($replace == 1) {
+        include(AW_HTML . '/errors/processing.html');
+      }
+      else {
+        include(AW_HTML . '/deleted.php');
+      }
       $html = ob_get_contents();
       ob_end_clean();
       try {
