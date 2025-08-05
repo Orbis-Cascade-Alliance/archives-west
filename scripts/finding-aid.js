@@ -144,15 +144,21 @@ function format_table() {
     desc = $(this).children('.c0x_description').length;
     cont = $(this).children('.c0x_container').length;
     date = $(this).children('.c0x_date').length;
+
+    // Alternate background colors
+    if ($(this).parents('ul').length%2 == 0) {
+      $(this).addClass('gray');
     }
+    else {
+      $(this).addClass('white');
+    }
+    
     // If the current item the first of a series, or its previous sibling was a series,
     // or if the containers have changed, mark for a new table
     if ((desc || cont || date) && $(this).children('ul').length == 0 && ($(prev_li).length == 0 || $(prev_li).has('ul').length > 0 || comparison === false)) {
      $(this).addClass('new_table');
     }
   });
-  
-  
   
   // Date "column"
   $('.c0x_table').each(function() {

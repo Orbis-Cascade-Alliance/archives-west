@@ -241,7 +241,15 @@ a#aeon:focus {
   margin: 0;
 }
 
-#dscdiv-content > ul > li,
+li.white {
+  background: #ffffff;
+}
+
+li.gray {
+  background: #f9f9f9;
+}
+
+/*#dscdiv-content > ul > li,
 #dscdiv-content > ul > li > ul > li > ul > li {
   background: #ffffff;
 }
@@ -249,7 +257,7 @@ a#aeon:focus {
 #dscdiv-content > ul > li > ul > li,
 #dscdiv-content > ul > li > ul > li > ul > li > ul > li {
   background: #f9f9f9;
-}
+}*/
 
 .c0x_row {
   display: flex;
