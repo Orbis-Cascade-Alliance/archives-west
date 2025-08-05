@@ -191,6 +191,7 @@ a[href="#top"] {
 
 #dscdiv-content a[href="#top"] {
   margin-top: 0;
+  right: 1rem;
 }
 
 a#aeon {
@@ -212,41 +213,65 @@ a#aeon:focus {
   text-decoration: underline;
 }
 
-#dscdiv-content ul {
-  padding: 0;
-  margin: 0;
-  list-style: none;
+#dscdiv-content h4,
+#dscdiv-content h5,
+#dscdiv-content h6,
+#dscdiv-content h7 {
+  margin: 00;
 }
 
-.c0x_table {
-  display: table;
+#dscdiv-content ul {
+  list-style: none;
   padding: 1rem;
 }
 
-.c0x_row {
-  display: table-row;
-}
-
-.c0x_row > div {
-  display: table-cell;
-  padding: .5rem 1rem;
-  border-top: 1px solid #cccccc;
-}
-
-.c0x_table_labels {
-  font-weight: bold;
-  text-transform: capitalize;
-}
-
-.c0x_label {
-  border: 0;
-  clip: rect(0 0 0 0);
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
+#dscdiv-content > ul {
   padding: 0;
-  position: absolute;
-  width: 1px;
+}
+
+#dscdiv-content li {
+  margin: 0 0 1rem 0;
+  padding: 1rem;
+  border: 1px solid #cccccc;
+  border-radius: .25rem;
+  position: relative;
+}
+
+#dscdiv-content li:last-child {
+  margin: 0;
+}
+
+#dscdiv-content > ul > li,
+#dscdiv-content > ul > li > ul > li > ul > li {
+  background: #ffffff;
+}
+
+#dscdiv-content > ul > li > ul > li,
+#dscdiv-content > ul > li > ul > li > ul > li > ul > li {
+  background: #f9f9f9;
+}
+
+.c0x_row {
+  display: flex;
+  flex-direction: column;
+}
+
+.c0x_description {
+  font-weight: bold;
+}
+
+.c0x_description .scopecontent {
+  font-weight: normal;
+  margin-left: 2rem;
+}
+
+.c0x_description .c0x_label {
+  display: none;
+}
+
+
+.c0x_label::after {
+  content: ': ';
 }
 
 #main .footer {
@@ -328,36 +353,6 @@ img.daoimage {
 
   dd {
     margin-left: 0;
-  }
-  
-  .c0x_table_labels {
-    display: none !important;
-  }
-  
-  .c0x_table .c0x_label {
-    position: relative;
-  }
-  
-  .c0x_label::after {
-    content: ': ';
-  }
-
-  li.c0x_table_row {
-    display: list-item;
-    border-bottom: 1px solid #cccccc;
-  }
-  
-  div.c0x_table_row {
-    display: block;
-  }
-
-  .c0x_table_row > div {
-    display: block;
-    border: none;
-  }
-  
-  .c0x_table_row:last-child > div {
-    padding-bottom: inherit;
   }
   
 }

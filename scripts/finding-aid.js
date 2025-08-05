@@ -82,22 +82,6 @@ $(document).ready(function() {
     }
   }
   
-  // TEMPORARY
-  // Switch CSS versions to show table vs. list displays
-  if (urlParams.get('display') == 'list') {
-    var links = document.getElementsByTagName('link');
-    for (var l = 0; l < links.length; l++) {
-      if (links[l].getAttribute('href').indexOf('finding-aid.css') != -1) {
-        links[l].setAttribute('href', links[l].getAttribute('href').replace('finding-aid.css', 'finding-aid-list.css'))
-      }
-    }
-    $('#dscdiv-content li').each(function() {
-      if ($(this).children('.c0x_description').length || $(this).children('.c0x_container').length || $(this).children('.c0x_date').length) {
-        $(this).addClass('c0x_row');
-      }
-    });
-  }
-  
   // Dialog for QR codes
   $('#dialog-qr').dialog({
     autoOpen: false,
@@ -160,34 +144,15 @@ function format_table() {
     desc = $(this).children('.c0x_description').length;
     cont = $(this).children('.c0x_container').length;
     date = $(this).children('.c0x_date').length;
-    
-    // Add row class
-    if (desc || cont || date) {
-      $(this).addClass('c0x_row');
     }
     // If the current item the first of a series, or its previous sibling was a series,
-    // or if the containers have changed, print "headers"
-    if ($(prev_li).length == 0 || $(prev_li).has('ul').length > 0 || comparison === false) {
-      desc = $(this).children('.c0x_description').length;
-      cont = $(this).children('.c0x_container').length;
-      label_row = '<li class="c0x_table_labels c0x_row" aria-hidden="true">';
-      if (cont > 0) {
-        $(this).children('.c0x_container').children('.c0x_label').each(function() {
-          label_row += '<div>' + $(this).text() + '</div>';
-        });
-      }
-      if (desc > 0) {
-        label_row += '<div>Description</div>';
-      }
-      label_row += '</li>';
-      $(this).before(label_row);
-    } 
+    // or if the containers have changed, mark for a new table
+    if ((desc || cont || date) && $(this).children('ul').length == 0 && ($(prev_li).length == 0 || $(prev_li).has('ul').length > 0 || comparison === false)) {
+     $(this).addClass('new_table');
+    }
   });
   
-  // Wrap "tables" for Display
-  $('#dscdiv-content li.c0x_table_labels').each(function() {
-    $(this).nextUntil('li.c0x_table_labels').addBack().wrapAll('<div class="c0x_table">');
-  });
+  
   
   // Date "column"
   $('.c0x_table').each(function() {

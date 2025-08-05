@@ -107,14 +107,14 @@ Changes:
           </xsl:when>
           <!-- if current c0x has container, print details -->
           <xsl:otherwise>
-            <!-- Containers -->
-            <xsl:if test="did/container">
-              <xsl:apply-templates select="did/container" />
-            </xsl:if>
             <!-- unittitle or daogrp -->
             <xsl:call-template name="c0x_description">
               <xsl:with-param name="did" select="did" />
             </xsl:call-template>
+            <!-- Containers -->
+            <xsl:if test="did/container">
+              <xsl:apply-templates select="did/container" />
+            </xsl:if>
             <!-- Dates -->
             <xsl:choose>
               <xsl:when test="did/unitdate">
