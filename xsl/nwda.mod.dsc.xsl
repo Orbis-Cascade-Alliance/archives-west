@@ -50,7 +50,7 @@ Changes:
 		</h3>
 		<div class="dsc" id="dscdiv-content">
       <xsl:apply-templates select="*[not(self::c01)]"/>
-      <ul>
+      <ul id="dscul">
         <xsl:apply-templates select="c01"/>
       </ul>
 		</div>
@@ -421,7 +421,6 @@ Changes:
 			<xsl:when test="parent::c01 and //c02">
 				<xsl:if test="count(parent::c01/preceding-sibling::c01)!='0'"/>
 				<xsl:variable select="count(../preceding-sibling::c01)+1" name="ppos"/>
-        <a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 				<h4>
 					<xsl:attribute name="id">
 						<xsl:choose>

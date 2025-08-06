@@ -97,7 +97,8 @@ $(document).ready(function() {
   dsc_classes();
   
   // Add DSC toggle button
-  $('#dscdiv-content').prepend('<p><button id="dsc-toggle" onclick="dsc_toggle();return false;">Switch to <span class="type">table</span> view</button></p>');
+  $('#dscdiv-content').prepend('<p><label for="dsc-toggle"><span class="switch"><input type="checkbox" id="dsc-toggle" aria-controls="dscul" aria-checked="false"><span class="slider round"></span></span> <span class="text">Enable table view</span></label></p>');
+  $('#dsc-toggle').click(dsc_toggle);
   
 });
 
@@ -194,7 +195,15 @@ function compare_rows(prev_li, current_li) {
 
 // Toggle between views
 function dsc_toggle() {
-  var type = $('#dscdiv-content > ul').eq(0).hasClass('display_table') ? 'list' : 'table';
+  var type;
+  if ($('#dscul').hasClass('display_table')) {
+    type = 'list';
+    $('#dsc-toggle').attr('aria-checked','false');
+  }
+  else {
+    type = 'table';
+    $('#dsc-toggle').attr('aria-checked','true');
+  }
   dsc_view(type);
 }
 
@@ -206,7 +215,7 @@ function dsc_view(type) {
     var table, row, has_dates;
     
     // Apply view-specific CSS
-    $('#dscdiv-content > ul').eq(0).addClass('display_table');
+    $('#dscul').addClass('display_table');
     
     // Wrap list items to display in each table
     $('#dscdiv-content li.dsc_table').each(function() {
@@ -280,7 +289,7 @@ function dsc_view(type) {
     $('#dsc-toggle > span.type').text('table');
     
     // Apply view-specific CSS
-    $('#dscdiv-content > ul').eq(0).removeClass('display_table');
+    $('#dscul').removeClass('display_table');
     
     // Replace tables with original list items
     var parent_li;
