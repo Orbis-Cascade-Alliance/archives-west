@@ -49,8 +49,9 @@ Changes:
       </button>
 		</h3>
 		<div class="dsc" id="dscdiv-content">
+      <xsl:apply-templates select="*[not(self::c01)]"/>
       <ul>
-        <xsl:apply-templates select="*[not(self::head)]"/>
+        <xsl:apply-templates select="c01"/>
       </ul>
 		</div>
 	</xsl:template>

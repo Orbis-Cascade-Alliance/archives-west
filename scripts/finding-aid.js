@@ -196,7 +196,7 @@ function dsc_view(type) {
     var table, row, has_dates;
     
     // Apply view-specific CSS
-    $('#dscdiv-content ul:first-child').addClass('display_table');
+    $('#dscdiv-content > ul').eq(0).addClass('display_table');
     
     // Wrap list items to display in each table
     $('#dscdiv-content li.dsc_table').each(function() {

@@ -282,15 +282,15 @@ ul.display_table li.gray {
   content: ': ';
 }
 
-.dsc_table {
+table.dsc_table {
   margin-bottom: 1rem;
 }
 
-.dsc_table .c0x_description {
+table.dsc_table .c0x_description {
   font-weight: normal;
 }
 
-.dsc_table .c0x_label {
+table.dsc_table .c0x_label {
   display: none;
 }
 
