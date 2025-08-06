@@ -93,11 +93,8 @@ $(document).ready(function() {
     return false;
   });
   
-  // Display DSC as a table
-  // REMOVE DISPLAY CHECK IN PRODUCTION
-  if (urlParams.get('display') != 'list') {
-    format_table();
-  }
+  // Add classes for DSC display as list or table
+  dsc_classes();
   
 });
 
@@ -135,8 +132,9 @@ function print_finding_aid() {
   window.print();
 }
 
-// Add "table headings"
-function format_table() {
+// Add classes to mark uls for table view
+// and alternate background colors in list view
+function dsc_classes() {
   var prev_li, comparison, label_row, desc, cont, date;
   $('#dscdiv-content li').each(function() {
     prev_li = $(this).prev('li');
@@ -155,26 +153,13 @@ function format_table() {
     
     // If the current item the first of a series, or its previous sibling was a series,
     // or if the containers have changed, mark for a new table
-    if ((desc || cont || date) && $(this).children('ul').length == 0 && ($(prev_li).length == 0 || $(prev_li).has('ul').length > 0 || comparison === false)) {
-     $(this).addClass('new_table');
+    if ((desc || cont || date) && ($(prev_li).length == 0 || $(prev_li).has('ul').length > 0 || comparison === false)) {
+     $(this).addClass('dsc_table');
     }
   });
-  
-  // Date "column"
-  $('.c0x_table').each(function() {
-    if ($(this).children('li').children('.c0x_date').length > 0) {
-      $(this).children('li').each(function() {
-        if ($(this).hasClass('c0x_table_labels')) {
-          $(this).append('<div>Dates</div>');
-        }
-        else if ($(this).children('div.c0x_date').length == 0) {
-          $(this).append('<div class="c0x_date"></div>');
-        }
-      })
-    }
-  })
 }
 
+// Compare the container types between sequential list items
 function compare_rows(prev_li, current_li) {
   var prev_labels = $(prev_li).children('div').children('.c0x_label');
   var current_labels = $(current_li).children('div').children('.c0x_label');
@@ -201,5 +186,112 @@ function compare_rows(prev_li, current_li) {
   }
   else {
     return false;
+  }
+}
+
+// Toggle between views
+function dsc_view(type) {
+  var desc, cont, date;
+  if (type == 'table') {
+    var table, row, has_dates;
+    
+    // Apply view-specific CSS
+    $('#dscdiv-content ul:first-child').addClass('display_table');
+    
+    // Wrap list items to display in each table
+    $('#dscdiv-content li.dsc_table').each(function() {
+      $(this).nextUntil('li.dsc_table').addBack().wrapAll('<div class="c0x_table">');
+    });
+    
+    // For each wrapper, copy contents into a table element and replace
+    $('#dscdiv-content .c0x_table').each(function() {
+      if ($(this).children('li').children('.c0x_date').length > 0) {
+        has_dates = true;
+      }
+      else {
+        has_dates = false;
+      }
+      table = '<table class="dsc_table">';
+      
+      // Headers
+      table += '<thead>';
+      $(this).children('li').eq(0).children('.c0x_container').each(function() {
+        table += '<th>' + $(this).children('.c0x_label').text() + '</th>';
+      });
+      table += '<th>Description</th>';
+      if (has_dates == true) {
+        table += '<th>Dates</th>';
+      }
+      table += '</thead>';
+      
+      // Body
+      table += '<tbody>';
+      $(this).children('li').each(function() {
+        desc = $(this).children('.c0x_description').length;
+        cont = $(this).children('.c0x_container').length;
+        date = $(this).children('.c0x_date').length;
+        if (desc || cont || date) {
+          row = '<tr>';
+          // Containers
+          if (cont > 0) {
+            $(this).children('.c0x_container').each(function() {
+              row += '<td class="c0x_container">' + $(this).html() + '</td>';
+            });
+          }
+          // Description
+          if (desc > 0) {
+            row += '<td class="c0x_description">' + $(this).children('.c0x_description').eq(0).html() + '</td>';
+          }
+          // Dates
+          if (has_dates == true) {
+            row += '<td class="c0x_date">';
+            if (date > 0) {
+              row += $(this).children('.c0x_date').eq(0).html();
+            }
+            row += '</td>';
+          }
+          row += '</tr>';
+          table += row;
+        }
+      });
+      table += '</tbody></table>';
+ 
+      // Replace wrapper div with a list item
+      $(this).before('<li>' + table + '</li>').remove();
+    });
+  }
+  else {
+    // Apply view-specific CSS
+    $('#dscdiv-content ul:first-child').removeClass('display_table');
+    
+    // Replace tables with original list items
+    var parent_ul, parent_li;
+    $('.dsc_table').each(function() {
+      parent_ul = $(this).parents('ul').eq(0);
+      $(this).children('tbody').children('tr').each(function() {
+        desc = $(this).children('.c0x_description').length;
+        cont = $(this).children('.c0x_container').length;
+        date = $(this).children('.c0x_date').length;
+        if ($(this).parents('ul').length%2 == 0) {
+          parent_li = '<li class="gray">';
+        }
+        else {
+          parent_li = '<li class="white">';
+        }
+        if (desc > 0) {
+          parent_li += '<div class="c0x_description">' + $(this).children('.c0x_description').eq(0).html() + '</div>';
+        }
+        if (date > 0) {
+          parent_li += '<div class="c0x_date">' + $(this).children('.c0x_date').eq(0).html() + '</div>';
+        }
+        if (cont > 0) {
+          $(this).children('.c0x_container').each(function() {
+            parent_li += '<div class="c0x_container">' + $(this).html() + '</div>';
+          });
+        }
+        parent_li += '</li>';
+        $(parent_ul).append(parent_li);
+      });
+    }).parent('li').remove();
   }
 }

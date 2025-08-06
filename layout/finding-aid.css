@@ -237,6 +237,11 @@ a#aeon:focus {
   position: relative;
 }
 
+#dscdiv-content ul.display_table li {
+  border: 0;
+  padding: 0;
+}
+
 #dscdiv-content li:last-child {
   margin: 0;
 }
@@ -249,15 +254,10 @@ li.gray {
   background: #f9f9f9;
 }
 
-/*#dscdiv-content > ul > li,
-#dscdiv-content > ul > li > ul > li > ul > li {
-  background: #ffffff;
+ul.display_table li.white,
+ul.display_table li.gray {
+  background: transparent;
 }
-
-#dscdiv-content > ul > li > ul > li,
-#dscdiv-content > ul > li > ul > li > ul > li > ul > li {
-  background: #f9f9f9;
-}*/
 
 .c0x_row {
   display: flex;
@@ -280,6 +280,18 @@ li.gray {
 
 .c0x_label::after {
   content: ': ';
+}
+
+.dsc_table {
+  margin-bottom: 1rem;
+}
+
+.dsc_table .c0x_description {
+  font-weight: normal;
+}
+
+.dsc_table .c0x_label {
+  display: none;
 }
 
 #main .footer {
