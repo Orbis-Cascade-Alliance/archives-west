@@ -213,6 +213,19 @@ a#aeon:focus {
   text-decoration: underline;
 }
 
+button#dsc-toggle {
+  background-color: #43177d;
+  color: #ffffff;
+  font-size: 110%;
+  border-radius: .25rem;
+  padding: .5rem;
+}
+
+button#dsc-toggle:hover,
+button#dsc-toggle:focus {
+  background-color: #6335a3;
+}
+
 #dscdiv-content h4,
 #dscdiv-content h5,
 #dscdiv-content h6,

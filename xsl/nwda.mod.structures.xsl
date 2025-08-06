@@ -63,12 +63,12 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 	<!-- ********************* <OVERVIEW> *********************** -->
 	
 	<xsl:template match="archdesc" mode="flag">
-		<h1 id="top" class="visuallyhidden">Archives West Finding Aid</h1>
-    <div id="content-wrapper">
-      <div id="toc">
+    <div id="content-wrapper" role="main">
+      <h1 id="top" class="visuallyhidden">Archives West Finding Aid</h1>
+      <div id="toc" role="complementary">
         <xsl:call-template name="toc"/>
       </div>
-      <div id="main" role="main">
+      <div id="main">
         <h2>
           <xsl:value-of select="$titleproper"/>
         </h2>

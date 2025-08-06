@@ -96,6 +96,9 @@ $(document).ready(function() {
   // Add classes for DSC display as list or table
   dsc_classes();
   
+  // Add DSC toggle button
+  $('#dscdiv-content').prepend('<p><button id="dsc-toggle" onclick="dsc_toggle();return false;">Switch to <span class="type">table</span> view</button></p>');
+  
 });
 
 // Toggle content with glyphicons
@@ -190,9 +193,16 @@ function compare_rows(prev_li, current_li) {
 }
 
 // Toggle between views
+function dsc_toggle() {
+  var type = $('#dscdiv-content > ul').eq(0).hasClass('display_table') ? 'list' : 'table';
+  dsc_view(type);
+}
+
+// Convert list to table or vice versa
 function dsc_view(type) {
   var desc, cont, date;
   if (type == 'table') {
+    $('#dsc-toggle > span.type').text('list');
     var table, row, has_dates;
     
     // Apply view-specific CSS
@@ -218,7 +228,9 @@ function dsc_view(type) {
       $(this).children('li').eq(0).children('.c0x_container').each(function() {
         table += '<th>' + $(this).children('.c0x_label').text() + '</th>';
       });
-      table += '<th>Description</th>';
+      if ($(this).children('li').children('.c0x_description').length > 0) {
+        table += '<th>Description</th>';
+      }
       if (has_dates == true) {
         table += '<th>Dates</th>';
       }
@@ -231,7 +243,7 @@ function dsc_view(type) {
         cont = $(this).children('.c0x_container').length;
         date = $(this).children('.c0x_date').length;
         if (desc || cont || date) {
-          row = '<tr>';
+          row = '<tr class="' + $(this).attr('class') + '">';
           // Containers
           if (cont > 0) {
             $(this).children('.c0x_container').each(function() {
@@ -253,44 +265,45 @@ function dsc_view(type) {
           row += '</tr>';
           table += row;
         }
+        if ($(this).find('.c0x_table').length == 0) {
+          $(this).remove();
+        }
       });
       table += '</tbody></table>';
  
       // Replace wrapper div with a list item
-      $(this).before('<li>' + table + '</li>').remove();
-    });
+      $(this).before('<li>' + table + '</li>').children('li').unwrap();
+    }).remove();
+    
   }
   else {
+    $('#dsc-toggle > span.type').text('table');
+    
     // Apply view-specific CSS
-    $('#dscdiv-content ul:first-child').removeClass('display_table');
+    $('#dscdiv-content > ul').eq(0).removeClass('display_table');
     
     // Replace tables with original list items
-    var parent_ul, parent_li;
+    var parent_li;
     $('.dsc_table').each(function() {
-      parent_ul = $(this).parents('ul').eq(0);
+      parent_li = $(this).parent('li');
       $(this).children('tbody').children('tr').each(function() {
         desc = $(this).children('.c0x_description').length;
         cont = $(this).children('.c0x_container').length;
         date = $(this).children('.c0x_date').length;
-        if ($(this).parents('ul').length%2 == 0) {
-          parent_li = '<li class="gray">';
-        }
-        else {
-          parent_li = '<li class="white">';
-        }
+        new_li = '<li class="' + $(this).attr('class') + '">';
         if (desc > 0) {
-          parent_li += '<div class="c0x_description">' + $(this).children('.c0x_description').eq(0).html() + '</div>';
+          new_li += '<div class="c0x_description">' + $(this).children('.c0x_description').eq(0).html() + '</div>';
         }
         if (date > 0) {
-          parent_li += '<div class="c0x_date">' + $(this).children('.c0x_date').eq(0).html() + '</div>';
+          new_li += '<div class="c0x_date">' + $(this).children('.c0x_date').eq(0).html() + '</div>';
         }
         if (cont > 0) {
           $(this).children('.c0x_container').each(function() {
-            parent_li += '<div class="c0x_container">' + $(this).html() + '</div>';
+            new_li += '<div class="c0x_container">' + $(this).html() + '</div>';
           });
         }
-        parent_li += '</li>';
-        $(parent_ul).append(parent_li);
+        new_li += '</li>';
+        $(parent_li).before(new_li);
       });
     }).parent('li').remove();
   }
