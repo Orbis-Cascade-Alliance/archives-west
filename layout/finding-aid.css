@@ -241,8 +241,6 @@ a#aeon:focus {
   right: 0;
   bottom: 0;
   background-color: #43177d;
-  -webkit-transition: .4s;
-  transition: .4s;
   border-radius: 34px;
 }
 
@@ -268,7 +266,8 @@ input:checked + .slider {
 }
 
 input:focus + .slider {
-  box-shadow: 0 0 1px #2196F3;
+  outline: 3px solid #005DA8;
+  outline-offset: 2px;
 }
 
 input:checked + .slider:before {
@@ -321,6 +320,24 @@ li.gray {
 ul.display_table li.white,
 ul.display_table li.gray {
   background: transparent;
+}
+
+#dscdiv-content div ul {
+  list-style: disc;
+  list-style-position: inside;
+  padding: 1rem 0 0 1rem;
+}
+
+#dscdiv-content div ul ul { 
+  list-style-type: circle;
+  padding-top: 0;
+}
+
+#dscdiv-content div li {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
 }
 
 .c0x_row {
