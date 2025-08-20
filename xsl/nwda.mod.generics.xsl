@@ -353,23 +353,9 @@ Major or significant revision history:
 	</xsl:template>
 
 	<xsl:template match="p">
-		<!-- 2004-09-27 carlsonm: adding test to remove excess space if <p> is in <dsc> 
-Tracking # 4.20
--->
-		<xsl:choose>
-			<xsl:when test="not(ancestor::dsc) or parent::dsc">
-				<p>
-					<xsl:apply-templates/>
-				</p>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:apply-templates/>
-				<xsl:if test="not(position()=last()) and c01">
-					<br/>
-					<br/>
-				</xsl:if>
-			</xsl:otherwise>
-		</xsl:choose>
+    <p>
+      <xsl:apply-templates/>
+    </p>
 	</xsl:template>
 	<xsl:template match="controlaccess[@type='lower']">
 		<xsl:value-of select="name()"/>

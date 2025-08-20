@@ -349,9 +349,13 @@ ul.display_table li.gray {
   font-weight: bold;
 }
 
-.c0x_description .scopecontent {
+.c0x_description div {
   font-weight: normal;
   margin-left: 2rem;
+}
+
+.c0x_description p {
+  margin: 0;
 }
 
 .c0x_description .c0x_label {
