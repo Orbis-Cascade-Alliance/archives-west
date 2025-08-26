@@ -18,6 +18,7 @@ class AW_Repo {
   public $rights;
   public $as_host;
   public $as_prefix;
+  public $as_version;
   public $users;
   
   function __construct($repo_id) {
@@ -42,6 +43,7 @@ class AW_Repo {
             $this->rights = $row['rights'];
             $this->as_host = $row['as_host'];
             $this->as_prefix = $row['as_prefix'];
+            $this->as_version = $row['as_version'];
           }
         }
         else {
@@ -116,6 +118,10 @@ class AW_Repo {
   
   function get_as_host() {
     return $this->as_host;
+  }
+  
+  function get_as_version() {
+    return $this->as_version;
   }
   
   function get_oaipmh_prefix() {

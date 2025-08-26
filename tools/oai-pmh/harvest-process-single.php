@@ -34,7 +34,12 @@ if (isset($_POST['as_resource']) && !empty($_POST['as_resource'])) {
     $path = parse_url($as_resource, PHP_URL_PATH);
   }
   $prefix = $repo->get_oaipmh_prefix();
-  $resource_id = $prefix . '/' . $path;
+  $version = $repo->get_as_version();
+  $delimiter = ':';
+  if (intval($version) < 4) {
+    $delimiter = '/';
+  }
+  $resource_id = $prefix . $delimiter . $path;
 }
 else {
   $harvest_errors[] = 'Link is required.';
