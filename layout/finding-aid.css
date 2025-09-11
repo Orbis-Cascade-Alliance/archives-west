@@ -1,6 +1,7 @@
 #main-content {
   width: auto;
   margin: 0 1rem;
+  position: relative;
 }
 
 h2 {
@@ -17,6 +18,12 @@ h3 {
 h4 {
   font-size: 120%;
   font-weight: normal;
+}
+
+h5, h6, p.c0x_heading {
+  font-size: 100%;
+  font-weight: bold;
+  margin-top: 1rem;
 }
 
 mark {
@@ -54,6 +61,8 @@ button.glyphicon {
 .glyphicon-arrow-up::before {
   content: "\21D1";
 }
+
+/* Table of Contents */
 
 #toc {
   position: sticky;
@@ -100,6 +109,8 @@ button.glyphicon {
   margin-top: 0.5rem;
 }
 
+/* Main */
+
 #main {
   margin-left: 380px;
   padding: 0 .5rem;
@@ -115,8 +126,7 @@ button.glyphicon {
   padding-top: 0;
 }
 
-#docBody h3 .glyphicon,
-#docBody h4 .glyphicon {
+#docBody .glyphicon {
   margin: auto 0.5rem;
 }
 
@@ -171,13 +181,6 @@ th, td {
   border-top: 1px solid #ddd;
 }
 
-.containerLabel {
-  color: #6c34a8;
-  font-size: 85%;
-  text-decoration: none;
-  text-transform: capitalize;
-}
-
 a[href="#top"] {
   font-size: 1rem;
   font-weight: normal;
@@ -185,8 +188,14 @@ a[href="#top"] {
   color: #ffffff;
   padding: .25rem .5rem .25rem 0;
   text-decoration: none;
-  float: right;
-  vertical-align: middle;
+  margin-top: 3rem;
+  position: absolute;
+  right: 0;
+}
+
+#dscdiv-content a[href="#top"] {
+  margin-top: 0;
+  right: 1rem;
 }
 
 a#aeon {
@@ -208,17 +217,182 @@ a#aeon:focus {
   text-decoration: underline;
 }
 
+/* DSC */
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+  vertical-align: middle;
+}
+
+.switch #dsc-toggle {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #43177d;
+  border-radius: 34px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+  border-radius: 50%;
+}
+
+.switch + .text {
+  font-size: 110%;
+}
+
+input:checked + .slider {
+  background-color: #8649d7;
+}
+
+input:focus + .slider {
+  outline: 3px solid #005DA8;
+  outline-offset: 2px;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+#dscdiv-content h4,
+#dscdiv-content h5,
+#dscdiv-content h6,
+#dscdiv-content p.c0x_heading {
+  margin: 0;
+}
+
+#dscdiv-content ul {
+  list-style: none;
+  padding: 1rem;
+}
+
+#dscdiv-content > ul {
+  padding: 0;
+}
+
+#dscdiv-content li {
+  margin: 0 0 1rem 0;
+  padding: 1rem;
+  border: 1px solid #cccccc;
+  border-radius: .25rem;
+  position: relative;
+}
+
+#dscdiv-content ul.display_table li {
+  border: 0;
+  padding: 0;
+}
+
+#dscdiv-content li:last-child {
+  margin: 0;
+}
+
+li.white {
+  background: #ffffff;
+}
+
+li.gray {
+  background: #f9f9f9;
+}
+
+ul.display_table li.white,
+ul.display_table li.gray {
+  background: transparent;
+}
+
+#dscdiv-content div ul {
+  list-style: disc;
+  list-style-position: inside;
+  padding: 1rem 0 0 1rem;
+}
+
+#dscdiv-content div ul ul { 
+  list-style-type: circle;
+  padding-top: 0;
+}
+
+#dscdiv-content div li {
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+}
+
+.c0x_row {
+  display: flex;
+  flex-direction: column;
+}
+
+.c0x_description {
+  font-weight: bold;
+}
+
+.c0x_description div {
+  font-weight: normal;
+  margin-left: 2rem;
+}
+
+.c0x_description p {
+  margin: 0;
+}
+
+.c0x_description .c0x_label {
+  display: none;
+}
+
+
+.c0x_label::after {
+  content: ': ';
+}
+
+table.dsc_table {
+  margin-bottom: 1rem;
+}
+
+table.dsc_table .c0x_description {
+  font-weight: normal;
+}
+
+table.dsc_table .c0x_label {
+  display: none;
+}
+
+/* Footer */
 #main .footer {
   text-align: center;
+}
+
+#main .footer .author {
+  font-size: 120%;
 }
 
 .hidden {
   display: none;
 }
 
-/*.dsc .note::before {
-  content: "\2B25";
-}*/
+/* QR Dialog */
 
 #qr-loading {
   min-width:232px;
@@ -232,6 +406,8 @@ a#aeon:focus {
   text-align: center;
   padding: 1rem;
 }
+
+/* Images */
 
 img.daoimage {
   width: 400px;

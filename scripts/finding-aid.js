@@ -13,10 +13,8 @@ $(document).ready(function() {
   
   // Handle behavior of Table of Contents depending on window width
   toc_structure();
-  table_structure();
   $(window).resize(function() {
     toc_structure();
-    table_structure();
   });
   
   // Attach handler to toggle buttons
@@ -69,6 +67,7 @@ $(document).ready(function() {
         $(this).wrapInner('<a href="/search.php?facet=' + facet + ':' + encodeURIComponent(facet_term) + '"></a>');
       });
     }
+    
   });
     
   // Highlight keyword matches
@@ -93,6 +92,13 @@ $(document).ready(function() {
     $('#dialog-qr').dialog('open').html('<img src="' + $(this).attr('href') + '" alt="QR Code" />');
     return false;
   });
+  
+  // Add classes for DSC display as list or table
+  dsc_classes();
+  
+  // Add DSC toggle button
+  $('#dscdiv-content').prepend('<p><label for="dsc-toggle"><span class="switch"><input type="checkbox" id="dsc-toggle" aria-controls="dscul" aria-checked="false"><span class="slider round"></span></span> <span class="text">Enable table view</span></label></p>');
+  $('#dsc-toggle').click(dsc_toggle);
   
 });
 
@@ -125,57 +131,189 @@ function toc_structure() {
   }
 }
 
-// Mobile tables
-function table_structure() {
-  if ($(window).outerWidth() > 760) {
-    $('table thead, table tbody tr').show();
-    $('table td').css({
-      'display': 'table-cell',
-      'border-top': '1px solid #ddd',
-      'padding': '.5rem'
-    });
-    $('span.table-label').remove();
-  }
-  else {
-    $('table').each(function() {
-      $(this).find('thead').hide();
-      $(this).find('td').css({
-        'display': 'block',
-        'border-top': 'none',
-        'padding': '.5rem 0'
-      });
-      var container_labels = [];
-      $(this).find('tbody tr').each(function() {
-        if ($(this).find('td span.containerLabel').length > 0) {
-          container_labels = [];
-          $(this).children('td').each(function() {
-            if ($(this).children('span.containerLabel').length > 0) {
-              container_labels.push($(this).children('span.containerLabel').text());
-            }
-            else {
-              container_labels.push('');
-            }
-          });
-          $(this).hide();
-        }
-        else {
-          var i = 0;
-          $(this).children('td').each(function() {
-            if (typeof(container_labels[i]) != 'undefined' && container_labels[i] != '' && $(this).text() != '' && $(this).children('.c02').length == 0 && $(this).children('.table-label').length == 0 && $(this).text().substring(0, container_labels[i].length) != container_labels[i]) {
-              $(this).prepend('<span class="table-label">' + container_labels[i] + ':</span> ');
-            }
-            if ($(this).is(':last-child')) {
-              $(this).css('border-bottom', '1px solid #ddd');
-            }
-            i++;
-          });
-        }
-      });
-    });
-  }
-}
-
 // Print window
 function print_finding_aid() {
   window.print();
+}
+
+// Add classes to mark uls for table view
+// and alternate background colors in list view
+function dsc_classes() {
+  var prev_li, comparison, label_row, desc, cont, date;
+  $('#dscdiv-content li').each(function() {
+    prev_li = $(this).prev('li');
+    comparison = compare_rows(prev_li, this);
+    desc = $(this).children('.c0x_description').length;
+    cont = $(this).children('.c0x_container').length;
+    date = $(this).children('.c0x_date').length;
+
+    // Alternate background colors
+    if ($(this).parents('ul').length%2 == 0) {
+      $(this).addClass('gray');
+    }
+    else {
+      $(this).addClass('white');
+    }
+    
+    // If the current item the first of a series, or its previous sibling was a series,
+    // or if the containers have changed, mark for a new table
+    if ((desc || cont || date) && ($(prev_li).length == 0 || $(prev_li).has('ul').length > 0 || comparison === false)) {
+     $(this).addClass('dsc_table');
+    }
+  });
+}
+
+// Compare the container types between sequential list items
+function compare_rows(prev_li, current_li) {
+  var prev_labels = $(prev_li).children('div').children('.c0x_label');
+  var current_labels = $(current_li).children('div').children('.c0x_label');
+  var current_dates = $(current_li).children('.c0x_date').length;
+  
+  // Check if this is the first item in a list
+  if ($(prev_labels).length != 0) {
+    // If different lengths, check if the difference is a missing date
+    if ($(prev_labels).length != $(current_labels).length) {
+      if ($(current_labels).length != $(prev_li).children('div:not(.c0x_date)').length && $(current_li).children('div:not(.c0x_date)').length != $(prev_labels).length) {
+        return false;
+      }
+    }
+    // Compare text of labels
+    for (var c = 0; c < $(prev_labels).length; c++) {
+      if (typeof $(current_labels).eq(c)[0] != 'undefined') {
+        if ($(prev_labels).eq(c)[0].textContent.trim() != $(current_labels).eq(c)[0].textContent.trim()) {
+          return false;
+        }
+      }
+    }
+    // If all labels except for missing dates are the same, don't add row
+    return true;
+  }
+  else {
+    return false;
+  }
+}
+
+// Toggle between views
+function dsc_toggle() {
+  var type;
+  if ($('#dscul').hasClass('display_table')) {
+    type = 'list';
+    $('#dsc-toggle').attr('aria-checked','false');
+  }
+  else {
+    type = 'table';
+    $('#dsc-toggle').attr('aria-checked','true');
+  }
+  dsc_view(type);
+}
+
+// Convert list to table or vice versa
+function dsc_view(type) {
+  var desc, cont, date;
+  if (type == 'table') {
+    $('#dsc-toggle > span.type').text('list');
+    var table, row, has_dates;
+    
+    // Apply view-specific CSS
+    $('#dscul').addClass('display_table');
+    
+    // Wrap list items to display in each table
+    $('#dscdiv-content li.dsc_table').each(function() {
+      $(this).nextUntil('li.dsc_table').addBack().wrapAll('<div class="c0x_table">');
+    });
+    
+    // For each wrapper, copy contents into a table element and replace
+    $('#dscdiv-content .c0x_table').each(function() {
+      if ($(this).children('li').children('.c0x_date').length > 0) {
+        has_dates = true;
+      }
+      else {
+        has_dates = false;
+      }
+      table = '<table class="dsc_table">';
+      
+      // Headers
+      table += '<thead>';
+      $(this).children('li').eq(0).children('.c0x_container').each(function() {
+        table += '<th>' + $(this).children('.c0x_label').text() + '</th>';
+      });
+      if ($(this).children('li').children('.c0x_description').length > 0) {
+        table += '<th>Description</th>';
+      }
+      if (has_dates == true) {
+        table += '<th>Dates</th>';
+      }
+      table += '</thead>';
+      
+      // Body
+      table += '<tbody>';
+      $(this).children('li').each(function() {
+        desc = $(this).children('.c0x_description').length;
+        cont = $(this).children('.c0x_container').length;
+        date = $(this).children('.c0x_date').length;
+        if (desc || cont || date) {
+          row = '<tr class="' + $(this).attr('class') + '">';
+          // Containers
+          if (cont > 0) {
+            $(this).children('.c0x_container').each(function() {
+              row += '<td class="c0x_container">' + $(this).html() + '</td>';
+            });
+          }
+          // Description
+          if (desc > 0) {
+            row += '<td class="c0x_description">' + $(this).children('.c0x_description').eq(0).html() + '</td>';
+          }
+          // Dates
+          if (has_dates == true) {
+            row += '<td class="c0x_date">';
+            if (date > 0) {
+              row += $(this).children('.c0x_date').eq(0).html();
+            }
+            row += '</td>';
+          }
+          row += '</tr>';
+          table += row;
+        }
+        if ($(this).find('.c0x_table').length == 0) {
+          $(this).remove();
+        }
+      });
+      table += '</tbody></table>';
+ 
+      // Replace wrapper div with a list item
+      $(this).before('<li>' + table + '</li>').children('li').unwrap();
+    }).remove();
+    
+  }
+  else {
+    $('#dsc-toggle > span.type').text('table');
+    
+    // Apply view-specific CSS
+    $('#dscul').removeClass('display_table');
+    
+    // Replace tables with original list items
+    var parent_li;
+    $('.dsc_table').each(function() {
+      parent_li = $(this).parent('li');
+      $(this).children('tbody').children('tr').each(function() {
+        desc = $(this).children('.c0x_description').length;
+        cont = $(this).children('.c0x_container').length;
+        date = $(this).children('.c0x_date').length;
+        new_li = '<li class="' + $(this).attr('class') + '">';
+        if (desc > 0) {
+          new_li += '<div class="c0x_description">' + $(this).children('.c0x_description').eq(0).html() + '</div>';
+        }
+        if (cont > 0) {
+          $(this).children('.c0x_container').each(function() {
+            new_li += '<div class="c0x_container">' + $(this).html() + '</div>';
+          });
+        }
+        if (date > 0) {
+          new_li += '<div class="c0x_date">' + $(this).children('.c0x_date').eq(0).html() + '</div>';
+        }
+        new_li += '</li>';
+        $(parent_li).before(new_li);
+      });
+    }).parent('li').remove();
+  }
 }
