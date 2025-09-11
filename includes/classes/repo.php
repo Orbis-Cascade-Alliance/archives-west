@@ -100,6 +100,16 @@ class AW_Repo {
     return $this->address;
   }
   
+  function get_location() {
+    $pattern = '/^([\w\s-]+),*\s*([A-Z]{2})$/';
+    foreach ($this->get_address() as $address_line) {
+      if (preg_match($pattern, $address_line, $matches)) {
+        return $matches[1] . ', ' . $matches[2];
+      }
+    }
+    return false;
+  }
+  
   function get_collection_info() {
     return $this->collection_info;
   }

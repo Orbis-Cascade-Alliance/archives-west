@@ -35,6 +35,7 @@ if (isset($argv[1]) && !empty($argv[1])) {
         echo '</div>';
         echo $finding_aid->transform();
         echo '<div id="dialog-qr" title="QR Code"><div id="qr-loading">Loading...</div></div>';
+        echo '<div id="dialog-actions" title="Item Details">Loading...</div>';
       }
       else {
         echo '<title>Finding Aid Not Found - ' . SITE_TITLE . '</title>';
