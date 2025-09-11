@@ -22,4 +22,4 @@
         </ul>
       </div>
     </div><!-- end header -->
-    <div id="main-content" class="width-wrapper">
+    <div id="main-content" class="width-wrapper" role="main">

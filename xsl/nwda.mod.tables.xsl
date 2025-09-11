@@ -2,9 +2,9 @@
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:ead="urn:isbn:1-931666-22-9" exclude-result-prefixes="fo ead">
 	<xsl:template match="*[local-name()='table']">
 		<xsl:if test="*[local-name()='head']">
-			<h4>
+			<h3>
 				<xsl:value-of select="*[local-name()='head']"/>
-			</h4>
+			</h3>
 		</xsl:if>
 		<table class="table table-striped">
 			<xsl:apply-templates select="*[not(local-name()='head')]"/>

@@ -36,11 +36,11 @@ $(document).ready(function() {
   // Add links to controlaccess headings
   $('#caID ul.ca_list').each(function() {
     var facet;
-    if ($(this).prev('h4').length > 0) {
-      var heading_el = $(this).prev('h4');
+    if ($(this).prev('h3').length > 0) {
+      var heading_el = $(this).prev('h3');
     }
-    else if ($(this).prev('h5').length > 0) {
-      var heading_el = $(this).prev('h5');
+    else if ($(this).prev('h4').length > 0) {
+      var heading_el = $(this).prev('h4');
     }
     var heading = heading_el.text().trim();
     if (heading == 'Subject Terms') {

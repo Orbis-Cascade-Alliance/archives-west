@@ -39,7 +39,7 @@ Changes:
 		</xsl:if>
 		<a id="{$dsc_id}"/>
     <a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
-		<h3>
+		<h2>
 			<xsl:value-of select="$dsc_head"/>
 			<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-dscdiv" aria-controls="dscdiv-content" aria-expanded="true">
         <xsl:attribute name="title">
@@ -47,7 +47,7 @@ Changes:
           <xsl:value-of select="$dsc_head"/>
         </xsl:attribute>
       </button>
-		</h3>
+		</h2>
 		<div class="dsc" id="dscdiv-content">
       <xsl:apply-templates select="*[not(self::c01)]"/>
       <ul id="dscul">
@@ -68,18 +68,24 @@ Changes:
           <!-- if next c0x child has did, print heading and start new list -->
           <xsl:when test="child::node()/did">
             <xsl:choose>
-              <!-- h4 for series defined in c01/did template -->
+              <!-- h3 for series defined in c01/did template -->
               <xsl:when test="local-name(.)='c01'">
                 <xsl:apply-templates select="did" />
               </xsl:when>
-              <!-- h5 unitid/title and date for subseries -->
+              <!-- h4 unitid/title and date for subseries -->
               <xsl:when test="local-name(.)='c02'">
+                <h4>
+                  <xsl:call-template name="c0x_heading"/>
+                </h4>
+              </xsl:when>
+              <!-- h5 unitid/title and date for sub-subseries -->
+              <xsl:when test="local-name(.)='c03'">
                 <h5>
                   <xsl:call-template name="c0x_heading"/>
                 </h5>
               </xsl:when>
-              <!-- h6 unitid/title and date for sub-subseries -->
-              <xsl:when test="local-name(.)='c03'">
+              <!-- h6 unitid/title and date for sub-sub-subseries -->
+              <xsl:when test="local-name(.)='c04'">
                 <h6>
                   <xsl:call-template name="c0x_heading"/>
                 </h6>
@@ -403,7 +409,7 @@ Changes:
 			<xsl:when test="parent::c01 and //c02">
 				<xsl:if test="count(parent::c01/preceding-sibling::c01)!='0'"/>
 				<xsl:variable select="count(../preceding-sibling::c01)+1" name="ppos"/>
-				<h4>
+				<h3>
 					<xsl:attribute name="id">
 						<xsl:choose>
 							<xsl:when test="parent::node()/@id">
@@ -461,7 +467,7 @@ Changes:
 						</xsl:otherwise>
 					</xsl:choose>
 					<!-- END what if no unitititle-->
-				</h4>
+				</h3>
         
 				<!-- March 2015: Adding container display as per revision specification 7.1.2 -->
 				<xsl:if test="count(container) &gt; 0">
