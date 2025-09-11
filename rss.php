@@ -52,7 +52,12 @@ if (!empty($arks)) {
         $item->addChild('pubDate', date('r', strtotime($date)));
       }
     }
-    header('Content-Type: text/xml');
+    if (!headers_sent()) {
+      if (!isset($content_type)) {
+        $content_type = 'text/xml';
+      }
+      header('Content-Type: ' . $content_type);
+    }
     echo $rss->asXML();
   }
   catch (Exception $e) {

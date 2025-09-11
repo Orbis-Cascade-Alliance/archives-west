@@ -1,6 +1,7 @@
 <?php
 // AW_S3 saves copies of EADs to the AWS S3 buckets
-require AW_HTML . '/aws/vendor/autoload.php';
+// Examples: https://docs.aws.amazon.com/sdk-for-php/v3/developer-guide/php_s3_code_examples.html
+require_once AW_HTML . '/aws/vendor/autoload.php';
 use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
 use Aws\S3\Exception\S3Exception;
@@ -35,20 +36,63 @@ class AW_S3 {
         throw new Exception('S3Exception: ' . $e->getMessage());
       }
       catch (AwsException $e) {
-        throw new Exception('AwsException: ' . $e->getMessage());
+        throw new Exception('AwsException: ' . $e->getAwsErrorMessage());
       }
     }
     return $this->client;
   }
   
-  function put_file($file_path, $file_contents) {
+  function put_contents($file_path, $file_contents, $content_type) {
     $client = $this->get_client();
     try {
       $result = $client->putObject([
         'Bucket' => $this->bucket,
         'Key' => $this->get_key($file_path),
         'StorageClass' => $this->storage_class,
-        'Body' => $file_contents
+        'Body' => $file_contents,
+        'ContentType' => $content_type
+      ]);
+    }
+    catch (S3Exception $e) {
+      throw new Exception('S3Exception: ' . $e->getMessage());
+    }
+    catch (AwsException $e) {
+      throw new Exception('AwsException: ' . $e->getAwsErrorMessage());
+    }
+  }
+  
+  function put_source($file_path, $source) {
+    $client = $this->get_client();
+    try {
+      $result = $client->putObject([
+        'Bucket' => $this->bucket,
+        'Key' => $this->get_key($file_path),
+        'StorageClass' => $this->storage_class,
+        'SourceFile' => $source
+      ]);
+    }
+    catch (S3Exception $e) {
+      throw new Exception('S3Exception: ' . $e->getMessage());
+    }
+    catch (AwsException $e) {
+      throw new Exception('AwsException: ' . $e->getAwsErrorMessage());
+    }
+  }
+  
+  function delete_files($files) {
+    $objects = array();
+    foreach ($files as $file_path) {
+      $objects[] = [
+        'Key' => $this->get_key($file_path)
+      ];
+    }
+    $client = $this->get_client();
+    try {
+      $result = $client->deleteObjects([
+        'Bucket' => $this->bucket,
+        'Delete' => [
+          'Objects' => $objects
+        ]
       ]);
     }
     catch (S3Exception $e) {
@@ -58,4 +102,5 @@ class AW_S3 {
       throw new Exception('AwsException: ' . $e->getMessage());
     }
   }
+  
 }

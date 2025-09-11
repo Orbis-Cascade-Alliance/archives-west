@@ -82,6 +82,7 @@ if ($repo_id != 0) {
   echo '<p>' . print_field('textarea', 'visit', 'Visitation Information', $repo->get_visit_info()) . '</p>';
   echo '<p>' . print_field('rights', 'rights', 'Rights Statement', $repo->get_rights()) . '</p>';
   echo '<p>' . print_field('text', 'as_host', 'ArchivesSpace Host for OAI-PMH', $repo->get_as_host()) . '<button id="as-test">Test Connection</button></p>';
+  echo '<p>' . print_field('text', 'as_version', 'ArchivesSpace Version', $repo->get_as_version()) . '</p>';
   ?>
   <p><input type="submit" value="Save Changes" /></p>
 </form>

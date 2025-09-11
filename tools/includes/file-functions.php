@@ -628,7 +628,17 @@ function upload_file($file_contents, $file_name, $ark, $replace, $user_id) {
     
     // If file with the same name exists, check if it's for the current ARK or a different one
     $upload = true;
-    if (file_exists($file_path)) {
+    // If this ARK is associated with a deleted file, print error
+    if (!$current_finding_aid->is_active()) {
+      $errors[] = 'This ARK is associated with a deleted finding aid. Submit a help request to restore the file.';
+      $upload = false;
+    }
+    // If a file name exists in the database and we're not replacing it, print error
+    else if ($current_finding_aid->get_file() && !$replace) {
+      $errors[] = 'This ARK is associated with the file <strong>' . $current_finding_aid->get_file() . '</strong>.';
+      $upload = false;
+    }
+    else if (file_exists($file_path)) {
       $associated_ark = '';
       if ($mysqli = connect()) {
         $ark_result = $mysqli->query('SELECT ark FROM arks WHERE file="' . $file_name . '" AND repo_id=' . $repo_id . ' AND active=1');
@@ -651,16 +661,6 @@ function upload_file($file_contents, $file_name, $ark, $replace, $user_id) {
           $upload = false;
         }
       }
-    }
-    // If a file name exists in the database and we're not replacing it, print error
-    else if ($current_finding_aid->get_file() && !$replace) {
-      $errors[] = 'This ARK is associated with the file <strong>' . $current_finding_aid->get_file() . '</strong>.';
-      $upload = false;
-    }
-    // If this ARK is associated with a deleted file, print error
-    else if (!$current_finding_aid->is_active()) {
-      $errors[] = 'This ARK is associated with a deleted finding aid. Submit a help request to restore the file.';
-      $upload = false;
     }
 
     if ($upload) {
@@ -739,11 +739,10 @@ function upload_file($file_contents, $file_name, $ark, $replace, $user_id) {
               }
               
               // Save file in AWS S3
-              require_once(AW_INCLUDES . '/classes/s3.php');
               foreach (S3_BUCKETS as $bucket) {
                 try {
                   $s3 = new AW_S3($bucket['name'], $bucket['region'], $bucket['class'], $bucket['path']);
-                  $s3->put_file($repo->get_folder() . '/' . $file_name, $file_contents);
+                  $s3->put_source($repo->get_folder() . '/' . $file_name, $file_path);
                 }
                 catch (Exception $e) {
                   log_error($e->getMessage());
@@ -754,7 +753,7 @@ function upload_file($file_contents, $file_name, $ark, $replace, $user_id) {
               // Start caching process
               $finding_aid = new AW_Finding_Aid($ark);
               if ($replace) {
-                $finding_aid->delete_cache();
+                $finding_aid->delete_cache(1);
               }
               $finding_aid->build_cache();
               

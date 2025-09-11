@@ -33,6 +33,7 @@ $copy = $repo->get_copy_info();
 $visit = $repo->get_visit_info();
 $rights = $repo->get_rights();
 $as_host = $repo->get_as_host();
+$as_version = $repo->get_as_version();
 if (isset($_POST['name']) && !empty($_POST['name'])) {
   $name = htmlspecialchars(filter_var($_POST['name'], FILTER_SANITIZE_STRING));
   $name = preserve_quotes($name);
@@ -73,12 +74,15 @@ if (isset($_POST['as_host'])) {
     $as_host = substr($as_host, 0, (strlen($as_host) - 1));
   }
 }
+if (isset($_POST['as_version'])) {
+  $as_version = filter_var($_POST['as_version'], FILTER_SANITIZE_STRING);
+}
 
 if ($mysqli = connect()) {
   // Update repos table
   $serialized_address = $mysqli->real_escape_string(serialize($address_array));
-  $update_stmt = $mysqli->prepare('UPDATE repos SET name=?, email=?, url=?, phone=?, fax=?, address=?, collection=?, copy=?, visit=?, rights=?, as_host=? WHERE id=?');
-  $update_stmt->bind_param('sssssssssssi', $name, $email, $url, $phone, $fax, $serialized_address, $collection, $copy, $visit, $rights, $as_host, $repo_id);
+  $update_stmt = $mysqli->prepare('UPDATE repos SET name=?, email=?, url=?, phone=?, fax=?, address=?, collection=?, copy=?, visit=?, rights=?, as_host=?, as_version=? WHERE id=?');
+  $update_stmt->bind_param('ssssssssssssi', $name, $email, $url, $phone, $fax, $serialized_address, $collection, $copy, $visit, $rights, $as_host, $as_version, $repo_id);
   $update_stmt->execute();
   if ($mysqli->error) {
     $errors[] = $mysqli->error;

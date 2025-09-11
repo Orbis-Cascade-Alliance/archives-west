@@ -26,65 +26,72 @@ if (isset($_POST['ark']) && !empty($_POST['ark'])) {
     $arks = array($ark);
   }
   
-  foreach ($arks as $ark) {
-    if ($finding_aid = new AW_Finding_Aid($ark)) {
+  try {
+    $session = new AW_Session();
+    
+    if ($mysqli = connect()) {
       
-      // Move the file and remove from BaseX
-      $file_name = $finding_aid->get_file();
-      if ($file_name != '') {
-        $repo = $finding_aid->get_repo();
-        $repo_id = $repo->get_id();
-        $file_path = AW_REPOS . '/' . $repo->get_folder() . '/eads/' . $file_name;
-        $trash_path = AW_REPOS . '/' . $repo->get_folder() . '/trash/' . $file_name;
-        if (file_exists($file_path)) {
-          rename($file_path, $trash_path);
-        }
-        try {
-          $session = new AW_Session();
-          $session->delete_document($repo_id, $file_name);
-          $session->close();
-        }
-        catch (Exception $e) {
-          die('Error communicating with BaseX to delete document. Submit a ULC Help Request.');
-        }
-      }
+      // Prepare statements
+      $user_id = $user->get_id();
+      $action = 'delete';
+      $delete_stmt = $mysqli->prepare('UPDATE arks SET active=0 WHERE ark=?');
+      $delete_stmt->bind_param('s', $ark);
+      $existing_stmt = $mysqli->prepare('SELECT id FROM updates WHERE ark=? AND action=? AND complete=0');
+      $existing_stmt->bind_param('ss', $ark, $action);
+      $insert_stmt = $mysqli->prepare('INSERT INTO updates (user, action, ark) VALUES (?, ?, ?)');
+      $insert_stmt->bind_param('iss', $user_id, $action, $ark);
       
-      // Delete cache
-      $finding_aid->delete_cache();
-
-      if ($mysqli = connect()) {
-        // Update arks table
-        $delete_stmt = $mysqli->prepare('UPDATE arks SET active=0 WHERE ark=?');
-        $delete_stmt->bind_param('s', $ark);
-        $delete_stmt->execute();
-        $delete_stmt->close();
+      foreach ($arks as $ark) {
+        if ($finding_aid = new AW_Finding_Aid($ark)) {
+          
+          // Move the file and remove from BaseX
+          $file_name = $finding_aid->get_file();
+          if ($file_name != '') {
+            $repo = $finding_aid->get_repo();
+            $repo_id = $repo->get_id();
+            $file_path = AW_REPOS . '/' . $repo->get_folder() . '/eads/' . $file_name;
+            $trash_path = AW_REPOS . '/' . $repo->get_folder() . '/trash/' . $file_name;
+            if (file_exists($file_path)) {
+              rename($file_path, $trash_path);
+            }
+            $session->delete_document($repo_id, $file_name);
+          }
         
-        // Insert into updates table
-        $user_id = $user->get_id();
-        $action = 'delete';
-        $existing_result = $mysqli->query('SELECT id FROM updates WHERE ark="' . $ark . '" AND action="' . $action . '" AND complete=0');
-        if ($existing_result->num_rows == 0) {
-          $insert_stmt = $mysqli->prepare('INSERT INTO updates (user, action, ark) VALUES (?, ?, ?)');
-          $insert_stmt->bind_param('iss', $user_id, $action, $ark);
-          $insert_stmt->execute();
-          $insert_stmt->close();
+          // Delete cache
+          $finding_aid->delete_cache();
+          
+          // Update arks table
+          $delete_stmt->execute();
+          
+          // Insert into updates table
+          $existing_stmt->execute();
+          $existing_result = $existing_stmt->get_result();
+          if ($existing_result->num_rows == 0) {
+            $insert_stmt->execute();
+          }
         }
-        $mysqli->close();
       }
-      
-      // Reset finding aids session variable for homepage
-      $_SESSION['fa_arks'] = array();
-      
-      // Redirect to batch page
-      if ($type == 'batch') {
-        $_SESSION['fa_deleted'] = $arks;
-      }
+      $insert_stmt->close();
+      $existing_stmt->close();
+      $delete_stmt->close();
+      $mysqli->close();
     }
+    $session->close();
+    
+    // Start index process
+    index_next();
   }
-  // Start index process
-  index_next();
-}
-if ($type == 'batch') {
-  header('Location: ' . AW_DOMAIN . '/tools/delete-batch.php');
+  catch (Exception $e) {
+    die('Error communicating with BaseX to delete document. Submit a ULC Help Request.');
+  }
+  
+  // Reset finding aids session variable for homepage
+  $_SESSION['fa_arks'] = array();
+  
+  // Redirect to batch page
+  if ($type == 'batch') {
+    $_SESSION['fa_deleted'] = $arks;
+    header('Location: ' . AW_DOMAIN . '/tools/delete-batch.php');
+  }
 }
 ?>

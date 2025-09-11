@@ -244,9 +244,7 @@ include(AW_INCLUDES . '/header.php');
 
 <div id="rss">
   <h2>What's New?</h2>
-  <div id="rss-content">
-    <?php echo print_rss(); ?>
-  </div>
+  <div id="rss-content">Loading...</div>
 </div>
 
 <?php include(AW_INCLUDES . '/footer.php'); ?>
