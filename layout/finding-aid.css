@@ -279,8 +279,8 @@ input:checked + .slider:before {
 #dscdiv-content h4,
 #dscdiv-content h5,
 #dscdiv-content h6,
-#dscdiv-content h7 {
-  margin: 00;
+#dscdiv-content p.c0x_heading {
+  margin: 0;
 }
 
 #dscdiv-content ul {
