@@ -75,30 +75,19 @@ Changes:
               <!-- h5 unitid/title and date for subseries -->
               <xsl:when test="local-name(.)='c02'">
                 <h5>
-                  <xsl:call-template name="c0x_heading">
-                    <xsl:with-param name="c0x" select="."/>
-                  </xsl:call-template>
+                  <xsl:call-template name="c0x_heading"/>
                 </h5>
               </xsl:when>
+              <!-- h6 unitid/title and date for sub-subseries -->
               <xsl:when test="local-name(.)='c03'">
                 <h6>
-                  <xsl:call-template name="c0x_heading">
-                    <xsl:with-param name="c0x" select="."/>
-                  </xsl:call-template>
+                  <xsl:call-template name="c0x_heading"/>
                 </h6>
               </xsl:when>
-              <xsl:when test="local-name(.)='c04'">
-                <h7>
-                  <xsl:call-template name="c0x_heading">
-                    <xsl:with-param name="c0x" select="."/>
-                  </xsl:call-template>
-                </h7>
-              </xsl:when>
+              <!-- Paragraphs for further headings -->
               <xsl:otherwise>
-                <p>
-                  <xsl:call-template name="c0x_heading">
-                    <xsl:with-param name="c0x" select="."/>
-                  </xsl:call-template>
+                <p class="c0x_heading">
+                  <xsl:call-template name="c0x_heading" />
                 </p>
               </xsl:otherwise>
             </xsl:choose>
@@ -109,9 +98,7 @@ Changes:
           <!-- if current c0x has container, print details -->
           <xsl:otherwise>
             <!-- unittitle or daogrp -->
-            <xsl:call-template name="c0x_description">
-              <xsl:with-param name="did" select="did" />
-            </xsl:call-template>
+            <xsl:call-template name="c0x_description"/>
             <!-- Containers -->
             <xsl:if test="did/container">
               <xsl:apply-templates select="did/container" />
@@ -119,9 +106,7 @@ Changes:
             <!-- Dates -->
             <xsl:choose>
               <xsl:when test="did/unitdate">
-                <xsl:call-template name="c0x_dates">
-                  <xsl:with-param name="unitdates" select="did/unitdate"/>
-                </xsl:call-template>
+                <xsl:call-template name="c0x_dates"/>
               </xsl:when>
             </xsl:choose>
           </xsl:otherwise>
@@ -131,15 +116,14 @@ Changes:
   
   <!-- c0x headings -->
   <xsl:template name="c0x_heading">
-    <xsl:param name="c0x"></xsl:param>
-    <xsl:if test="string($c0x/did/unitid)">
-      <xsl:apply-templates select="$c0x/did/unitid"/>
+    <xsl:if test="string(did/unitid)">
+      <xsl:apply-templates select="did/unitid"/>
       <xsl:text>: </xsl:text>
     </xsl:if>
-    <xsl:apply-templates select="$c0x/did/unittitle"/>
-    <xsl:if test="$c0x/did/unitdate/node()[not(self::comment()) and not(normalize-space(.))]">
+    <xsl:apply-templates select="did/unittitle"/>
+    <xsl:if test="did/unitdate/node()[not(self::comment()) and not(normalize-space(.))]">
       <xsl:text>, </xsl:text>
-      <xsl:for-each select="$c0x/did/unitdate">
+      <xsl:for-each select="did/unitdate">
         <xsl:value-of select="."/>
         <xsl:if test="not(position() = last())">
           <xsl:text>, </xsl:text>
@@ -151,11 +135,10 @@ Changes:
   <!-- c0x_description -->
   <!-- print unittitle or daogrp -->
   <xsl:template name="c0x_description">
-    <xsl:param name="did"></xsl:param>
     <xsl:choose>
       <xsl:when test="local-name(.)='c01'">
         <xsl:choose>
-          <xsl:when test="$did/container or $did/unitdate">
+          <xsl:when test="did/container or $did/unitdate">
             <div class="c0x_description">
               <span class="c0x_label">Description</span>
               <xsl:apply-templates select="did" />
@@ -166,23 +149,23 @@ Changes:
           </xsl:otherwise>
         </xsl:choose>
       </xsl:when>
-      <xsl:when test="$did/unittitle">
+      <xsl:when test="did/unittitle">
         <div class="c0x_description">
           <span class="c0x_label">Description</span>
           <xsl:text> </xsl:text>
-          <xsl:if test="string($did/unitid)">
-            <xsl:value-of select="$did/unitid"/>
+          <xsl:if test="string(did/unitid)">
+            <xsl:value-of select="did/unitid"/>
             <xsl:text>: </xsl:text>
           </xsl:if>
-          <xsl:apply-templates select="$did/unittitle" />
+          <xsl:apply-templates select="did/unittitle" />
           <xsl:call-template name="c0x_children"/>
         </div>
       </xsl:when>
-      <xsl:when test="$did/daogrp">
+      <xsl:when test="did/daogrp">
         <div class="c0x_description">
           <span class="c0x_label">Description</span>
           <xsl:text> </xsl:text>
-          <xsl:apply-templates select="$did/daogrp"/>
+          <xsl:apply-templates select="did/daogrp"/>
         </div>
       </xsl:when>
     </xsl:choose>
@@ -190,12 +173,11 @@ Changes:
   
   <!-- c0x_date -->
   <xsl:template name="c0x_dates">
-    <xsl:param name="unitdates"/>
-    <xsl:if test="$unitdates">
+    <xsl:if test="did/unitdate">
       <div class="c0x_date">
         <span class="c0x_label">Dates</span>
         <xsl:text> </xsl:text>
-        <xsl:for-each select="$unitdates">
+        <xsl:for-each select="did/unitdate">
           <xsl:value-of select="."/>
           <!-- place a semicolon and a space between dates -->
           <xsl:if test="not(position() = last())">
