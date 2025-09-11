@@ -360,7 +360,7 @@ ul.display_table li.gray {
 }
 
 .c0x_description .c0x_label {
-  display: none;
+  font-weight: normal;
 }
 
 
