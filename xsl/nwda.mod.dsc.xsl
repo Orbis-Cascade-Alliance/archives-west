@@ -138,7 +138,7 @@ Changes:
     <xsl:choose>
       <xsl:when test="local-name(.)='c01'">
         <xsl:choose>
-          <xsl:when test="did/container or $did/unitdate">
+          <xsl:when test="did/container or did/unitdate">
             <div class="c0x_description">
               <span class="c0x_label">Description</span>
               <xsl:apply-templates select="did" />
