@@ -106,6 +106,11 @@ Changes:
           </xsl:when>
           <!-- if current c0x has container, print details -->
           <xsl:otherwise>
+            <xsl:if test="local-name(.)='c01' or local-name(.)='c02'">
+              <xsl:attribute name="id">
+                <xsl:value-of select="generate-id(.)"/>
+              </xsl:attribute>
+            </xsl:if>
             <!-- unittitle or daogrp -->
             <xsl:call-template name="c0x_description"/>
             <!-- Containers -->
@@ -181,47 +186,63 @@ Changes:
         </xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
-    <xsl:choose>
+    <xsl:call-template name="c0x_heading_text"/>
+  </xsl:template>
+  
+  <xsl:template name="c0x_heading_text">
+  <xsl:choose>
       <!-- if unittitle -->
       <xsl:when test="did/unittitle">
         <xsl:if test="string(did/unitid)">
           <xsl:if test="did/unitid/@label">
             <xsl:value-of select="did/unitid/@label"/>
-            <xsl:text>&#160;</xsl:text>
-            <xsl:if test="did/unitid/@type='counter' or did/unitid/@type='counternumber'"> Cassette Counter&#160; </xsl:if>
+            <xsl:text> </xsl:text>
+            <xsl:if test="did/unitid/@type='counter' or did/unitid/@type='counternumber'">Cassette Counter </xsl:if>
           </xsl:if>
-          <xsl:if test="did/unitid[@type='accession']"> Accession No.&#160; </xsl:if>
-          <xsl:value-of select="did/unitid"/>: <xsl:text>&#160;</xsl:text>
+          <xsl:if test="did/unitid[@type='accession']">Accession No. </xsl:if>
+          <xsl:value-of select="did/unitid"/>: <xsl:text> </xsl:text>
         </xsl:if>
-        <xsl:apply-templates select="did/unittitle"/>
-        <xsl:if test="string(did/unitdate) and string(did/unittitle)">,&#160;</xsl:if>
+        <xsl:value-of select="string(did/unittitle)"/>
         <xsl:if test="string(did/unitdate)">
+          <xsl:text>, </xsl:text>
           <xsl:for-each select="did/unitdate">
             <xsl:choose>
-              <xsl:when test="@type='bulk'"> &#160;(bulk <xsl:apply-templates/>) </xsl:when>
+              <xsl:when test="@type='bulk'"> (bulk <xsl:apply-templates/>)</xsl:when>
               <xsl:otherwise>
-                <xsl:apply-templates/>
-                <xsl:if test="not(position()=last())">,&#160;</xsl:if>
+                <xsl:value-of select="string(.)"/>
+                <xsl:if test="not(position()=last())">, </xsl:if>
               </xsl:otherwise>
             </xsl:choose>
           </xsl:for-each>
         </xsl:if>
       </xsl:when>
       <!-- if unitid only -->
-      <xsl:when test="did/unitid/text() and not(did/unittitle)">
+      <xsl:when test="did/unitid/text()">
         <xsl:if test="did/unitid/@label">
           <xsl:value-of select="did/unitid/@label"/>
-          <xsl:text>&#160;</xsl:text>
-          <xsl:if test="did/unitid/@type='counter' or did/unitid/@type='counternumber'"> Cassette Counter&#160; </xsl:if>
+          <xsl:text> </xsl:text>
+          <xsl:if test="did/unitid/@type='counter' or did/unitid/@type='counternumber'">Cassette Counter </xsl:if>
         </xsl:if>
-        <xsl:if test="did/unitid[@type='accession']"> Accession No.&#160; </xsl:if>
+        <xsl:if test="did/unitid[@type='accession']">Accession No. </xsl:if>
         <xsl:value-of select="did/unitid"/>
       </xsl:when>
       <!-- if date only -->
-      <xsl:when test="did/unitdate/text() and not(did/unittitle)">
+      <xsl:when test="did/unitdate/text()">
         <xsl:value-of select="did/unitdate"/>
       </xsl:when>
-      <xsl:otherwise>Subordinate Component # <xsl:value-of select="count(preceding-sibling)+1"/>
+      <!-- if container only -->
+      <xsl:when test="did/container/text()">
+        <xsl:for-each select="did/container">
+          <xsl:call-template name="regularize_container">
+            <xsl:with-param name="current_val" select="@type"/>
+          </xsl:call-template>
+          <xsl:text> </xsl:text>
+          <xsl:value-of select="."/>
+          <xsl:if test="position()!=last()">, </xsl:if>
+        </xsl:for-each>
+      </xsl:when>
+      <xsl:otherwise>
+        Untitled
       </xsl:otherwise>
     </xsl:choose>
   </xsl:template>
@@ -229,27 +250,25 @@ Changes:
   <!-- c0x_description -->
   <!-- print unittitle or daogrp -->
   <xsl:template name="c0x_description">
-    <xsl:choose>
-      <xsl:when test="did/unittitle">
-        <div class="c0x_description">
-          <span class="c0x_label">Description</span>
-          <xsl:text> </xsl:text>
+  <xsl:if test="did/unittitle or did/daogrp">
+    <div class="c0x_description">
+      <span class="c0x_label">Description</span>
+      <xsl:text> </xsl:text>
+      <xsl:choose>
+        <xsl:when test="did/unittitle">
           <xsl:if test="string(did/unitid)">
             <xsl:value-of select="did/unitid"/>
             <xsl:text>: </xsl:text>
           </xsl:if>
           <xsl:apply-templates select="did/unittitle" />
           <xsl:call-template name="c0x_children"/>
-        </div>
-      </xsl:when>
-      <xsl:when test="did/daogrp">
-        <div class="c0x_description">
-          <span class="c0x_label">Description</span>
-          <xsl:text> </xsl:text>
+        </xsl:when>
+        <xsl:when test="did/daogrp">
           <xsl:apply-templates select="did/daogrp"/>
-        </div>
-      </xsl:when>
-    </xsl:choose>
+        </xsl:when>
+      </xsl:choose>
+      </div>
+    </xsl:if>
   </xsl:template>
   
   <!-- c0x_date -->
@@ -480,7 +499,7 @@ Changes:
 
 	<xsl:template match="did">
     <!-- March 2015: Adding container display as per revision specification 7.1.2 -->
-    <xsl:if test="count(container) &gt; 0">
+    <xsl:if test="count(container) &gt; 0 and (not(parent::node()/child::node()/did) or unittitle or unitid or unitdate)">
       <p>
         <span class="c0x_label">Container(s)</span>
         <xsl:for-each select="container">

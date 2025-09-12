@@ -106,7 +106,19 @@ button.glyphicon {
 
 #toc > ul > li > ul {
   display: none;
-  margin-left: 2rem;
+  list-style: none;
+  margin-left: 3rem;
+  margin-top: 0.5rem;
+}
+
+#toc > ul > li > ul > li.expandable {
+  margin-left: -2rem;
+}
+
+#toc > ul > li > ul > li.expandable ul {
+  display: none;
+  list-style: none;
+  margin-left: 1rem;
   margin-top: 0.5rem;
 }
 

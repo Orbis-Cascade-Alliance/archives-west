@@ -231,43 +231,65 @@
 
 	</xsl:template>
 	<xsl:template name="dsc_links">
-		<!-- if there are c02's anywhere in the dsc, then display the c01 headings
-			if there are no c02's, all of the c01's are an in-depth type of dsc -->
-		<xsl:if test="//c02">
-			<ul class="list-unstyled" id="dsc-content">
-				<xsl:for-each select="//c01">
-					<li>
-						<a>
-							<xsl:attribute name="href">
-								<xsl:choose>
-									<xsl:when test="@id">
-										<xsl:value-of select="concat('#', @id)"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="concat('#', generate-id())"/>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:attribute>
-							<!-- what if no unitititle-->
-							<xsl:choose>
-								<xsl:when test="did/unittitle">
-									<xsl:apply-templates select="did/unittitle" mode="no-highlights"/>
-								</xsl:when>
-								<!-- 2004-07-14 carlsonm mod: select unitid no matter encodinganalog if no unittitle -->
-								<xsl:when test="did/unitid/text() and not(did/unittitle)">
-									<xsl:if test="did/unitid/@type='accession'"> Accession No.&#160; </xsl:if>
-									<xsl:value-of select="did/unitid"/>
-								</xsl:when>
-								<xsl:otherwise>
-									Subordinate Component # <xsl:value-of select="position()"/>
-								</xsl:otherwise>
-							</xsl:choose>
-							<!-- END what if no unitititle-->
-						</a>
-					</li>
-				</xsl:for-each>
-			</ul>
-		</xsl:if>
+    <ul class="list-unstyled" id="dsc-content">
+      <xsl:for-each select="dsc/c01">
+        <li>
+          <xsl:if test="c02">
+            <xsl:attribute name="class">expandable</xsl:attribute>
+            <button type="button" class="glyphicon glyphicon-triangle-right" id="toggle-admin" aria-controls="admin-content" aria-expanded="false">
+              <xsl:attribute name="title">
+                <xsl:text>Open contents of </xsl:text>
+                <xsl:call-template name="c0x_heading_text" />
+              </xsl:attribute>
+              <xsl:attribute name="aria-controls">
+                <xsl:text>toc_</xsl:text>
+                <xsl:value-of select="generate-id(.)"/>
+              </xsl:attribute>
+            </button>
+          </xsl:if>
+          <a>
+            <xsl:attribute name="href">
+              <xsl:text>#</xsl:text>
+              <xsl:choose>
+                <xsl:when test="@id">
+                  <xsl:value-of select="@id"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="generate-id(.)"/>
+                </xsl:otherwise>
+              </xsl:choose>
+            </xsl:attribute>
+            <xsl:call-template name="c0x_heading_text" />
+          </a>
+          <xsl:if test="c02">
+            <ul>
+            <xsl:attribute name="id">
+              <xsl:text>toc_</xsl:text>
+              <xsl:value-of select="generate-id(.)"/>
+            </xsl:attribute>
+            <xsl:for-each select="c02">
+              <li>
+                <a>
+                  <xsl:attribute name="href">
+                    <xsl:text>#</xsl:text>
+                    <xsl:choose>
+                      <xsl:when test="@id">
+                        <xsl:value-of select="@id"/>
+                      </xsl:when>
+                      <xsl:otherwise>
+                        <xsl:value-of select="generate-id(.)"/>
+                      </xsl:otherwise>
+                    </xsl:choose>
+                  </xsl:attribute>
+                  <xsl:call-template name="c0x_heading_text" />
+                </a>
+              </li>
+            </xsl:for-each>
+            </ul>
+          </xsl:if>
+        </li>
+      </xsl:for-each>
+    </ul>
 	</xsl:template>
 	<!-- ********************* </TABLE OF CONTENTS> *********************** -->
 </xsl:stylesheet>
