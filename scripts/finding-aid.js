@@ -2,7 +2,7 @@ $(document).ready(function() {
   
   // Alerts
   var ark = window.location.href.match(/80444\/xv[0-9]{5,6}/);
-  if (ark.length == 1) {
+  if (ark != null && ark.length == 1) {
     $.get('/alert.php', {type: 'finding_aid', ark: ark[0]}, function(result) {
       $('#main-content').prepend(result);
     });
@@ -36,11 +36,11 @@ $(document).ready(function() {
   // Add links to controlaccess headings
   $('#caID ul.ca_list').each(function() {
     var facet;
-    if ($(this).prev('h4').length > 0) {
-      var heading_el = $(this).prev('h4');
+    if ($(this).prev('h3').length > 0) {
+      var heading_el = $(this).prev('h3');
     }
-    else if ($(this).prev('h5').length > 0) {
-      var heading_el = $(this).prev('h5');
+    else if ($(this).prev('h4').length > 0) {
+      var heading_el = $(this).prev('h4');
     }
     var heading = heading_el.text().trim();
     if (heading == 'Subject Terms') {

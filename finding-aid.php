@@ -13,13 +13,16 @@ if (isset($_GET['ark']) && !empty($_GET['ark'])) {
     if ($cache = $finding_aid->get_cache()) {
       echo $cache;
     }
+    else if (!$finding_aid->is_active()) {
+      header('Location: ' . AW_DOMAIN . '/deleted.php?ark=' . $ark);
+    }
     else {
-      header('Location: /processing.php');
+      header('Location: ' . AW_DOMAIN . '/errors/processing.html');
     }
   }
   catch (Exception $e) {
     log_error($e->getMessage());
-    header('Location: /404.php');
+    header('Location: ' . AW_DOMAIN . '/errors/404.html');
   }
 }
 else {

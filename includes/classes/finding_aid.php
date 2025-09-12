@@ -130,12 +130,40 @@ class AW_Finding_Aid {
   }
   
   // Delete the existing cache
-  function delete_cache() {
+  function delete_cache($replace = 0) {
     if (file_exists($this->cache_path)) {
       unlink($this->cache_path);
       if ($mysqli = connect()) {
         $mysqli->query('UPDATE arks SET cached=0 WHERE ark="' . $this->get_ark() . '"');
         $mysqli->close();
+      }
+    }
+    // Publish deletion message to AWS S3
+    $bucket = S3_CACHE;
+    if (!empty($bucket)) {
+      $ark = $this->get_ark();
+      ob_start();
+      if ($replace == 1) {
+        include(AW_HTML . '/errors/processing.html');
+      }
+      else {
+        include(AW_HTML . '/deleted.php');
+      }
+      $html = ob_get_contents();
+      ob_end_clean();
+      try {
+        $cache_file = $this->get_qualifier() . '.html';
+        $s3 = new AW_S3($bucket['name'], $bucket['region'], $bucket['class'], $bucket['path']);
+        $s3->put_contents($cache_file, $html, 'text/html');
+        // Clear CloudFront cache
+        $distribution = AW_CLOUDFRONT;
+        if (!empty($distribution)) {
+          $cf = new AW_CloudFront($distribution['id'], $distribution['region']);
+          $cf->create_invalidation(array('/' . $bucket['path'] . $cache_file));
+        }
+      }
+      catch (Exception $e) {
+        log_error($e->getMessage());
       }
     }
   }

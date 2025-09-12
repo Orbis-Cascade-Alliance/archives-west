@@ -86,6 +86,7 @@ else {
   <title>Preview - <?php echo SITE_TITLE; ?></title>
   <link rel="stylesheet" href="<?php echo AW_DOMAIN; ?>/layout/finding-aid.css" />
   <link rel="stylesheet" href="<?php echo AW_DOMAIN; ?>/layout/finding-aid-print.css" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
   <script src="<?php echo AW_DOMAIN; ?>/scripts/jquery.mark.min.js"></script>
   <script src="<?php echo AW_DOMAIN; ?>/scripts/finding-aid.js"></script>
 <?php

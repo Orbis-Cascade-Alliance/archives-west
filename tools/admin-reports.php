@@ -79,6 +79,7 @@ if ($user->is_admin()) {
   echo '<h2>Recent Updates</h2>';
   $update_query = 'SELECT updates.ark as ARK,
       updates.date as Date,
+      updates.action as Action,
       users.username as Username,
       repos.name as Repository,
       updates.complete as Complete

@@ -35,6 +35,22 @@ catch (Exception $e) {
 }
 
 if ($repo) {
+  
+  // Delete finding aids from AWS S3
+  $bucket = S3_CACHE;
+  if (!empty($bucket)) {
+    $files = array();
+    if ($mysqli = connect()) {
+      $ark_result = $mysqli->query('SELECT ark FROM arks WHERE repo_id=' . $repo_id);
+      while ($row = $result->fetch_row()) {
+        $files[] = str_replace('80444/', '', $row[0]) . '.html';
+      }
+      $mysqli->close();
+      $s3 = new AW_S3($bucket['name'], $bucket['region'], $bucket['class'], $bucket['path']);
+      $s3->delete_files($files);
+    }
+  }
+  
   // Delete the file directories in eads, cache, qr, and tools/jobs
   $path = AW_REPOS . '/' . $repo->get_folder();
   if (is_dir($path)) {

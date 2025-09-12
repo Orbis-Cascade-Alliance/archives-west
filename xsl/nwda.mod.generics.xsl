@@ -169,9 +169,9 @@ Major or significant revision history:
 
 	<!--ultra generics-->
 	<xsl:template match="emph[not(@render)]">
-		<u>
+		<i>
 			<xsl:apply-templates/>
-		</u>
+		</i>
 	</xsl:template>
 
 	<xsl:template match="lb">
