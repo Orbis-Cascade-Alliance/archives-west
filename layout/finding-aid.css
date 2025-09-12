@@ -277,6 +277,7 @@ input:checked + .slider:before {
   transform: translateX(26px);
 }
 
+#dscdiv-content h3,
 #dscdiv-content h4,
 #dscdiv-content h5,
 #dscdiv-content h6,

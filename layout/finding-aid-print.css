@@ -56,4 +56,35 @@
     background: transparent;
   }
   
+  /* Simplify card display */
+  li.white,
+  li.gray {
+    background: transparent;
+  }
+
+  #dscdiv-content ul {
+    list-style: none;
+  }
+
+  #dscdiv-content ul ul { 
+    list-style-type: disc;
+  }
+
+  #dscdiv-content ul ul ul {
+    list-style-type: circle;
+  }
+
+  #dscdiv-content li {
+    border: none;
+    background: transparent;
+    padding: 0;
+    margin: 0;
+  }
+
+  .dsc-footer {
+    display: none;
+  }
+
+  
+  
 }
