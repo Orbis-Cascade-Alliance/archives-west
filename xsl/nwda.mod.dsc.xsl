@@ -129,38 +129,11 @@ Changes:
                 <div class="dsc-parents">
                   <xsl:text>Location: </xsl:text>
                   <xsl:for-each select="ancestor::c01">
-                    <a>
-                      <xsl:attribute name="href">
-                        <xsl:choose>
-                          <xsl:when test="@id">
-                            <xsl:value-of select="concat('#', @id)"/>
-                          </xsl:when>
-                          <xsl:otherwise>
-                            <xsl:value-of select="concat('#', generate-id())"/>
-                          </xsl:otherwise>
-                        </xsl:choose>
-                      </xsl:attribute>
-                      <xsl:choose>
-                        <xsl:when test="string(did/unitid)">
-                          <xsl:value-of select="did/unitid"/>
-                        </xsl:when>
-                        <xsl:otherwise>
-                          <xsl:value-of select="did/unittitle"/>
-                        </xsl:otherwise>
-                      </xsl:choose>
-                      <!-- END what if no unitititle-->
-                    </a>
+                    <xsl:call-template name="c0x_heading_link"/>
                   </xsl:for-each>
                   <xsl:for-each select="ancestor::c02|ancestor::c03|ancestor::c04|ancestor::c05|ancestor::c06|ancestor::c07|ancestor::c08|ancestor::c09|ancestor::c10|ancestor::c11">
                     <xsl:text> / </xsl:text>      
-                    <xsl:choose>
-                      <xsl:when test="string(did/unitid)">
-                        <xsl:value-of select="did/unitid"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:value-of select="did/unittitle"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
+                    <xsl:call-template name="c0x_heading_link"/>
                   </xsl:for-each>
                 </div>
               </xsl:if>
@@ -245,6 +218,23 @@ Changes:
         Untitled
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template name="c0x_heading_link">
+    <a>
+      <xsl:attribute name="href">
+        <xsl:text>#</xsl:text>
+        <xsl:choose>
+          <xsl:when test="@id">
+            <xsl:value-of select="@id"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="generate-id(.)"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+      <xsl:call-template name="c0x_heading_text" />
+    </a>
   </xsl:template>
   
   <!-- c0x_description -->
