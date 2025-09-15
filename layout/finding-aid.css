@@ -373,7 +373,7 @@ ul.display_table li.gray {
 }
 
 .c0x_description .c0x_label {
-  font-weight: normal;
+  display: none;
 }
 
 
