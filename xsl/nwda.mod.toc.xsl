@@ -247,20 +247,7 @@
               </xsl:attribute>
             </button>
           </xsl:if>
-          <a>
-            <xsl:attribute name="href">
-              <xsl:text>#</xsl:text>
-              <xsl:choose>
-                <xsl:when test="@id">
-                  <xsl:value-of select="@id"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="generate-id(.)"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:attribute>
-            <xsl:call-template name="c0x_heading_text" />
-          </a>
+          <xsl:call-template name="c0x_heading_link"/>
           <xsl:if test="c02">
             <ul>
             <xsl:attribute name="id">
@@ -269,20 +256,7 @@
             </xsl:attribute>
             <xsl:for-each select="c02">
               <li>
-                <a>
-                  <xsl:attribute name="href">
-                    <xsl:text>#</xsl:text>
-                    <xsl:choose>
-                      <xsl:when test="@id">
-                        <xsl:value-of select="@id"/>
-                      </xsl:when>
-                      <xsl:otherwise>
-                        <xsl:value-of select="generate-id(.)"/>
-                      </xsl:otherwise>
-                    </xsl:choose>
-                  </xsl:attribute>
-                  <xsl:call-template name="c0x_heading_text" />
-                </a>
+                <xsl:call-template name="c0x_heading_link"/>
               </li>
             </xsl:for-each>
             </ul>

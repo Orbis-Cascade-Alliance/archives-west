@@ -389,8 +389,53 @@ table.dsc_table .c0x_description {
   font-weight: normal;
 }
 
-table.dsc_table .c0x_label {
+table.dsc_table .c0x_label,
+table.dsc_table .dsc-footer {
   display: none;
+}
+
+.dsc-footer {
+  display: flex;
+}
+
+.dsc-parents {
+  flex: 1 1 auto;
+}
+
+.dsc-actions {
+  flex: 0 0 auto;
+  text-align: right;
+}
+
+.dsc-actions button {
+  height: 24px;
+  width: 24px;
+  background-position: center center;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.dsc-actions button:focus {
+  outline: 3px solid #005DA8;
+  outline-offset: 2px;
+}
+
+.dsc-actions .btn-citation {
+  background-image: url('images/info.png');
+}
+
+#dialog-actions ul {
+  padding: .5rem;
+  margin: 0 0 0 1rem;
+}
+
+dl.citation {
+  display: block;
+}
+
+dl.citation dt {
+  text-align:left;
 }
 
 /* Footer */
@@ -406,6 +451,14 @@ table.dsc_table .c0x_label {
   display: none;
 }
 
+.loading {
+  display: block;
+  height: 200px;
+  background: url('images/loading.gif');
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 /* QR Dialog */
 
 #qr-loading {
@@ -419,6 +472,13 @@ table.dsc_table .c0x_label {
 #dialog-qr {
   text-align: center;
   padding: 1rem;
+}
+
+.ui-dialog {
+  position: fixed !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important; /* Center the dialog */
 }
 
 /* Images */

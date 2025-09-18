@@ -127,6 +127,25 @@ Changes:
                 <xsl:call-template name="c0x_dates"/>
               </xsl:when>
             </xsl:choose>
+            <div class="dsc-footer">
+              <!-- Parents -->
+              <xsl:if test="local-name(.)!='c01'">
+                <div class="dsc-parents">
+                  <xsl:text>Location: </xsl:text>
+                  <xsl:for-each select="ancestor::c01">
+                    <xsl:call-template name="c0x_heading_link"/>
+                  </xsl:for-each>
+                  <xsl:for-each select="ancestor::c02|ancestor::c03|ancestor::c04|ancestor::c05|ancestor::c06|ancestor::c07|ancestor::c08|ancestor::c09|ancestor::c10|ancestor::c11">
+                    <xsl:text> / </xsl:text>      
+                    <xsl:call-template name="c0x_heading_link"/>
+                  </xsl:for-each>
+                </div>
+              </xsl:if>
+              <!-- Record actions -->
+              <div class="dsc-actions">
+                <button class="btn-citation" title="Show Citation Information"></button>
+              </div>
+            </div>
           </xsl:otherwise>
         </xsl:choose>
       </li>
@@ -217,6 +236,23 @@ Changes:
         Untitled
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template name="c0x_heading_link">
+    <a>
+      <xsl:attribute name="href">
+        <xsl:text>#</xsl:text>
+        <xsl:choose>
+          <xsl:when test="@id">
+            <xsl:value-of select="@id"/>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="generate-id(.)"/>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:attribute>
+      <xsl:call-template name="c0x_heading_text" />
+    </a>
   </xsl:template>
   
   <!-- c0x_description -->
