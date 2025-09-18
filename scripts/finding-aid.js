@@ -371,7 +371,7 @@ function handle_citation(e) {
 
 function show_citation(item) {
   $('#dialog-actions').dialog('open').html('<div class="loading"></div>');
-  $.get('citation.php', {
+  $.get('/citation.php', {
     ark: get_ark()
   }, function (result) {
     json = JSON.parse(result);
