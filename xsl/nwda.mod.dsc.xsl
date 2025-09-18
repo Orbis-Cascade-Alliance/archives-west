@@ -117,16 +117,14 @@ Changes:
             </xsl:if>
             <!-- unittitle or daogrp -->
             <xsl:call-template name="c0x_description"/>
+            <!-- Dates -->
+            <xsl:if test="did/unitdate">
+              <xsl:call-template name="c0x_dates"/>
+            </xsl:if>
             <!-- Containers -->
             <xsl:if test="did/container">
               <xsl:apply-templates select="did/container" />
             </xsl:if>
-            <!-- Dates -->
-            <xsl:choose>
-              <xsl:when test="did/unitdate">
-                <xsl:call-template name="c0x_dates"/>
-              </xsl:when>
-            </xsl:choose>
             <div class="dsc-footer">
               <!-- Parents -->
               <xsl:if test="local-name(.)!='c01'">

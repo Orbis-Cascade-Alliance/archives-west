@@ -330,13 +330,13 @@ function dsc_view(type) {
         if (desc > 0) {
           new_li += '<div class="c0x_description">' + $(this).children('.c0x_description').eq(0).html() + '</div>';
         }
+        if (date > 0) {
+          new_li += '<div class="c0x_date">' + $(this).children('.c0x_date').eq(0).html() + '</div>';
+        }
         if (cont > 0) {
           $(this).children('.c0x_container').each(function() {
             new_li += '<div class="c0x_container">' + $(this).html() + '</div>';
           });
-        }
-        if (date > 0) {
-          new_li += '<div class="c0x_date">' + $(this).children('.c0x_date').eq(0).html() + '</div>';
         }
         new_li += '<div class="dsc-footer">' + footer + '</div>';
         new_li += '</li>';
