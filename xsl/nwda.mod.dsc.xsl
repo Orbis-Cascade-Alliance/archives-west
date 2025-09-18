@@ -101,6 +101,10 @@ Changes:
             </xsl:choose>
             <xsl:apply-templates select="did"/>
             <ul>
+              <xsl:attribute name="id">
+                <xsl:text>dscdiv-</xsl:text>
+                <xsl:value-of select="generate-id(.)"/>
+              </xsl:attribute>
               <xsl:apply-templates select="c01|c02|c03|c04|c05|c06|c07|c08|c09|c10|c11|c12" />
             </ul>
           </xsl:when>
@@ -141,6 +145,20 @@ Changes:
       </xsl:choose>
     </xsl:attribute>
     <xsl:call-template name="c0x_heading_text"/>
+    <button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-dsc-" aria-controls="dscdiv-content" aria-expanded="true">
+      <xsl:attribute name="id">
+        <xsl:text>toggle-dsc-</xsl:text>
+        <xsl:value-of select="generate-id(.)"/>
+      </xsl:attribute>
+      <xsl:attribute name="aria-controls">
+        <xsl:text>dscdiv-</xsl:text>
+        <xsl:value-of select="generate-id(.)"/>
+      </xsl:attribute>
+      <xsl:attribute name="title">
+        <xsl:text>Close </xsl:text>
+        <xsl:call-template name="c0x_heading_text"/>
+      </xsl:attribute>
+    </button>
   </xsl:template>
   
   <xsl:template name="c0x_heading_text">
