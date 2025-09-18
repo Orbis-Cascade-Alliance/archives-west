@@ -376,11 +376,6 @@ ul.display_table li.gray {
   display: none;
 }
 
-
-.c0x_label::after {
-  content: ': ';
-}
-
 table.dsc_table {
   margin-bottom: 1rem;
 }
@@ -403,7 +398,7 @@ table.dsc_table .dsc-footer {
 }
 
 .dsc-actions {
-  flex: 0 0 auto;
+  flex: 1 0 auto;
   text-align: right;
 }
 

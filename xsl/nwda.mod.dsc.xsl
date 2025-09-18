@@ -123,7 +123,7 @@ Changes:
             </xsl:if>
             <!-- Containers -->
             <xsl:if test="did/container">
-              <xsl:apply-templates select="did/container" />
+              <xsl:call-template name="c0x_containers" />
             </xsl:if>
             <div class="dsc-footer">
               <!-- Parents -->
@@ -189,16 +189,16 @@ Changes:
             <xsl:if test="did/unitid/@type='counter' or did/unitid/@type='counternumber'">Cassette Counter </xsl:if>
           </xsl:if>
           <xsl:if test="did/unitid[@type='accession']">Accession No. </xsl:if>
-          <xsl:value-of select="did/unitid"/>: <xsl:text> </xsl:text>
+          <xsl:value-of select="normalize-space(did/unitid)"/>:<xsl:text> </xsl:text>
         </xsl:if>
-        <xsl:value-of select="string(did/unittitle)"/>
+        <xsl:value-of select="normalize-space(did/unittitle)"/>
         <xsl:if test="string(did/unitdate)">
           <xsl:text>, </xsl:text>
           <xsl:for-each select="did/unitdate">
             <xsl:choose>
               <xsl:when test="@type='bulk'"> (bulk <xsl:apply-templates/>)</xsl:when>
               <xsl:otherwise>
-                <xsl:value-of select="string(.)"/>
+                <xsl:value-of select="normalize-space(.)"/>
                 <xsl:if test="not(position()=last())">, </xsl:if>
               </xsl:otherwise>
             </xsl:choose>
@@ -213,22 +213,17 @@ Changes:
           <xsl:if test="did/unitid/@type='counter' or did/unitid/@type='counternumber'">Cassette Counter </xsl:if>
         </xsl:if>
         <xsl:if test="did/unitid[@type='accession']">Accession No. </xsl:if>
-        <xsl:value-of select="did/unitid"/>
+        <xsl:value-of select="normalize-space(did/unitid)"/>
       </xsl:when>
       <!-- if date only -->
       <xsl:when test="did/unitdate/text()">
-        <xsl:value-of select="did/unitdate"/>
+        <xsl:value-of select="normalize-space(did/unitdate)"/>
       </xsl:when>
       <!-- if container only -->
       <xsl:when test="did/container/text()">
-        <xsl:for-each select="did/container">
-          <xsl:call-template name="regularize_container">
-            <xsl:with-param name="current_val" select="@type"/>
-          </xsl:call-template>
-          <xsl:text> </xsl:text>
-          <xsl:value-of select="."/>
-          <xsl:if test="position()!=last()">, </xsl:if>
-        </xsl:for-each>
+        <xsl:call-template name="c0x_container_text">
+          <xsl:with-param name="containers" select="did/container"/>
+        </xsl:call-template>
       </xsl:when>
       <xsl:otherwise>
         Untitled
@@ -258,7 +253,7 @@ Changes:
   <xsl:template name="c0x_description">
   <xsl:if test="did/unittitle or did/daogrp">
     <div class="c0x_description">
-      <span class="c0x_label">Description</span>
+      <span class="c0x_label">Description: </span>
       <xsl:text> </xsl:text>
       <xsl:choose>
         <xsl:when test="did/unittitle">
@@ -281,7 +276,7 @@ Changes:
   <xsl:template name="c0x_dates">
     <xsl:if test="did/unitdate">
       <div class="c0x_date">
-        <span class="c0x_label">Dates</span>
+        <span class="c0x_label">Dates: </span>
         <xsl:text> </xsl:text>
         <xsl:for-each select="did/unitdate">
           <xsl:value-of select="."/>
@@ -310,26 +305,29 @@ Changes:
 	<!-- ********************* END c0xs *************************** -->
 
 	<!-- *** CONTAINERS ** -->
-  <xsl:template match="container">
-    <div class="c0x_container">
-      <span class="c0x_label">
-        <xsl:call-template name="regularize_container">
-          <xsl:with-param name="current_val" select="@type"/>
-        </xsl:call-template>
-      </span>
-      <xsl:text> </xsl:text>
-      <xsl:value-of select="." />
+  <xsl:template name="c0x_containers">
+    <div class="c0x_containers">
+      <span class="c0x_label">Container: </span>
+      <xsl:call-template name="c0x_container_text">
+        <xsl:with-param name="containers" select="did/container"/>
+      </xsl:call-template>
     </div>
   </xsl:template>
   
-  <!-- compare container types and print "false" if they don't match -->
-  <xsl:template name="compare_containers">
-    <xsl:param name="previous_containers"/>
-    <xsl:param name="container_pos"/>
-    <xsl:param name="current_type"/>
-    <xsl:if test="$previous_containers[$container_pos]/@type != $current_type">
-      <xsl:text>false</xsl:text>
-    </xsl:if>
+  <xsl:template name="c0x_container_text">
+    <xsl:param name="containers"/>
+    <xsl:for-each select="$containers">
+      <span class="c0x_container">
+        <span class="c0x_label">
+          <xsl:call-template name="regularize_container">
+            <xsl:with-param name="current_val" select="@type"/>
+          </xsl:call-template>
+        </span>
+        <xsl:text> </xsl:text>
+        <xsl:value-of select="." />
+      </span>
+      <xsl:if test="position()!=last()">, </xsl:if>
+    </xsl:for-each>
   </xsl:template>
   
 
@@ -507,21 +505,16 @@ Changes:
     <!-- March 2015: Adding container display as per revision specification 7.1.2 -->
     <xsl:if test="count(container) &gt; 0 and (not(parent::node()/child::node()/did) or unittitle or unitid or unitdate)">
       <p>
-        <span class="c0x_label">Container(s)</span>
-        <xsl:for-each select="container">
-          <xsl:call-template name="regularize_container">
-            <xsl:with-param name="current_val" select="@type"/>
-          </xsl:call-template>
-          <xsl:text> </xsl:text>
-          <xsl:value-of select="."/>
-          <xsl:if test="position()!=last()">, </xsl:if>
-        </xsl:for-each>
+        <span class="c0x_label">Container: </span>
+        <xsl:call-template name="c0x_container_text">
+          <xsl:with-param name="containers" select="container"/>
+        </xsl:call-template>
       </p>
     </xsl:if>
     <!-- May 2015: Adding abstract, which had not previously been displayed -->
     <xsl:if test="count(abstract) &gt; 0">
       <p>
-        <span class="c0x_label">Abstract</span>
+        <span class="c0x_label">Abstract: </span>
         <xsl:apply-templates select="abstract"/>
       </p>
     </xsl:if>

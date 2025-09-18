@@ -94,16 +94,18 @@ $(document).ready(function() {
   });
   
   // Dialog for item actions
+  var window_width = $(window).width();
+  var window_height = $(window).height();
+  var max_width = window_width < 600 ? window_width * 0.85 : 600;
+  var max_height = window_height * 0.9;
   $('#dialog-actions').dialog({
     autoOpen: false,
-    width: 600,
+    width: max_width,
+    height: max_height,
+    title: "Citation Information",
     draggable: false
   });
-  $('.btn-citation').click(function(e) {
-    e.preventDefault();
-    show_citation($(this).parent('div').parent('div').parent('li'));
-    return false;
-  });
+  $('.btn-citation').click(handle_citation);
   
   // Add classes for DSC display as list or table
   dsc_classes();
@@ -187,18 +189,11 @@ function dsc_classes() {
 
 // Compare the container types between sequential list items
 function compare_rows(prev_li, current_li) {
-  var prev_labels = $(prev_li).children('div').children('.c0x_label');
-  var current_labels = $(current_li).children('div').children('.c0x_label');
-  var current_dates = $(current_li).children('.c0x_date').length;
+  var prev_labels = $(prev_li).children('div:not(".c0x_date")').find('.c0x_label');
+  var current_labels = $(current_li).children('div:not(".c0x_date")').find('.c0x_label');
   
   // Check if this is the first item in a list
   if ($(prev_labels).length != 0) {
-    // If different lengths, check if the difference is a missing date
-    if ($(prev_labels).length != $(current_labels).length) {
-      if ($(current_labels).length != $(prev_li).children('div:not(.c0x_date)').length && $(current_li).children('div:not(.c0x_date)').length != $(prev_labels).length) {
-        return false;
-      }
-    }
     // Compare text of labels
     for (var c = 0; c < $(prev_labels).length; c++) {
       if (typeof $(current_labels).eq(c)[0] != 'undefined') {
@@ -206,8 +201,11 @@ function compare_rows(prev_li, current_li) {
           return false;
         }
       }
+      else {
+        return false;
+      }
     }
-    // If all labels except for missing dates are the same, don't add row
+    // If all labels except for dates are the same, don't mark for new table
     return true;
   }
   else {
@@ -227,6 +225,9 @@ function dsc_toggle() {
     $('#dsc-toggle').attr('aria-checked','true');
   }
   dsc_view(type);
+  gtag('event', 'toggle_view', {
+    'type': type
+  });
 }
 
 // Convert list to table or vice versa
@@ -256,7 +257,7 @@ function dsc_view(type) {
       
       // Headers
       table += '<thead>';
-      $(this).children('li').eq(0).children('.c0x_container').each(function() {
+      $(this).children('li').eq(0).children('.c0x_containers').children('.c0x_container').each(function() {
         table += '<th>' + $(this).children('.c0x_label').text() + '</th>';
       });
       if ($(this).children('li').children('.c0x_description').length > 0) {
@@ -271,13 +272,17 @@ function dsc_view(type) {
       table += '<tbody>';
       $(this).children('li').each(function() {
         desc = $(this).children('.c0x_description').length;
-        cont = $(this).children('.c0x_container').length;
+        cont = $(this).children('.c0x_containers').length;
         date = $(this).children('.c0x_date').length;
         if (desc || cont || date) {
-          row = '<tr class="' + $(this).attr('class') + '">';
+          row = '<tr class="' + $(this).attr('class') + '"';
+          if ($(this).attr('id') != '' && $(this).attr('id') != 'undefined') {
+            row += ' id="' + $(this).attr('id') + '"';
+          }
+          row += '>';
           // Containers
           if (cont > 0) {
-            $(this).children('.c0x_container').each(function() {
+            $(this).children('.c0x_containers').children('.c0x_container').each(function() {
               row += '<td class="c0x_container">' + $(this).html() + '</td>';
             });
           }
@@ -326,7 +331,11 @@ function dsc_view(type) {
         date = $(this).children('.c0x_date').length;
         var footer = $(this).children('.c0x_description').children('.dsc-footer').eq(0).html();
         $(this).children('.c0x_description').children('.dsc-footer').remove();
-        new_li = '<li class="' + $(this).attr('class') + '">';
+        new_li = '<li class="' + $(this).attr('class') + '"';
+        if ($(this).attr('id') != '' && $(this).attr('id') != 'undefined') {
+          new_li += ' id="' + $(this).attr('id') + '"';
+        }
+        new_li += '>';
         if (desc > 0) {
           new_li += '<div class="c0x_description">' + $(this).children('.c0x_description').eq(0).html() + '</div>';
         }
@@ -334,13 +343,19 @@ function dsc_view(type) {
           new_li += '<div class="c0x_date">' + $(this).children('.c0x_date').eq(0).html() + '</div>';
         }
         if (cont > 0) {
+          new_li += '<div class="c0x_containers"><span class="c0x_label">Container: </span>';
           $(this).children('.c0x_container').each(function() {
-            new_li += '<div class="c0x_container">' + $(this).html() + '</div>';
+            new_li += '<span class="c0x_container">' + $(this).html() + '</span>';
+            if ($(this).index() != $(this).siblings('.c0x_container').length ) {
+              new_li += ', ';
+            }
           });
+          new_li += '</div>';
         }
         new_li += '<div class="dsc-footer">' + footer + '</div>';
         new_li += '</li>';
         $(parent_li).before(new_li);
+        $('.btn-citation').click(handle_citation);
       });
     }).parent('li').remove();
   }
@@ -348,8 +363,14 @@ function dsc_view(type) {
 
 /* Record actions */
 
+function handle_citation(e) {
+  e.preventDefault();
+  show_citation($(this).parent('div').parent('div').parent('li'));
+  return false;
+}
+
 function show_citation(item) {
-  $('#dialog-actions').dialog('option', 'title', 'Citation Information').dialog('open').html('<div class="loading"></div>');
+  $('#dialog-actions').dialog('open').html('<div class="loading"></div>');
   $.get('citation.php', {
     ark: get_ark()
   }, function (result) {
@@ -381,16 +402,15 @@ function show_citation(item) {
 function item_hierarchy(item) {
   var tree = new Array;
   // Clone item containers
-  var containers = item_containers(item);
-  if (containers.length > 0) {
-    tree.push(containers);
-  }
+  $(item).children('.c0x_containers').children('.c0x_container').each(function() {
+    tree.unshift($(this).html());
+  });
   // For each list item, add the heading text to an array
   var heading;
   $(item).parents('li').each(function() {
     heading = $(this).children('h3,h4,h5,h6').eq(0).text();
     if (typeof heading != undefined && heading.trim() != '') {
-      tree.push(heading);
+      tree.push(heading.trim());
     }
   });
   return tree;
@@ -398,14 +418,6 @@ function item_hierarchy(item) {
 
 function item_description(item) {
   return '<p>' + $(item).children('.c0x_description').clone().children(':not("a")').remove().end().text() + '</p>';
-}
-
-function item_containers(item) {
-  var containers = new Array;
-  $(item).children('.c0x_container').each(function() {
-    containers.push($(this).html());
-  });
-  return containers;
 }
 
 function item_dates(item) {
