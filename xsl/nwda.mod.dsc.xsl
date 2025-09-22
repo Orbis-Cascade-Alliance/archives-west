@@ -552,7 +552,7 @@ Changes:
 
 					<xsl:for-each select="daoloc">
 						<xsl:if test="@label = following::arc[1]/@to">
-							<img src="{@href}" class="daoimage" bolder="0">
+							<img src="{@href}" class="daoimage" bolder="0" loading="lazy">
 								<xsl:if test="@title">
 									<xsl:attribute name="title">
 										<xsl:value-of select="@title"/>
@@ -578,7 +578,7 @@ Changes:
 					<xsl:when test="arc[1][@show='embed' or @xlink:show='embed'] and arc[1][@actuate='onload' or @actuate='onLoad' or @xlink:actuate='onLoad']">
 						<xsl:for-each select="daoloc">
 							<xsl:if test="@label = following-sibling::arc[1]/@to">
-								<img src="{@href}" class="daoimage" border="0">
+								<img src="{@href}" class="daoimage" border="0" loading="lazy">
 									<xsl:if test="@title">
 										<xsl:attribute name="title">
 											<xsl:value-of select="@title"/>
