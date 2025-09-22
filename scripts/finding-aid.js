@@ -27,6 +27,7 @@ $(document).ready(function() {
       else {
         $('#' + content_id).hide();
       }
+      $(this).attr('aria-label', $(this).attr('title'));
     })
     .click(function(e) {
       e.preventDefault();
