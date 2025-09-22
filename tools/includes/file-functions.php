@@ -118,7 +118,8 @@ function convert_file($file_contents, $mainagencycode) {
       $to_remove = array(
         '//eadheader' => 'findaidstatus',
         '//archdesc//physdesc' => 'altrender',
-        '//archdesc//physdesc//extent' => 'altrender'
+        '//archdesc//physdesc//extent' => 'altrender',
+        '//archdesc/dsc//did/container' => 'altrender'
       );
       foreach ($to_remove as $query => $attribute) {
         foreach($xpath->query($query . '[@' . $attribute . ']') as $node) {
