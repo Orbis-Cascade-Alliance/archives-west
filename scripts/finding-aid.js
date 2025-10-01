@@ -181,7 +181,7 @@ function dsc_classes() {
     
     // If the current item the first of a series, or its previous sibling was a series,
     // or if the containers have changed, mark for a new table
-    if ((desc || cont || date) && ($(prev_li).length == 0 || $(prev_li).has('ul').length > 0 || comparison === false)) {
+    if ((desc || cont || date) && ($(prev_li).length == 0 || $(prev_li).children('ul').length > 0 || comparison === false)) {
      $(this).addClass('dsc_table');
     }
     
