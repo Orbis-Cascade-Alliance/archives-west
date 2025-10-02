@@ -249,9 +249,9 @@ Changes:
   </xsl:template>
   
   <!-- c0x_description -->
-  <!-- print unittitle or daogrp -->
+  <!-- print unittitle, daogrp, or other content outside did -->
   <xsl:template name="c0x_description">
-  <xsl:if test="did/unittitle or did/daogrp">
+  <xsl:if test="did/unittitle or did/daogrp or *[not(self::did)]">
     <div class="c0x_description">
       <span class="c0x_label">Description: </span>
       <xsl:text> </xsl:text>
@@ -267,6 +267,9 @@ Changes:
         <xsl:when test="did/daogrp">
           <xsl:apply-templates select="did/daogrp"/>
         </xsl:when>
+        <xsl:otherwise>
+          <xsl:call-template name="c0x_children"/>
+        </xsl:otherwise>
       </xsl:choose>
       </div>
     </xsl:if>

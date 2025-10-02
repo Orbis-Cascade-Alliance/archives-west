@@ -377,7 +377,8 @@ function show_citation(item) {
   }, function (result) {
     json = JSON.parse(result);
     var html = '<dl class="citation">';
-    if ($(item).children('.c0x_description').length > 0) {
+    var description = item_description(item);
+    if (description !== false) {
       html += '<dt>Item Description</dt><dd>' + item_description(item) + '</dd>';
     }
     var hierarchy = item_hierarchy(item);
@@ -418,7 +419,11 @@ function item_hierarchy(item) {
 }
 
 function item_description(item) {
-  return '<p>' + $(item).children('.c0x_description').clone().children(':not("a")').remove().end().text() + '</p>';
+  var desc = $(item).children('.c0x_description').clone().children(':not("a")').remove().end().text().trim();
+  if (desc != '') {
+    return '<p>' + desc + '</p>';
+  }
+  return false;
 }
 
 function item_dates(item) {
