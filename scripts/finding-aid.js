@@ -120,7 +120,7 @@ $(document).ready(function() {
 // Get ARK from URL
 function get_ark() {
   var ark = window.location.href.match(/80444\/xv[0-9]{5,6}/);
-  if (ark.length == 1) {
+  if (ark != null && ark.length == 1) {
     return ark[0];
   }
   return false;
