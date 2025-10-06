@@ -192,18 +192,7 @@ Changes:
           <xsl:value-of select="normalize-space(did/unitid)"/>:<xsl:text> </xsl:text>
         </xsl:if>
         <xsl:value-of select="normalize-space(did/unittitle)"/>
-        <xsl:if test="string(did/unitdate)">
-          <xsl:text>, </xsl:text>
-          <xsl:for-each select="did/unitdate">
-            <xsl:choose>
-              <xsl:when test="@type='bulk'"> (bulk <xsl:apply-templates/>)</xsl:when>
-              <xsl:otherwise>
-                <xsl:value-of select="normalize-space(.)"/>
-                <xsl:if test="not(position()=last())">, </xsl:if>
-              </xsl:otherwise>
-            </xsl:choose>
-          </xsl:for-each>
-        </xsl:if>
+        <xsl:call-template name="c0x_heading_date"/>
       </xsl:when>
       <!-- if unitid only -->
       <xsl:when test="did/unitid/text()">
@@ -214,10 +203,11 @@ Changes:
         </xsl:if>
         <xsl:if test="did/unitid[@type='accession']">Accession No. </xsl:if>
         <xsl:value-of select="normalize-space(did/unitid)"/>
+        <xsl:call-template name="c0x_heading_date"/>
       </xsl:when>
       <!-- if date only -->
       <xsl:when test="did/unitdate/text()">
-        <xsl:value-of select="normalize-space(did/unitdate)"/>
+        <xsl:call-template name="c0x_heading_date"/>
       </xsl:when>
       <!-- if container only -->
       <xsl:when test="did/container/text()">
@@ -229,6 +219,21 @@ Changes:
         Untitled
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template name="c0x_heading_date">
+    <xsl:if test="string(did/unitdate)">
+      <xsl:text>, </xsl:text>
+      <xsl:for-each select="did/unitdate">
+        <xsl:choose>
+          <xsl:when test="@type='bulk'"> (bulk <xsl:apply-templates/>)</xsl:when>
+          <xsl:otherwise>
+            <xsl:value-of select="normalize-space(.)"/>
+            <xsl:if test="not(position()=last())">, </xsl:if>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:for-each>
+    </xsl:if>
   </xsl:template>
   
   <xsl:template name="c0x_heading_link">
