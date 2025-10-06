@@ -193,25 +193,20 @@ function compare_rows(prev_li, current_li) {
   var prev_labels = $(prev_li).children('div:not(".c0x_date")').find('.c0x_label');
   var current_labels = $(current_li).children('div:not(".c0x_date")').find('.c0x_label');
   
-  // Check if this is the first item in a list
   if ($(prev_labels).length != 0) {
-    // Compare text of labels
-    for (var c = 0; c < $(prev_labels).length; c++) {
-      if (typeof $(current_labels).eq(c)[0] != 'undefined') {
+    // Compare number of labels
+    if ($(prev_labels).length == $(current_labels).length) {
+      // Compare text of labels
+      for (var c = 0; c < $(prev_labels).length; c++) {
         if ($(prev_labels).eq(c)[0].textContent.trim() != $(current_labels).eq(c)[0].textContent.trim()) {
           return false;
         }
       }
-      else {
-        return false;
-      }
+      // If all labels except for dates are the same, don't mark for new table
+      return true;
     }
-    // If all labels except for dates are the same, don't mark for new table
-    return true;
   }
-  else {
-    return false;
-  }
+  return false;
 }
 
 // Toggle between views
