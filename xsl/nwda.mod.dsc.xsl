@@ -161,7 +161,30 @@ Changes:
         </xsl:otherwise>
       </xsl:choose>
     </xsl:attribute>
-    <xsl:call-template name="c0x_heading_text"/>
+    <xsl:choose>
+      <xsl:when test="did/unittitle/extref">
+        <a>
+          <xsl:attribute name="href">
+            <xsl:choose>
+              <xsl:when test="did/unittitle/extref/@href">
+                <xsl:value-of select="did/unittitle/extref/@href"/>
+              </xsl:when>
+              <xsl:when test="did/unittitle/extref/@xlink:href">
+                <xsl:value-of select="did/unittitle/extref/@xlink:href"/>
+              </xsl:when>
+            </xsl:choose>
+          </xsl:attribute>
+          <xsl:attribute name="target">_blank</xsl:attribute>
+          <xsl:call-template name="c0x_heading_text" />
+        </a>
+      </xsl:when>
+      <xsl:when test="did/daogrp">
+        <xsl:apply-templates select="did/daogrp"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:call-template name="c0x_heading_text"/>
+      </xsl:otherwise>
+    </xsl:choose>
     <button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-dsc-" aria-controls="dscdiv-content" aria-expanded="true">
       <xsl:attribute name="id">
         <xsl:text>toggle-dsc-</xsl:text>
