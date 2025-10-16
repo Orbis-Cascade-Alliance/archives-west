@@ -61,9 +61,6 @@ Changes:
 
       <!-- start list item -->
       <li class="{name()}">
-        <xsl:for-each select="*[@id] | did/*[@id]">
-          <a id="{@id}"/>
-        </xsl:for-each>
         <xsl:choose>
           <!-- if next c0x child has did, print heading and start new list -->
           <xsl:when test="child::node()/did">
