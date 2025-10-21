@@ -23,4 +23,9 @@
     filter: invert(1);
   }
   
+  /* Remove margin on finding aid title */
+  h1 {
+    margin-left: 0;
+  }
+  
 }
