@@ -8,7 +8,7 @@
   /* Hide table of contents, downloads, glyphicons and return to top links */
   #toc,
   #downloads,
-  .backtotop,
+  a[href="#top"],
   .glyphicon {
     display: none;
   }
