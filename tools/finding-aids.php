@@ -199,9 +199,11 @@ if ($repo_id != 0) {
             }
           }
           echo '</td>
-          <td class="file">
-            <a href="' . AW_DOMAIN . '/ark:' . $ark . '/xml" target="_blank" title="View XML for ' . $ark_info['file'] . '">' . mb_strimwidth($ark_info['file'], 0, 30, "...") . '</a>
-          </td>
+          <td class="file">';
+          if ($ark_info['file'] != '') {
+            echo '<a href="' . AW_DOMAIN . '/ark:' . $ark . '/xml" target="_blank" title="View XML for ' . $ark_info['file'] . '">' . mb_strimwidth($ark_info['file'], 0, 30, "...") . '</a>';
+          }
+          echo '</td>
           <td class="date">
             <button onclick="view_history(this);" title="View History">' . substr($ark_info['date'], 0, 10) . '</button>
           </td>
