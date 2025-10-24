@@ -165,8 +165,8 @@ function filter_table(keyword) {
       var has_keyword = false;
       $(el).children('.title, .ark, .file').each(function() {
         var child_text = $(this).text().toLowerCase();
-        if ($(this).hasClass('file')) {
-          child_text = $(this).children('a').attr('title').toLowerCase();
+        if ($(this).hasClass('file') && $(this).children('a').length > 0) {
+          child_text = $(this).children('a').text().toLowerCase();
         }
         if (child_text.indexOf(keyword) > -1) {
           has_keyword = true;
