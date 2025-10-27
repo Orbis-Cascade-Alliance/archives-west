@@ -25,28 +25,21 @@
   /* Style headings */
   h1 {
     margin-left: 0;
-  }
-  
-  h2 {
+    padding-left: 0;
     font-size: 24pt;
   }
   
-  h3 {
+  h2 {
     font-size: 18pt;
-    border: none;
+    border: none !important;
     padding-top: 0;
   }
   
-  h4 {
+  h3 {
     font-size: 14pt;
   }
   
-  /* Prevent page breaks in the middle of elements */
-  #docBody div {
-    page-break-before: avoid;
-    page-break-after: avoid;
-  }
-  
+  /* Prevent page breaks in the middle of table rows */
   #docBody table tr {
     page-break-inside: avoid;
   }
@@ -77,6 +70,10 @@
 
   #dscdiv-content ul ul ul {
     list-style-type: circle;
+  }
+  
+  #dscdiv-content ul.display_table ul {
+    list-style-type: none;
   }
 
   #dscdiv-content li {
