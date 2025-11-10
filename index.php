@@ -98,6 +98,7 @@ include(AW_INCLUDES . '/header.php');
           <button id="btn_Washington" aria-controls="Washington" aria-expanded="false">Washington</button>
             <ul id="Washington" class="searchterms" aria-labelledby="btn_Washington" style="display: none;">
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=waelc">Central Washington University, Archives and Special Collections</a></li>
+              <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=wasphie">Eastern Washington State Historical Society (Northwest Museum of Arts and Culture)</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=wachene">Eastern Washington University</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=wae">Everett Public Library, Northwest Room</a></li>
               <li><a href="<?php echo AW_DOMAIN; ?>/search.php?r=wasmhi">Museum of History &amp; Industry, Sophie Frye Bass Library</a></li>
