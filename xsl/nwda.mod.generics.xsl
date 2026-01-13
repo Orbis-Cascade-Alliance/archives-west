@@ -178,13 +178,7 @@ Major or significant revision history:
 		<br/>
 	</xsl:template>
 	
-	<xsl:template match="unittitle" mode="highlights">
-		<xsl:for-each select="./* | text()">
-			<xsl:apply-templates select="."/>
-		</xsl:for-each>
-	</xsl:template>
-	
-	<xsl:template match="unittitle" mode="no-highlights">
+	<xsl:template match="unittitle">
 		<xsl:for-each select=".//text()">
 			<xsl:text> </xsl:text>
 			<xsl:value-of select="normalize-space()"/>

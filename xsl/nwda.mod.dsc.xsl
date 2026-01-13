@@ -159,22 +159,6 @@ Changes:
       </xsl:choose>
     </xsl:attribute>
     <xsl:choose>
-      <xsl:when test="did/unittitle/extref">
-        <a>
-          <xsl:attribute name="href">
-            <xsl:choose>
-              <xsl:when test="did/unittitle/extref/@href">
-                <xsl:value-of select="did/unittitle/extref/@href"/>
-              </xsl:when>
-              <xsl:when test="did/unittitle/extref/@xlink:href">
-                <xsl:value-of select="did/unittitle/extref/@xlink:href"/>
-              </xsl:when>
-            </xsl:choose>
-          </xsl:attribute>
-          <xsl:attribute name="target">_blank</xsl:attribute>
-          <xsl:call-template name="c0x_heading_text" />
-        </a>
-      </xsl:when>
       <xsl:when test="did/daogrp">
         <xsl:apply-templates select="did/daogrp"/>
       </xsl:when>
@@ -193,7 +177,7 @@ Changes:
       </xsl:attribute>
       <xsl:attribute name="title">
         <xsl:text>Close </xsl:text>
-        <xsl:call-template name="c0x_heading_text"/>
+        <xsl:call-template name="normalized_heading_text"/>
       </xsl:attribute>
     </button>
   </xsl:template>
@@ -211,7 +195,7 @@ Changes:
           <xsl:if test="did/unitid[@type='accession']">Accession No. </xsl:if>
           <xsl:value-of select="normalize-space(did/unitid)"/>:<xsl:text> </xsl:text>
         </xsl:if>
-        <xsl:value-of select="normalize-space(did/unittitle)"/>
+        <xsl:apply-templates select="did/unittitle" />
         <xsl:call-template name="c0x_heading_date"/>
       </xsl:when>
       <!-- if unitid only -->
@@ -239,6 +223,13 @@ Changes:
         Untitled
       </xsl:otherwise>
     </xsl:choose>
+  </xsl:template>
+  
+  <xsl:template name="normalized_heading_text">
+    <xsl:variable name="heading_text">
+      <xsl:call-template name="c0x_heading_text"/>
+    </xsl:variable>
+    <xsl:value-of select="normalize-space($heading_text)"/>
   </xsl:template>
   
   <xsl:template name="c0x_heading_date">
@@ -269,7 +260,7 @@ Changes:
           </xsl:otherwise>
         </xsl:choose>
       </xsl:attribute>
-      <xsl:call-template name="c0x_heading_text" />
+      <xsl:call-template name="normalized_heading_text" />
     </a>
   </xsl:template>
   
