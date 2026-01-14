@@ -156,11 +156,7 @@ class AW_Finding_Aid {
         $s3 = new AW_S3($bucket['name'], $bucket['region'], $bucket['class'], $bucket['path']);
         $s3->put_contents($cache_file, $html, 'text/html');
         // Clear CloudFront cache
-        $distribution = AW_CLOUDFRONT;
-        if (!empty($distribution)) {
-          $cf = new AW_CloudFront($distribution['id'], $distribution['region']);
-          $cf->create_invalidation(array('/' . $bucket['path'] . $cache_file));
-        }
+        queue_invalidation($cache_file);
       }
       catch (Exception $e) {
         log_error($e->getMessage());

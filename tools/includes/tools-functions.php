@@ -81,6 +81,16 @@ function create_job($job_type, $repo_id, $user_id) {
   return $job_id;
 }
 
+// Queue a file for CloudFront invalidation
+function queue_invalidation($file) {
+  if ($mysqli = connect()) {
+    $mysqli->query('INSERT INTO cf (file) VALUES ("' . $file . '")');
+    $cf_id = $mysqli->insert_id;
+    $mysqli->close();
+  }
+  return $cf_id;
+}
+
 // Return a select element of ARKs
 function build_ark_select($repo_id, $active = 1, $null_file = 0) {
   $ark_select = null;
