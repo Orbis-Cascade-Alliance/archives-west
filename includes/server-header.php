@@ -14,7 +14,9 @@ require_once(AW_CLASSES . '/session.php');
 require_once(AW_CLASSES . '/updates.php');
 require_once(AW_CLASSES . '/user.php');
 require_once(AW_INCLUDES . '/functions.php');
-if ((isset($_SERVER['REMOTE_ADDR']) && !in_array($_SERVER['REMOTE_ADDR'], ADMIN_IPS)) && check_maintenance_mode()) {
+if ((isset($_SERVER['HTTP_CLOUDFRONT_VIEWER_ADDRESS'])
+  && !in_array(substr($_SERVER['HTTP_CLOUDFRONT_VIEWER_ADDRESS'], 0, strpos($_SERVER['HTTP_CLOUDFRONT_VIEWER_ADDRESS'], ':')), ADMIN_IPS))
+  && check_maintenance_mode()) {
   die(get_maintenance_file());
 }
 ?>
