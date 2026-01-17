@@ -25,25 +25,35 @@ try {
         $repo_id = filter_var($_POST['repo_id'], FILTER_SANITIZE_NUMBER_INT);
         echo 'Building repo ' . $repo_id . '...' . "\n";
         $session->build_db($repo_id);
-        echo $session->print_info();
-        $session->optimize_db($repo_id);
         break;
       case 3:
+        // Optimize databases
+        $repo_id = filter_var($_POST['repo_id'], FILTER_SANITIZE_NUMBER_INT);
+        echo 'Optimizing database index for ' . $repo_id . '...' . "\n";
+        $session->optimize_db($repo_id);
+        break;
+      case 4:
         // Build text databases
         $repo_id = filter_var($_POST['repo_id'], FILTER_SANITIZE_NUMBER_INT);
         echo 'Building text index for ' . $repo_id . '...' . "\n";
         $session->build_text($repo_id);
         $session->index_text($repo_id);
         break;
-      case 4:
-        // Build brief database
-        $session->index_all_brief();
-        break;
       case 5:
-        // Build facets
-        $session->index_all_facets();
+        // Build brief databases
+        $repo_id = filter_var($_POST['repo_id'], FILTER_SANITIZE_NUMBER_INT);
+        echo 'Building brief index for ' . $repo_id . '...' . "\n";
+        $session->index_brief($repo_id);
+        echo $session->print_info();
         break;
       case 6:
+        // Build facets
+        $repo_id = filter_var($_POST['repo_id'], FILTER_SANITIZE_NUMBER_INT);
+        echo 'Building facet index for ' . $repo_id . '...' . "\n";
+        $session->index_facets($repo_id);
+        echo $session->print_info();
+        break;
+      case 7:
         // Copy indexes to production
         $session->copy_indexes_to_prod();
       default:

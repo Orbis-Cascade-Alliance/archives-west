@@ -48,31 +48,53 @@ function rebuild_dbs() {
               clearInterval(interval);
               iteration_complete = false;
               populate_repo_ids();
-              $('#results').prepend("Building text indexes...\n");
+              $('#results').prepend("Optimizing database indexes...\n");
               iterate_dbs(3);
               var interval2 = setInterval(
                 function() {
                   if (iteration_complete) {
                     clearInterval(interval2);
-                    $('#results').prepend("Building brief record index...\n");
-                    rebuild_process(
-                      {type:'all',step:4},
+                    iteration_complete = false;
+                    populate_repo_ids();
+                    $('#results').prepend("Building text indexes...\n");
+                    iterate_dbs(4);
+                    var interval3 = setInterval(
                       function() {
-                        $('#results').prepend("Building facet indexes...\n");
-                        rebuild_process(
-                          {type:'all',step:5},
-                          function() {
-                            $('#results').prepend("Copying indexes to production...\n");
-                            rebuild_process(
-                            {type:'all',step:6},
+                        if (iteration_complete) {
+                          clearInterval(interval3);
+                          $('#results').prepend("Building brief record index...\n");
+                          iteration_complete = false;
+                          populate_repo_ids();
+                          iterate_dbs(5);
+                          var interval4 = setInterval(
                             function() {
-                              $('#results').prepend("Rebuild complete!\n");
-                              $('#form-rebuild').show();
-                              iteration_complete = false;
-                              populate_repo_ids();
-                            })
-                          }
-                        );
+                              if (iteration_complete) {
+                                clearInterval(interval4);
+                                $('#results').prepend("Building facet indexes...\n");
+                                iteration_complete = false;
+                                populate_repo_ids();
+                                iterate_dbs(6);
+                                var interval5 = setInterval(
+                                  function() {
+                                    if (iteration_complete) {
+                                      clearInterval(interval5);
+                                      $('#results').prepend("Copying indexes to production...\n");
+                                      rebuild_process(
+                                        {type:'all',step:7},
+                                        function() {
+                                          $('#results').prepend("Rebuild complete!\n");
+                                          $('#form-rebuild').show();
+                                          iteration_complete = false;
+                                          populate_repo_ids();
+                                        }
+                                      );
+                                    }
+                                  }
+                                );
+                              }
+                            }
+                          );
+                        }
                       }
                     );
                   }
