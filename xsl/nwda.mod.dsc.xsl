@@ -267,7 +267,7 @@ Changes:
   <!-- c0x_description -->
   <!-- print unittitle, daogrp, or other content outside did -->
   <xsl:template name="c0x_description">
-  <xsl:if test="did/unittitle or did/daogrp or *[not(self::did)]">
+  <xsl:if test="did/* or *[not(self::did)]">
     <div class="c0x_description">
       <span class="c0x_label">Description: </span>
       <xsl:text> </xsl:text>
