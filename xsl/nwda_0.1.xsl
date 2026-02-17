@@ -57,7 +57,9 @@ Overhaul to HTML5/Bootstrap 3 by Ethan Gruber in March 2015.
 	<xsl:template match="eadheader/eadid | eadheader/revisiondesc | archdesc/did"/>
 	
 	<xsl:template match="/">
-		<xsl:apply-templates select="//ead/archdesc" mode="flag"/>
+    <div id="transformation">
+      <xsl:apply-templates select="//ead/archdesc" mode="flag"/>
+    </div>
 	</xsl:template>
 
 </xsl:stylesheet>
