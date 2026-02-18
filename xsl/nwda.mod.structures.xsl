@@ -86,8 +86,7 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 
 	<!-- ********************* COLLECTION OVERVIEW *********************** -->
 	<xsl:template name="collection_overview">
-		<h2>
-			<a id="overview"/>
+		<h2 id="overview">
 			<xsl:value-of select="$overview_head"/>
       <button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-overview" aria-controls="overview-content" aria-expanded="true">
         <xsl:attribute name="title">
@@ -322,105 +321,160 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 		<xsl:param name="withLabel"/>
 		<xsl:if test="$withLabel='true'">
 			<h3>
-				<xsl:if test="@id">
-					<a id="{@id}"/>
-				</xsl:if>
-				<xsl:choose>
-					<!--pull in correct label, depending on what is actually matched-->
-					<xsl:when test="local-name()='altformavail'">
-						<a id="{$altformavail_id}"/>
-						<xsl:value-of select="$altformavail_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='arrangement'">
-						<a id="{$arrangement_label}"/>
-						<xsl:value-of select="$arrangement_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='bibliography'">
-						<a id="{$bibliography_id}"/>
-						<xsl:value-of select="$bibliography_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='accessrestrict'">
-						<a id="{$accessrestrict_id}"/>
-						<xsl:value-of select="$accessrestrict_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='userestrict'">
-						<a id="{$userestrict_id}"/>
-						<xsl:value-of select="$userestrict_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='prefercite'">
-						<a id="{$prefercite_id}"/>
-						<xsl:value-of select="$prefercite_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='accruals'">
-						<a id="{$accruals_id}"/>
-						<xsl:value-of select="$accruals_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='acqinfo'">
-						<a id="{$acqinfo_id}"/>
-						<xsl:value-of select="$acqinfo_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='appraisal'">
-						<a id="{$appraisal_id}"/>
-						<xsl:value-of select="$appraisal_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='custodhist'">
-						<a id="{$custodhist_id}"/>
-						<xsl:value-of select="$custodhist_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='scopecontent'">
-						<a id="{$scopecontent_label}"/>
-						<xsl:value-of select="$scopecontent_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='separatedmaterial'">
-						<a id="{$separatedmaterial_id}"/>
-						<xsl:value-of select="$separatedmaterial_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='relatedmaterial'">
-						<a id="{$relatedmaterial_id}"/>
-						<xsl:value-of select="$relatedmaterial_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='originalsloc'">
-						<a id="{$originalsloc_id}"/>
-						<xsl:value-of select="$originalsloc_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='origination'">
-						<a id="{$origination_id}"/>
-						<xsl:value-of select="$origination_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='otherfindaid'">
-						<a id="{$otherfindaid_id}"/>
-						<xsl:value-of select="$otherfindaid_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='processinfo'">
-						<a id="{$processinfo_id}"/>
-						<xsl:value-of select="$processinfo_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='odd'">
-						<a id="{$odd_id}"/>
-						<xsl:value-of select="$odd_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='physdesc'">
-						<a id="{$physdesc_id}"/>
-						<xsl:value-of select="$physdesc_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='physloc'">
-						<a id="{$physloc_id}"/>
-						<xsl:value-of select="$physloc_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='phystech'">
-						<a id="{$phystech_id}"/>
-						<xsl:value-of select="$phystech_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='fileplan'">
-						<a id="{$fileplan_id}"/>
-						<xsl:value-of select="$fileplan_label"/>
-					</xsl:when>
-					<xsl:when test="local-name()='index'">
-						<a id="{$index_id}"/>
-						<xsl:value-of select="$index_label"/>
-					</xsl:when>
-					<xsl:otherwise/>
-				</xsl:choose>
+        <xsl:attribute name="id">
+          <xsl:choose>
+            <xsl:when test="local-name()='altformavail'">
+              <xsl:value-of select="$altformavail_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='arrangement'">
+              <xsl:value-of select="$arrangement_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='bibliography'">
+              <xsl:value-of select="$bibliography_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='accessrestrict'">
+              <xsl:value-of select="$accessrestrict_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='userestrict'">
+              <xsl:value-of select="$userestrict_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='prefercite'">
+              <xsl:value-of select="$prefercite_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='accruals'">
+              <xsl:value-of select="$accruals_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='acqinfo'">
+              <xsl:value-of select="$acqinfo_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='appraisal'">
+              <xsl:value-of select="$appraisal_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='custodhist'">
+              <xsl:value-of select="$custodhist_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='scopecontent'">
+              <xsl:value-of select="$scopecontent_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='separatedmaterial'">
+              <xsl:value-of select="$separatedmaterial_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='relatedmaterial'">
+              <xsl:value-of select="$relatedmaterial_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='originalsloc'">
+              <xsl:value-of select="$originalsloc_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='origination'">
+              <xsl:value-of select="$origination_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='otherfindaid'">
+              <xsl:value-of select="$otherfindaid_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='processinfo'">
+              <xsl:value-of select="$processinfo_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='odd'">
+              <xsl:value-of select="$odd_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='physdesc'">
+              <xsl:value-of select="$physdesc_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='physloc'">
+              <xsl:value-of select="$physloc_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='phystech'">
+              <xsl:value-of select="$phystech_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='fileplan'">
+              <xsl:value-of select="$fileplan_id"/>
+            </xsl:when>
+            <xsl:when test="local-name()='index'">
+              <xsl:value-of select="$index_id"/>
+            </xsl:when>
+            <xsl:otherwise/>
+          </xsl:choose>
+        </xsl:attribute>
+        <span>
+          <xsl:if test="@id">
+            <xsl:attribute name="id">
+              <xsl:value-of select="@id" />
+            </xsl:attribute>
+          </xsl:if>
+          <xsl:choose>
+            <!--pull in correct label, depending on what is actually matched-->
+            <xsl:when test="local-name()='altformavail'">
+              <xsl:value-of select="$altformavail_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='arrangement'">
+              <xsl:value-of select="$arrangement_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='bibliography'">
+              <xsl:value-of select="$bibliography_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='accessrestrict'">
+              <xsl:value-of select="$accessrestrict_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='userestrict'">
+              <xsl:value-of select="$userestrict_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='prefercite'">
+              <xsl:value-of select="$prefercite_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='accruals'">
+              <xsl:value-of select="$accruals_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='acqinfo'">
+              <xsl:value-of select="$acqinfo_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='appraisal'">
+              <xsl:value-of select="$appraisal_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='custodhist'">
+              <xsl:value-of select="$custodhist_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='scopecontent'">
+              <xsl:value-of select="$scopecontent_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='separatedmaterial'">
+              <xsl:value-of select="$separatedmaterial_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='relatedmaterial'">
+              <xsl:value-of select="$relatedmaterial_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='originalsloc'">
+              <xsl:value-of select="$originalsloc_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='origination'">
+              <xsl:value-of select="$origination_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='otherfindaid'">
+              <xsl:value-of select="$otherfindaid_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='processinfo'">
+              <xsl:value-of select="$processinfo_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='odd'">
+              <xsl:value-of select="$odd_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='physdesc'">
+              <xsl:value-of select="$physdesc_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='physloc'">
+              <xsl:value-of select="$physloc_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='phystech'">
+              <xsl:value-of select="$phystech_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='fileplan'">
+              <xsl:value-of select="$fileplan_label"/>
+            </xsl:when>
+            <xsl:when test="local-name()='index'">
+              <xsl:value-of select="$index_label"/>
+            </xsl:when>
+            <xsl:otherwise/>
+          </xsl:choose>
+        </span>
 			</h3>
 		</xsl:if>
 		<!-- 2004-11-30 Suppress the display of all <head> elements (with exceptions).  Example, Pauling finding aid of OSU SC -->
@@ -577,19 +631,18 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 			</xsl:choose>
 		</xsl:variable>
 		
-		<a id="{$odd_id}"/>
 		<xsl:choose>
 			<xsl:when test="not(ancestor::dsc)">
         <a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
-				<h2>
-				<xsl:choose>
-					<xsl:when test="@type='hist'">
-						<xsl:value-of select="$odd_head_histbck"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="$odd_head"/>
-					</xsl:otherwise>
-				</xsl:choose>
+				<h2 id="{$odd_id}">
+          <xsl:choose>
+            <xsl:when test="@type='hist'">
+              <xsl:value-of select="$odd_head_histbck"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$odd_head"/>
+            </xsl:otherwise>
+          </xsl:choose>
 					<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true">
             <xsl:attribute name="title">
               <xsl:text>Close </xsl:text>
@@ -606,7 +659,7 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 				</h2>
 			</xsl:when>
 			<xsl:otherwise>
-				<h5>
+				<h5 id="{$odd_id}">
 					<xsl:value-of select="$odd_head"/>
 				</h5>
 			</xsl:otherwise>
@@ -635,10 +688,14 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 		<xsl:if test="altformavail | userestrict | prefercite">
 			<a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
       <h2 id="{$useinfo_id}">
-				<xsl:if test="@id">
-					<a id="{@id}"/>
-				</xsl:if>
-				<xsl:value-of select="$useinfo_head"/>
+        <span>
+          <xsl:if test="@id">
+            <xsl:attribute name="id">
+              <xsl:value-of select="@id" />
+            </xsl:attribute>
+          </xsl:if>
+          <xsl:value-of select="$useinfo_head"/>
+        </span>
 				<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-usediv" aria-controls="usediv-content" aria-expanded="true">
           <xsl:attribute name="title">
             <xsl:text>Close </xsl:text>
@@ -659,12 +716,16 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 	<!-- ********************* </USEINFO> *********************** -->
 	<!-- ************************* ADMINISTRATIVE INFO ******************** -->
 	<xsl:template name="administrative_info">
-		<xsl:if test="@id">
-			<a id="{@id}"/>
-		</xsl:if>
     <a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
 		<h2 id="administrative_info">
-			<xsl:text>Administrative Information</xsl:text>
+      <span>
+        <xsl:if test="@id">
+          <xsl:attribute name="id">
+            <xsl:value-of select="@id" />
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:text>Administrative Information</xsl:text>
+      </span>
 			<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-ai" aria-controls="ai-content" aria-expanded="true" title="Close Administrative Information"></button>
 		</h2>
     
@@ -690,11 +751,16 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 			</xsl:choose>
 		</xsl:variable>
 		<xsl:if test="not(ancestor::dsc)">
-			<xsl:if test="@id">
-				<a id="{@id}"/>
-			</xsl:if>
-			<a id="{$arrangement_id}"/>
-			<h3>Arrangement</h3>
+			<h3 id="{$arrangement_id}">
+        <span>
+          <xsl:if test="@id">
+            <xsl:attribute name="id">
+              <xsl:value-of select="@id"/>
+            </xsl:attribute>
+          </xsl:if>
+          <xsl:text>Arrangement</xsl:text>
+        </span>
+      </h3>
 		</xsl:if>
 		<div class="{$class}">
 			<xsl:apply-templates select="./*[not(self::head)]"/>
@@ -705,18 +771,19 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 	<xsl:template name="admininfo">
 		<xsl:if test="acqinfo | accruals | custodhist | processinfo | separatedmaterial |
 			bibliography | relatedmaterial | did/physloc | originalsloc | appraisal | phystech">
-			<xsl:if test="not(ancestor::dsc)">
-				<xsl:choose>
-					<xsl:when test="@id">
-						<a id="{@id}"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<a id="{$admininfo_id}"/>
-					</xsl:otherwise>
-				</xsl:choose>
-
-			</xsl:if>
 			<div class="admininfo">
+        <xsl:if test="not(ancestor::dsc)">
+          <xsl:attribute name="id">
+            <xsl:choose>
+              <xsl:when test="@id">
+                <xsl:value-of select="@id" />
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="$admininfo_id" />
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:attribute>
+        </xsl:if>
 				<xsl:for-each select="custodhist | acqinfo | accruals | processinfo | separatedmaterial |
 					bibliography | relatedmaterial | appraisal | did/physloc | originalsloc | phystech">
 					<xsl:call-template name="archdesc_minor_children">
@@ -739,14 +806,19 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 				</xsl:otherwise>
 			</xsl:choose>
 		</xsl:variable>
-		<xsl:if test="not(ancestor::dsc)">
-			<xsl:if test="@id">
-				<a id="{@id}"/>
-			</xsl:if>
-			<a id="{$index_id}"/>
-		</xsl:if>
-
 		<div class="{$class}">
+      <xsl:if test="not(ancestor::dsc)">
+        <xsl:attribute name="id">
+          <xsl:choose>
+            <xsl:when test="@id">
+              <xsl:value-of select="@id" />
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="$index_id" />
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:attribute>
+      </xsl:if>
 			<xsl:apply-templates select="p"/>
 			<xsl:if test="count(indexentry) &gt; 0">
 				<table class="table table-striped">

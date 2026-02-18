@@ -34,13 +34,16 @@ Changes:
 
 	<!-- ********************* <DSC> *********************** -->
 	<xsl:template name="dsc" match="dsc[count(c01) &gt; 0]">
-		<xsl:if test="@id">
-			<a id="{@id}"/>
-		</xsl:if>
-		<a id="{$dsc_id}"/>
     <a href="#top"><span class="glyphicon glyphicon-arrow-up"> </span>Return to Top</a>
-		<h2>
-			<xsl:value-of select="$dsc_head"/>
+		<h2 id="{$dsc_id}">
+      <span>
+        <xsl:if test="@id">
+          <xsl:attribute name="id">
+            <xsl:value-of select="@id"/>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:value-of select="$dsc_head"/>
+      </span>
 			<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-dscdiv" aria-controls="dscdiv-content" aria-expanded="true">
         <xsl:attribute name="title">
           <xsl:text>Close </xsl:text>
