@@ -48,6 +48,10 @@ button.glyphicon {
   color: #005DA8;
   cursor: pointer;
   padding: 0;
+  width: 1.5rem;
+  height: 1rem;
+  overflow: hidden;
+  line-height: 1.5;
 }
 
 .glyphicon-triangle-right::before {

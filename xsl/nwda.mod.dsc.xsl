@@ -45,10 +45,8 @@ Changes:
         <xsl:value-of select="$dsc_head"/>
       </span>
 			<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-dscdiv" aria-controls="dscdiv-content" aria-expanded="true">
-        <xsl:attribute name="title">
-          <xsl:text>Close </xsl:text>
-          <xsl:value-of select="$dsc_head"/>
-        </xsl:attribute>
+        <xsl:text>Close </xsl:text>
+        <xsl:value-of select="$dsc_head"/>
       </button>
 		</h2>
 		<div class="dsc" id="dscdiv-content">
@@ -178,10 +176,8 @@ Changes:
         <xsl:text>dscdiv-</xsl:text>
         <xsl:value-of select="generate-id(.)"/>
       </xsl:attribute>
-      <xsl:attribute name="title">
-        <xsl:text>Close </xsl:text>
-        <xsl:call-template name="normalized_heading_text"/>
-      </xsl:attribute>
+      <xsl:text>Close </xsl:text>
+      <xsl:call-template name="normalized_heading_text"/>
     </button>
   </xsl:template>
   

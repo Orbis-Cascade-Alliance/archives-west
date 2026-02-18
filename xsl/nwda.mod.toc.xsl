@@ -9,7 +9,8 @@
 	<!-- TOC TEMPLATE - creates Table of Contents -->
 	<xsl:template name="toc">
 
-		<h2>Table of Contents <button type="button" id="toc-toggle" class="glyphicon glyphicon-triangle-bottom" aria-controls="toc-ul" aria-expanded="true" title="Close Table of Contents"></button></h2>
+		<h2>Table of Contents <button type="button" id="toc-toggle" class="glyphicon glyphicon-triangle-bottom" aria-controls="toc-ul" aria-expanded="true">Close Table of Contents</button>
+    </h2>
 		<ul id="toc-ul" class="list-unstyled">
 			<xsl:if test="did">
 				<li>
@@ -69,11 +70,9 @@
 			<xsl:if test="(string(userestrict)) or (string(altformavail))">
 				<li>
 					<button type="button" class="glyphicon glyphicon-triangle-right" id="toggle-use" aria-controls="use-content" aria-expanded="false">
-            <xsl:attribute name="title">
-              <xsl:text>Open </xsl:text>
-              <xsl:value-of select="$useinfo_head"/>
-              <xsl:text> Contents</xsl:text>
-            </xsl:attribute>
+            <xsl:text>Open </xsl:text>
+            <xsl:value-of select="$useinfo_head"/>
+            <xsl:text> Contents</xsl:text>
           </button>
 					<a href="#{$useinfo_id}" class="showuseinfo">
 						<xsl:value-of select="$useinfo_head"/>
@@ -109,7 +108,7 @@
 				string(accruals) or      string(separatedmaterial) or string(originalsloc)     or string(bibliography) or
 				string(otherfindaid) or string(relatedmaterial) or      string(index) or string(did/physloc)">
 				<li>
-					<button type="button" class="glyphicon glyphicon-triangle-right" id="toggle-admin" aria-controls="admin-content" aria-expanded="false" title="Open Administrative Information Contents"></button>
+					<button type="button" class="glyphicon glyphicon-triangle-right" id="toggle-admin" aria-controls="admin-content" aria-expanded="false">Open Administrative Information Contents</button>
 					<a href="#administrative_info">
 						<xsl:text>Administrative Information</xsl:text>
 					</a>
@@ -205,11 +204,9 @@
 				<li>
 					<xsl:if test="//c02">
 						<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-dsc" aria-controls="dsc-content" aria-expanded="true">
-              <xsl:attribute name="title">
-                <xsl:text>Close </xsl:text>
-                <xsl:value-of select="$dsc_head"/>
-                <xsl:text> Contents</xsl:text>
-              </xsl:attribute>
+              <xsl:text>Close </xsl:text>
+              <xsl:value-of select="$dsc_head"/>
+              <xsl:text> Contents</xsl:text>
             </button>
 					</xsl:if>
 					<a href="#{$dsc_id}" class="showdsc">
@@ -237,14 +234,12 @@
           <xsl:if test="c02">
             <xsl:attribute name="class">expandable</xsl:attribute>
             <button type="button" class="glyphicon glyphicon-triangle-right" id="toggle-admin" aria-controls="admin-content" aria-expanded="false">
-              <xsl:attribute name="title">
-                <xsl:text>Open contents of </xsl:text>
-                <xsl:call-template name="c0x_heading_text" />
-              </xsl:attribute>
               <xsl:attribute name="aria-controls">
                 <xsl:text>toc_</xsl:text>
                 <xsl:value-of select="generate-id(.)"/>
               </xsl:attribute>
+              <xsl:text>Open contents of </xsl:text>
+              <xsl:call-template name="c0x_heading_text" />
             </button>
           </xsl:if>
           <xsl:call-template name="c0x_heading_link"/>

@@ -89,10 +89,8 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 		<h2 id="overview">
 			<xsl:value-of select="$overview_head"/>
       <button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-overview" aria-controls="overview-content" aria-expanded="true">
-        <xsl:attribute name="title">
-          <xsl:text>Close </xsl:text>
-          <xsl:value-of select="$overview_head"/>
-        </xsl:attribute>
+        <xsl:text>Close </xsl:text>
+        <xsl:value-of select="$overview_head"/>
       </button>
 		</h2>
 		<div class="overview" id="overview-content">
@@ -522,10 +520,8 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 				<h2 id="{$bioghist_id}">
 					<xsl:value-of select="$bioghist_head"/>
           <button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true">
-            <xsl:attribute name="title">
-              <xsl:text>Close </xsl:text>
-              <xsl:value-of select="$bioghist_head"/>
-            </xsl:attribute>
+            <xsl:text>Close </xsl:text>
+            <xsl:value-of select="$bioghist_head"/>
           </button>
 				</h2>
 			</xsl:when>
@@ -535,10 +531,8 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 				<h2 id="{$bioghist_id}">
 					<xsl:value-of select="$bioghist_head"/>
 					<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true">
-            <xsl:attribute name="title">
-              <xsl:text>Close </xsl:text>
-              <xsl:value-of select="$bioghist_head"/>
-            </xsl:attribute>
+            <xsl:text>Close </xsl:text>
+            <xsl:value-of select="$bioghist_head"/>
           </button>
 				</h2>
 			</xsl:when>
@@ -548,10 +542,8 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 					<h2 id="{$historical_id}">
 						<xsl:value-of select="$historical_head"/>
 						<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true">
-              <xsl:attribute name="title">
-                <xsl:text>Close </xsl:text>
-                <xsl:value-of select="$historical_head"/>
-              </xsl:attribute>
+              <xsl:text>Close </xsl:text>
+              <xsl:value-of select="$historical_head"/>
             </button>
 					</h2>
 				</xsl:if>
@@ -592,10 +584,8 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
 			<h2 id="{$scopecontent_id}">
 				<xsl:value-of select="$scopecontent_head"/>
 				<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true">
-          <xsl:attribute name="title">
-              <xsl:text>Close </xsl:text>
-              <xsl:value-of select="$scopecontent_head"/>
-            </xsl:attribute>
+          <xsl:text>Close </xsl:text>
+          <xsl:value-of select="$scopecontent_head"/>
         </button>
 			</h2>
       
@@ -644,17 +634,15 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
             </xsl:otherwise>
           </xsl:choose>
 					<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-{$class}" aria-controls="{$class}-content" aria-expanded="true">
-            <xsl:attribute name="title">
-              <xsl:text>Close </xsl:text>
-              <xsl:choose>
-                <xsl:when test="@type='hist'">
-                  <xsl:value-of select="$odd_head_histbck"/>
-                </xsl:when>
-                <xsl:otherwise>
-                  <xsl:value-of select="$odd_head"/>
-                </xsl:otherwise>
-              </xsl:choose>
-            </xsl:attribute>
+            <xsl:text>Close </xsl:text>
+            <xsl:choose>
+              <xsl:when test="@type='hist'">
+                <xsl:value-of select="$odd_head_histbck"/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:value-of select="$odd_head"/>
+              </xsl:otherwise>
+            </xsl:choose>
           </button>
 				</h2>
 			</xsl:when>
@@ -697,10 +685,8 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
           <xsl:value-of select="$useinfo_head"/>
         </span>
 				<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-usediv" aria-controls="usediv-content" aria-expanded="true">
-          <xsl:attribute name="title">
-            <xsl:text>Close </xsl:text>
-            <xsl:value-of select="$useinfo_head"/>
-          </xsl:attribute>
+          <xsl:text>Close </xsl:text>
+          <xsl:value-of select="$useinfo_head"/>
         </button>
 			</h2>
       
@@ -726,7 +712,7 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
         </xsl:if>
         <xsl:text>Administrative Information</xsl:text>
       </span>
-			<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-ai" aria-controls="ai-content" aria-expanded="true" title="Close Administrative Information"></button>
+			<button type="button" class="glyphicon glyphicon-triangle-bottom" id="toggle-ai" aria-controls="ai-content" aria-expanded="true">Close Administrative Information</button>
 		</h2>
     
 		<div class="ai" id="ai-content">
