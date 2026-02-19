@@ -55,17 +55,17 @@ button.glyphicon {
 }
 
 .glyphicon-triangle-right::before {
-  content: "\25B6";
+  content: "\25B6" / "";
   padding: .33rem;
 }
 
 .glyphicon-triangle-bottom::before {
-  content: "\25BC";
+  content: "\25BC" / "";
   padding: .33rem;
 }
 
 .glyphicon-arrow-up::before {
-  content: "\21D1";
+  content: "\21D1" / "";
 }
 
 /* Table of Contents */
