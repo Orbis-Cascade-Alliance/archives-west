@@ -14,6 +14,7 @@ function check_process($script) {
 
 // If no caching process is currently running, create the cached file in the background
 // If a process is running, the cache-track.php script will call cache_next() when it's done
+// Used only in development
 function start_cache_process($ark) {
   $current_process = check_process('cache.php');
   if (!$current_process) {
@@ -23,6 +24,7 @@ function start_cache_process($ark) {
 }
 
 // Cache the next waiting finding aid with a cached value of 0
+// Used only in development
 function cache_next() {
   if ($mysqli = connect()) {
     $ark_result = $mysqli->query('SELECT ark FROM arks WHERE cached=0 AND active=1 AND file<>"" ORDER BY date ASC LIMIT 1');

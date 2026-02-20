@@ -11,6 +11,7 @@ require_once(AW_CLASSES . '/repo.php');
 require_once(AW_CLASSES . '/s3.php');
 require_once(AW_CLASSES . '/search.php');
 require_once(AW_CLASSES . '/session.php');
+require_once(AW_CLASSES . '/sqs.php');
 require_once(AW_CLASSES . '/updates.php');
 require_once(AW_CLASSES . '/user.php');
 require_once(AW_INCLUDES . '/functions.php');

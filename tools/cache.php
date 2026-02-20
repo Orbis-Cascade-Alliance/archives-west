@@ -1,6 +1,7 @@
 <?php
 // Generate the HTML cache for a finding aid
 // This script is called in the background using the AW_Process class
+// February 2026: Used only in development. Replaced by AWS SQS in production.
 
 // Include definitions
 require_once(getenv('AW_HOME') . '/defs.php');

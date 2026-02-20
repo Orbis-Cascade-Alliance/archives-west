@@ -84,7 +84,7 @@ class AW_Finding_Aid {
     return $this->ark_file;
   }
   
-  // Get complete file path
+  // Get complete file path on EBS volume
   function get_filepath() {
     return AW_REPOS . '/' . $this->get_repo()->get_folder() . '/eads/' . $this->get_file();
   }
@@ -109,14 +109,13 @@ class AW_Finding_Aid {
     return $this->ark_active == 1 ? true : false;
   }
   
-  // Get cache path
+  // Get cache path on EBS volume
   function get_cache_path() {
     return $this->cache_path;
   }
 
-  // Get cached file
-  // Returns false if path does not exist, since transformations
-  // can take a long time and will be done in the background
+  // Get cached file from EBS volume
+  // Returns false if path does not exist
   function get_cache() {
     if (file_exists($this->cache_path)) {
       return file_get_contents($this->cache_path);
@@ -126,19 +125,47 @@ class AW_Finding_Aid {
   
   // Start the cache process for this finding aid
   function build_cache() {
-    start_cache_process($this->get_ark());
+    // Production: send message to SQS for transformation in Lambda
+    if (!empty(AW_QUEUES) && isset(AW_QUEUES['aw-cache'])) {
+      $this->send_sqs_message();
+    }
+    // Development: use cache.php
+    else {
+      start_cache_process($this->get_ark());
+    }
+  }
+  
+  // Send message to SQS for Lambda
+  function send_sqs_message() {
+    $repo = $this->get_repo();
+    $aw_cache = AW_QUEUES['aw-cache'];
+    $sqs = new AW_SQS($aw_cache['queue_url'], $aw_cache['region']);
+    $data = array(
+      'ark' => $this->get_ark(),
+      'xml' => $this->get_file(),
+      'folder' => $repo->get_folder(),
+      'title' => $this->get_title(),
+      'repo' => array(
+        'name' => $repo->get_name(),
+        'url' => $repo->get_url(),
+        'address' => $repo->get_address(),
+        'phone' => $repo->get_phone(),
+        'fax' => $repo->get_fax(),
+        'email' => $repo->get_email(),
+        'rights' => $repo->get_rights()
+      )
+    );
+    $json = json_encode($data, JSON_UNESCAPED_SLASHES);
+    return $sqs->send_message($json);
   }
   
   // Delete the existing cache
   function delete_cache($replace = 0) {
+    // Development: delete cache file from EBS
     if (file_exists($this->cache_path)) {
       unlink($this->cache_path);
-      if ($mysqli = connect()) {
-        $mysqli->query('UPDATE arks SET cached=0 WHERE ark="' . $this->get_ark() . '"');
-        $mysqli->close();
-      }
     }
-    // Publish deletion message to AWS S3
+    // Production: publish deletion message to AWS S3
     $bucket = S3_CACHE;
     if (!empty($bucket)) {
       $ark = $this->get_ark();
@@ -161,6 +188,10 @@ class AW_Finding_Aid {
       catch (Exception $e) {
         log_error($e->getMessage());
       }
+    }
+    if ($mysqli = connect()) {
+      $mysqli->query('UPDATE arks SET cached=0 WHERE ark="' . $this->get_ark() . '"');
+      $mysqli->close();
     }
   }
   
@@ -186,6 +217,7 @@ class AW_Finding_Aid {
   }
   
   // Transform XML
+  // Used only in development
   function transform() {
     if (!isset($this->transformed)) {
       if ($this->get_file()) {

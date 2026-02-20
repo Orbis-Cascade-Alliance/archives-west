@@ -1,5 +1,7 @@
 <?php
 // Print a single finding aid
+// Used only in development
+// In production, CloudFront serves transformed finding aids from S3
 
 // Include definitions
 require_once(getenv('AW_HOME') . '/defs.php');
