@@ -407,7 +407,7 @@ function item_hierarchy(item) {
   // For each list item, add the heading text to an array
   var heading;
   $(item).parents('li').each(function() {
-    heading = $(this).children('h3,h4,h5,h6').eq(0).text();
+    heading = $(this).children('h3,h4,h5,h6').eq(0).clone().children().remove().end().text();
     if (typeof heading != undefined && heading.trim() != '') {
       tree.push(heading.trim());
     }
