@@ -122,6 +122,7 @@ function get_as_oaipmh($url) {
   $ch = curl_init();
   curl_setopt($ch, CURLOPT_URL, $url);
   curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+  curl_setopt($ch, CURLOPT_USERAGENT, 'ArchivesWest/1.0');
   $raw_response = curl_exec($ch);
   if ($raw_response === false) {
     throw new Exception(curl_error($ch));
