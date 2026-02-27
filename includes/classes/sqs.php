@@ -34,12 +34,13 @@ class AW_SQS {
     return $this->queue_url;
   }
   
-  function send_message($body) {
+  function send_message($body, $group) {
     $client = $this->get_client();
     try {
       $params = [
         'QueueUrl' => $this->get_queue_url(),
         'MessageBody' => $body,
+        'MessageGroupId' => $group,
         'DelaySeconds' => 10
       ];
       $result = $client->sendMessage($params);

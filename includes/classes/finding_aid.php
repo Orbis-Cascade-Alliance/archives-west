@@ -156,7 +156,7 @@ class AW_Finding_Aid {
       )
     );
     $json = json_encode($data, JSON_UNESCAPED_SLASHES);
-    return $sqs->send_message($json);
+    return $sqs->send_message($json, 'aw-cache');
   }
   
   // Delete the existing cache
