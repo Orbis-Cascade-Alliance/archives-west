@@ -19,7 +19,6 @@ class AW_SQS {
     if (!isset($this->client)) {
       try {
         $this->client = new Aws\Sqs\SqsClient([
-          'profile' => 'default',
           'version' => 'latest',
           'region' => $this->region
         ]);
