@@ -40,8 +40,7 @@ class AW_SQS {
       $params = [
         'QueueUrl' => $this->get_queue_url(),
         'MessageBody' => $body,
-        'MessageGroupId' => $group,
-        'DelaySeconds' => 10
+        'MessageGroupId' => $group
       ];
       $result = $client->sendMessage($params);
     }
