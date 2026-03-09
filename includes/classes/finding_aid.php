@@ -156,7 +156,7 @@ class AW_Finding_Aid {
       )
     );
     if ($name = $repo->get_name()) {
-      $data['repo']['name'] => $name;
+      $data['repo']['name'] = $name;
     }
     if ($url = $repo->get_url()) {
       $data['repo']['url'] = $url;
