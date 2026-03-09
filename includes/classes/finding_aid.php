@@ -146,15 +146,27 @@ class AW_Finding_Aid {
       'folder' => $repo->get_folder(),
       'title' => $this->get_title(),
       'repo' => array(
-        'name' => $repo->get_name(),
-        'url' => $repo->get_url(),
-        'address' => $repo->get_address(),
-        'phone' => $repo->get_phone(),
-        'fax' => $repo->get_fax(),
-        'email' => $repo->get_email(),
-        'rights' => $repo->get_rights()
+        'name' => $repo->get_name()
       )
     );
+    if ($url = $repo->get_url()) {
+      $data['repo']['url'] = $url;
+    }
+    if ($address = $repo->get_address()) {
+      $data['repo']['address'] = $address;
+    }
+    if ($phone = $repo->get_phone()) {
+      $data['repo']['phone'] = $phone;
+    };
+    if ($fax = $repo->get_fax()) {
+      $data['repo']['fax'] = $fax;
+    }
+    if ($email = $repo->get_email()) {
+      $data['repo']['email'] = $email;
+    }
+    if ($rights = $repo->get_rights()) {
+      $data['repo']['rights'] = $rights;
+    }
     $json = json_encode($data, JSON_UNESCAPED_SLASHES);
     return $sqs->send_message($json, 'aw-cache');
   }
