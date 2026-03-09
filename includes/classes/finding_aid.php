@@ -146,9 +146,18 @@ class AW_Finding_Aid {
       'folder' => $repo->get_folder(),
       'title' => $this->get_title(),
       'repo' => array(
-        'name' => $repo->get_name()
+        'name' => '',
+        'url' => '',
+        'address' => '',
+        'phone' => '',
+        'fax' => '',
+        'email' => '',
+        'rights' => ''
       )
     );
+    if ($name = $repo->get_name()) {
+      $data['repo']['name'] => $name;
+    }
     if ($url = $repo->get_url()) {
       $data['repo']['url'] = $url;
     }
