@@ -42,6 +42,23 @@ class AW_S3 {
     return $this->client;
   }
   
+  function get_file_contents($file_path) {
+    $client = $this->get_client();
+    try {
+      $result = $client->getObject([
+        'Bucket' => $this->bucket,
+        'Key' => $this->get_key($file_path)
+      ]);
+      return $result['Body'];
+    }
+    catch (S3Exception $e) {
+      throw new Exception('S3Exception: ' . $e->getMessage());
+    }
+    catch (AwsException $e) {
+      throw new Exception('AwsException: ' . $e->getAwsErrorMessage());
+    }
+  }
+  
   function put_contents($file_path, $file_contents, $content_type) {
     $client = $this->get_client();
     try {
