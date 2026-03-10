@@ -190,11 +190,11 @@ class AW_Finding_Aid {
     $bucket = S3_CACHE;
     if (!empty($bucket)) {
       $ark = $this->get_ark();
+      $cache_file = $this->get_qualifier() . '.html';
       $s3 = new AW_S3($bucket['name'], $bucket['region'], $bucket['class'], $bucket['path']);
       ob_start();
       if ($replace == 1) {
-        $qualifier = this->get_qualifier();
-        $body = $s3->get_file_contents($qualifier);
+        $body = $s3->get_file_contents($cache_file);
         $new_body = preg_replace('/<div[^>]*id="main-content"[^>]*>/', '$0<div class="alert">A new version of this finding aid is being processed.</div>', $body);
         echo $new_body;
       }
@@ -204,7 +204,6 @@ class AW_Finding_Aid {
       $html = ob_get_contents();
       ob_end_clean();
       try {
-        $cache_file = $this->get_qualifier() . '.html';
         $s3->put_contents($cache_file, $html, 'text/html');
         // Clear CloudFront cache
         queue_invalidation($cache_file);
