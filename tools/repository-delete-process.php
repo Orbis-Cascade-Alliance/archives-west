@@ -42,7 +42,7 @@ if ($repo) {
     $files = array();
     if ($mysqli = connect()) {
       $ark_result = $mysqli->query('SELECT ark FROM arks WHERE repo_id=' . $repo_id);
-      while ($row = $result->fetch_row()) {
+      while ($row = $ark_result->fetch_row()) {
         $files[] = str_replace('80444/', '', $row[0]) . '.html';
       }
       $mysqli->close();
