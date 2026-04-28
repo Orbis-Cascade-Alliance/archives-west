@@ -441,12 +441,12 @@ Changes:
 		<!-- for displaying extent, physloc, etc.  this is brought over from the original mod.dsc -->
 
 		<!-- added note in addition to did/note for item 2F on revision specifications-->
-		<xsl:if test="string(did/origination|did/physdesc|did/physloc|did/note|did/abstract|arrangement|odd|scopecontent|
+		<xsl:if test="string(did/origination|did/physdesc|did/physloc|did/note|did/abstract|did/langmaterial|arrangement|odd|scopecontent|
 			acqinfo|custodhist|processinfo|note|bioghist|accessrestrict|userestrict|index|altformavail|phystech)">
 
 
 			<xsl:for-each select="did">
-				<xsl:for-each select="origination | physdesc | physloc | note | abstract">
+				<xsl:for-each select="origination | physdesc | physloc | note | abstract | langmaterial">
 
 					<xsl:choose>
 						<xsl:when test="self::physdesc">
@@ -536,6 +536,19 @@ Changes:
         <xsl:apply-templates select="abstract"/>
       </p>
     </xsl:if>
+    <!-- April 2026: Adding langmaterial -->
+    <xsl:for-each select="langmaterial">
+      <p>
+        <span class="c0x_label">Language: </span>
+        <xsl:for-each select="node()">
+          <xsl:apply-templates select="." />
+          <xsl:if test="position() != last()">
+            <xsl:text> </xsl:text>
+          </xsl:if>
+        </xsl:for-each>
+      </p>
+    </xsl:for-each>
+    
 		<!--non-unittitle,unitdate,unitid descriptive information-->
     <xsl:for-each select="following-sibling::acqinfo | following-sibling::accruals | following-sibling::custodhist | following-sibling::processinfo | following-sibling::separatedmaterial |
       physdesc | physloc | origination | note | following-sibling::odd |
