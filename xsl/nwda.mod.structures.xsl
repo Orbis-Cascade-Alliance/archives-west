@@ -600,10 +600,8 @@ Revised by Tamara Marnell 2021-04 to uncollapse Administrative Information by de
           <xsl:value-of select="concat($class, '-content')"/>
         </xsl:attribute>
       </xsl:if>
-			<xsl:for-each select="p">
-				<p>
-					<xsl:apply-templates/>
-				</p>
+			<xsl:for-each select="*">
+				<xsl:apply-templates select="." />
 			</xsl:for-each>
 		</div>
 	</xsl:template>

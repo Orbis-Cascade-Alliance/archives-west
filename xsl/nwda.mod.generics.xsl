@@ -437,6 +437,20 @@ Major or significant revision history:
 			<xsl:value-of select="."/>
 		</span>
 	</xsl:template>
+  <xsl:template match="list">
+    <xsl:choose>
+      <xsl:when test="@type='ordered'">
+        <ol>
+          <xsl:apply-templates />
+        </ol>
+      </xsl:when>
+      <xsl:otherwise>
+        <ul>
+          <xsl:apply-templates />
+        </ul>
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:template>
 	<!-- ********************* <* @render> *********************** -->
 	<xsl:template match="*[@render]">
 		<xsl:choose>
